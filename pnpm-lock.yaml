@@ -11,6 +11,7 @@ specifiers:
   prettier: ^2.4.1
   ts-jest: ^27.0.5
   typescript: ^4.4.3
+  zod: ^3.9.1
 
 devDependencies:
   '@equt/eslint-config-base': 1.0.0_13388322ed5f5557f11897bd277b61cc
@@ -23,6 +24,7 @@ devDependencies:
   prettier: 2.4.1
   ts-jest: 27.0.5_1c26bd7af7c289ab64b4c561804bfe7c
   typescript: 4.4.3
+  zod: 3.9.1
 
 packages:
 
@@ -3841,4 +3843,8 @@ packages:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 20.2.9
+    dev: true
+
+  /zod/3.9.1:
+    resolution: {integrity: sha512-4h+26dlguuEScIYIEt8icqxVYXDbDAnOMgV2r/RO/0qpb0jJyK/VosUQWi/EF/2MB1HrtBZZxiRQrTbIqVLKeQ==}
     dev: true
