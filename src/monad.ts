@@ -32,7 +32,7 @@ export const request: fetchM<TypeError, Response> = (config: Config) => () =>
     }
   )
 
-export const guardStatus = <E1 extends Error, E2 extends Error>(
+export const guard = <E1 extends Error, E2 extends Error>(
   predicate: (n: number) => Option<E2>
 ): Combinator<E1, Response, E1 | E2> =>
   pipe(
