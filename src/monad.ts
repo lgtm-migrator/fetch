@@ -2,9 +2,14 @@ import type { ReaderTaskEither } from 'fp-ts/ReaderTaskEither'
 import type { Json } from 'fp-ts/Json'
 import type { Option } from 'fp-ts/Option'
 import { left, right } from 'fp-ts/Either'
-import { chainTaskEitherK, chainEitherKW } from 'fp-ts/ReaderTaskEither'
+import {
+  chainTaskEitherK,
+  chainTaskEitherKW,
+  chainEitherKW,
+} from 'fp-ts/ReaderTaskEither'
 import { foldW } from 'fp-ts/Option'
 import { pipe } from 'fp-ts/function'
+import { z } from 'zod'
 
 const unreachable = (): never => {
   throw new Error('WTF')
@@ -112,6 +117,25 @@ export const formData = <E extends Error>(): Combinator<
         resp.formData().then(
           x => right(x),
           () => unreachable() /* TODO */
+        )
+    )
+  )
+
+export const withDecoder = <E extends Error, S extends z.ZodTypeAny>(
+  s: S,
+  params?: Partial<z.ParseParamsNoData>
+): Combinator<E, unknown, E | z.ZodError, S> =>
+  pipe(
+    chainTaskEitherKW(
+      x => () =>
+        s.parseAsync(x, params).then(
+          x => right(x as S) /* TODO Why ? */,
+          (e: unknown) => {
+            if (e instanceof z.ZodError) {
+              return left(e)
+            }
+            return unreachable()
+          }
         )
     )
   )
