@@ -4,6 +4,9 @@
     "lib": ["ESNext", "DOM"],
     "target": "ES6",
     "moduleResolution": "Node",
-    "types": ["@types/jest"]
-  }
+    "types": ["@types/jest"],
+    "outDir": "es6",
+    "declaration": true
+  },
+  "exclude": ["**/*.test.ts"]
 }
