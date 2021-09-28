@@ -7,7 +7,7 @@ import { unreachable } from '../utils'
 export const withDecoder = <E extends Error, S extends z.ZodTypeAny>(
   s: S,
   params?: Partial<z.ParseParamsNoData>
-): Combinator<E, unknown, E | z.ZodError, S> =>
+): Combinator<E, unknown, z.ZodError, S> =>
   chainTaskEitherKW(
     x => () =>
       s.parseAsync(x, params).then(

@@ -7,7 +7,7 @@ import { unreachable } from '../utils'
 export const json = <E extends Error>(): Combinator<
   E,
   Response,
-  E | SyntaxError,
+  SyntaxError,
   Json
 > =>
   chainTaskEitherK(
