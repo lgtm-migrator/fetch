@@ -68,7 +68,9 @@ describe('Header combinator', () => {
     )()
 
     expect(mock.lastCall()?.[1]).toStrictEqual({
-      Authorization: 'BEARER ALWAYS_HAS_BEEN',
+      headers: {
+        Authorization: 'BEARER ALWAYS_HAS_BEEN',
+      },
     })
 
     await pipe(
@@ -80,7 +82,9 @@ describe('Header combinator', () => {
     )()
 
     expect(mock.lastCall()?.[1]).toStrictEqual({
-      Authorization: 'BEARER ALWAYS_HAS_BEEN',
+      headers: {
+        Authorization: 'BEARER ALWAYS_HAS_BEEN',
+      },
     })
   })
 
@@ -93,7 +97,9 @@ describe('Header combinator', () => {
     )()
 
     expect(mock.lastCall()?.[1]).toStrictEqual({
-      Authorization: 'BEARER ALWAYS_HAS_BEEN',
+      headers: {
+        Authorization: 'BEARER ALWAYS_HAS_BEEN',
+      },
     })
   })
 })
