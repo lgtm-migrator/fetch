@@ -4,6 +4,9 @@
   "license": "MIT",
   "main": "index.js",
   "types": "index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "jest",
     "test:coverage": "jest --coverage",
