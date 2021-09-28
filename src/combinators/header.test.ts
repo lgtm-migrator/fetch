@@ -1,4 +1,10 @@
-import { union, toRecord } from './header'
+import mock from 'fetch-mock-jest'
+import { union, toRecord, withHeaders } from './header'
+import { config, request } from '../monad'
+import { pipe } from 'fp-ts/function'
+
+beforeEach(() => mock.mock('https://example.com', 200))
+afterEach(() => mock.reset())
 
 describe('Convert HeaderInit to Record<string, string>', () => {
   it('should satisfy identity', () => {
@@ -48,5 +54,46 @@ describe('Merge two HeaderInit and create a new one', () => {
         { Authorization: 'BEARER WAIT_ITS_ALL_OHIO' }
       )
     ).toStrictEqual({ Authorization: 'BEARER WAIT_ITS_ALL_OHIO' })
+  })
+})
+
+const mk = config('https://example.com')
+
+describe('Header combinator', () => {
+  it('should set headers correctly', async () => {
+    await pipe(
+      request,
+      withHeaders({ Authorization: 'BEARER ALWAYS_HAS_BEEN' }),
+      mk
+    )()
+
+    expect(mock.lastCall()?.[1]).toStrictEqual({
+      Authorization: 'BEARER ALWAYS_HAS_BEEN',
+    })
+
+    await pipe(
+      request,
+      withHeaders({ Authorization: 'BEARER ALWAYS_HAS_BEEN' }),
+      config('https://example.com', {
+        headers: { Authorization: 'BEARER ALWAYS_HAS_BEEN' },
+      })
+    )()
+
+    expect(mock.lastCall()?.[1]).toStrictEqual({
+      Authorization: 'BEARER ALWAYS_HAS_BEEN',
+    })
+  })
+
+  it('latter combinator should take the precedence', async () => {
+    await pipe(
+      request,
+      withHeaders({ Authorization: 'BEARER WAIT_ITS_ALL_OHIO' }),
+      withHeaders({ Authorization: 'BEARER ALWAYS_HAS_BEEN' }),
+      mk
+    )()
+
+    expect(mock.lastCall()?.[1]).toStrictEqual({
+      Authorization: 'BEARER ALWAYS_HAS_BEEN',
+    })
   })
 })
