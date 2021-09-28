@@ -19,15 +19,15 @@ export const json = <E extends Error>(): Combinator<
       )
   )
 
-export const blob = <E extends Error>(): Combinator<E, Response, E, Blob> =>
-  chainTaskEitherK(resp => () => resp.blob().then(x => right(x)))
+// export const blob = <E extends Error>(): Combinator<E, Response, E, Blob> =>
+//   chainTaskEitherK(resp => () => resp.blob().then(x => right(x)))
 
 export const text = <E extends Error>(): Combinator<E, Response, E, string> =>
   chainTaskEitherK(resp => () => resp.text().then(x => right(x)))
 
-export const formData = <E extends Error>(): Combinator<
-  E,
-  Response,
-  E,
-  FormData
-> => chainTaskEitherK(resp => () => resp.formData().then(x => right(x)))
+// export const formData = <E extends Error>(): Combinator<
+//   E,
+//   Response,
+//   E,
+//   FormData
+// > => chainTaskEitherK(resp => () => resp.formData().then(x => right(x)))
