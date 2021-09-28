@@ -1,5 +1,5 @@
 import { withMethod } from './method'
-import { request, runFetchM } from '../monad'
+import { request, runFetchM } from '..'
 import mock from 'fetch-mock-jest'
 import { pipe } from 'fp-ts/function'
 

@@ -1,4 +1,4 @@
-import type { Combinator, Config } from '../monad'
+import type { Combinator, Config } from '..'
 import type { Json } from 'fp-ts/Json'
 import { flow } from 'fp-ts/function'
 import { local } from 'fp-ts/ReaderTaskEither'

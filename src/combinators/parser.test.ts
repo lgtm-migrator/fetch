@@ -2,7 +2,7 @@ import mock from 'fetch-mock-jest'
 import { pipe } from 'fp-ts/function'
 import { Response } from 'cross-fetch'
 import { right } from 'fp-ts/Either'
-import { runFetchM, request } from '../monad'
+import { runFetchM, request } from '..'
 import { json, text } from './parser'
 
 afterEach(() => mock.reset())

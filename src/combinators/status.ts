@@ -1,5 +1,5 @@
 import type { Option } from 'fp-ts/Option'
-import type { Combinator } from '../monad'
+import type { Combinator } from '..'
 import { pipe } from 'fp-ts/function'
 import { foldW } from 'fp-ts/Option'
 import { left, right } from 'fp-ts/Either'

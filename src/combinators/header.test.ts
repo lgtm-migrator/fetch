@@ -1,6 +1,6 @@
 import mock from 'fetch-mock-jest'
 import { union, toRecord, withHeaders } from './header'
-import { runFetchM, request } from '../monad'
+import { runFetchM, request } from '..'
 import { pipe } from 'fp-ts/function'
 
 beforeEach(() => mock.mock('https://example.com', 200))

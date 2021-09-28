@@ -1,4 +1,4 @@
-import type { Combinator, Config } from '../monad'
+import type { Combinator, Config } from '..'
 import { local } from 'fp-ts/ReaderTaskEither'
 
 export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'HEAD' | 'DELETE' | 'OPTION'

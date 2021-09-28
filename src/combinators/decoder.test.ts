@@ -3,7 +3,7 @@ import { withDecoder } from './decoder'
 import mock from 'fetch-mock-jest'
 import { Response } from 'cross-fetch'
 import { pipe } from 'fp-ts/function'
-import { runFetchM, request } from '../monad'
+import { runFetchM, request } from '..'
 import { json } from './parser'
 import { right } from 'fp-ts/Either'
 

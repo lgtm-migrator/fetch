@@ -1,4 +1,4 @@
-import type { Combinator } from '../monad'
+import type { Combinator } from '..'
 import type { Json } from 'fp-ts/Json'
 import { left, right } from 'fp-ts/Either'
 import { chainTaskEitherK } from 'fp-ts/ReaderTaskEither'

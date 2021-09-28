@@ -1,6 +1,6 @@
 import { guard } from './status'
 import mock from 'fetch-mock-jest'
-import { runFetchM, request } from '../monad'
+import { runFetchM, request } from '..'
 import { pipe } from 'fp-ts/function'
 import { some, none } from 'fp-ts/Option'
 import { left } from 'fp-ts/Either'
