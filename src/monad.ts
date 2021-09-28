@@ -1,4 +1,5 @@
 import type { ReaderTaskEither } from 'fp-ts/ReaderTaskEither'
+import type { TaskEither } from 'fp-ts/TaskEither'
 import { pipe } from 'fp-ts/function'
 import { left, right } from 'fp-ts/Either'
 import { assert } from './utils'
@@ -23,6 +24,17 @@ export const request: fetchM<TypeError, Response> = (config: Config) => () =>
       return left(e)
     }
   )
+
+type TypeOfFetch = typeof fetch
+
+export const config =
+  <E extends Error, A>(
+    input: RequestInfo,
+    init?: RequestInit,
+    fetch?: TypeOfFetch
+  ) =>
+  (m: fetchM<E, A>): TaskEither<E, A> =>
+    m({ input, init, fetch })
 
 export const get = pipe(request, withMethod('GET'))
 export const post = pipe(request, withMethod('POST'))
