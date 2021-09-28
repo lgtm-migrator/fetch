@@ -1,4 +1,5 @@
 [![codecov](https://codecov.io/gh/equt/fetch/branch/main/graph/badge.svg?token=EgscdLwP1m)](https://codecov.io/gh/equt/fetch)
+[![lgtm](https://badgen.net/lgtm/lines/g/equt/fetch)](https://lgtm.com/projects/g/equt/fetch/)
 
 Let's do something like
 
