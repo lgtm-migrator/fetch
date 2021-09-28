@@ -11,7 +11,7 @@ type FormBlob = {
 
 const isFormBlob = (x: unknown): x is FormBlob => !!(x as FormBlob).blob
 
-const mkFormData = (form: Formable): FormData =>
+export const mkFormData = (form: Formable): FormData =>
   Object.entries(form).reduce((m, [k, v]) => {
     if (typeof v === 'string') {
       m.set(k, v)
