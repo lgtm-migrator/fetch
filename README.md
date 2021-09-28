@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/equt/fetch/branch/main/graph/badge.svg?token=EgscdLwP1m)](https://codecov.io/gh/equt/fetch)
+
 Let's do something like
 
 ```typescript
