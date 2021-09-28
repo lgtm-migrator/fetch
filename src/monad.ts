@@ -141,6 +141,28 @@ export const withDecoder = <E extends Error, S extends z.ZodTypeAny>(
     )
   )
 
+export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'HEAD' | 'DELETE' | 'OPTION'
+
+export const withMethod = <E extends Error, A>(
+  method: HTTPMethod
+): Combinator<E, A> =>
+  pipe(
+    local(
+      ({ input, init }): Config => ({
+        input,
+        init: {
+          method,
+          ...init,
+        },
+      })
+    )
+  )
+
+export const get = pipe(request, withMethod('GET'))
+export const post = pipe(request, withMethod('POST'))
+export const put = pipe(request, withMethod('PUT'))
+export const del = pipe(request, withMethod('DELETE'))
+
 type FormBlob = {
   blob: Blob
   filename?: string
