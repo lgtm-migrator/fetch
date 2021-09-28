@@ -1,6 +1,8 @@
 import type { Combinator, Config } from '../monad'
-import { pipe } from 'fp-ts/function'
+import type { Json } from 'fp-ts/Json'
+import { flow } from 'fp-ts/function'
 import { local } from 'fp-ts/ReaderTaskEither'
+import { withHeaders } from './header'
 
 type FormBlob = {
   blob: Blob
@@ -33,14 +35,38 @@ type FormableKV = Record<
 >
 
 export const withForm = <E extends Error, A>(f: Formable): Combinator<E, A> =>
-  pipe(
-    local(
-      ({ input, init }): Config => ({
-        input,
-        init: {
-          body: mkFormData(f),
-          ...init,
-        },
-      })
-    )
+  local(
+    ({ input, init }): Config => ({
+      input,
+      init: {
+        body: mkFormData(f),
+        ...init,
+      },
+    })
+  )
+
+export const withJSONBody = <E extends Error, A>(
+  json: Json,
+  // FIXME Overload
+  // See https://github.com/microsoft/TypeScript/issues/26591
+  // Maybe we could handle it manually
+  replacer?: Parameters<typeof JSON.stringify>['1'],
+  space?: Parameters<typeof JSON.stringify>['2']
+): Combinator<E, A> =>
+  local(({ input, init }) => ({
+    input,
+    init: {
+      body: JSON.stringify(json, replacer, space),
+      ...init,
+    },
+  }))
+
+export const withJSON = <E extends Error, A>(
+  json: Json,
+  replacer?: Parameters<typeof JSON.stringify>['1'],
+  space?: Parameters<typeof JSON.stringify>['2']
+): Combinator<E, A> =>
+  flow(
+    withJSONBody(json, replacer, space),
+    withHeaders({ 'Content-Type': 'application/json' })
   )
