@@ -1,10 +1,15 @@
-export const unreachable = (): never => {
-  throw new Error('What!? How could you get there?')
-}
-
-export class NonExistError extends Error {
-  constructor(message: string) {
-    super(message)
-    throw new Error('What!? How could you ever create a non-existing error?')
-  }
+export const assert: {
+  TypeError: (e: unknown) => asserts e is TypeError
+  DOMException: (e: unknown) => asserts e is DOMException
+} = {
+  TypeError: e => {
+    if (!(e instanceof TypeError)) {
+      throw new Error(`Unexpected error: ${e}`)
+    }
+  },
+  DOMException: e => {
+    if (!(e instanceof DOMException)) {
+      throw new Error(`Unexpected error: ${e}`)
+    }
+  },
 }
