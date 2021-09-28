@@ -2,12 +2,12 @@ import mock from 'fetch-mock-jest'
 import { pipe } from 'fp-ts/function'
 import { Response } from 'cross-fetch'
 import { right } from 'fp-ts/Either'
-import { config, request } from '../monad'
+import { runFetchM, request } from '../monad'
 import { json, text } from './parser'
 
 afterEach(() => mock.reset())
 
-const mk = config('https://example.com')
+const mk = runFetchM('https://example.com')
 
 describe('Parser combinator', () => {
   it('should be able to parse JSON', async () => {

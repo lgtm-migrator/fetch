@@ -1,6 +1,6 @@
 import mock from 'fetch-mock-jest'
 import { pipe } from 'fp-ts/function'
-import { post, config } from '../monad'
+import { post, runFetchM } from '../monad'
 import { withForm, withJSON, mkFormData } from './body'
 
 beforeEach(() => mock.mock('https://example.com', 200))
@@ -44,7 +44,7 @@ describe('Create FormData', () => {
   })
 })
 
-const mk = config('https://example.com')
+const mk = runFetchM('https://example.com')
 
 describe('JSON body combinator', () => {
   it('should encode JSON & set header', async () => {

@@ -22,7 +22,7 @@ export const request: fetchM<TypeError, Response> = (config: Config) => () =>
     (e: unknown) => left(new TypeError((e as Error).message))
   )
 
-export const config =
+export const runFetchM =
   <E extends Error, A>(
     input: RequestInfo,
     init?: RequestInit,

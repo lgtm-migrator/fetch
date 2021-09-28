@@ -1,13 +1,13 @@
 import { guard } from './status'
 import mock from 'fetch-mock-jest'
-import { config, request } from '../monad'
+import { runFetchM, request } from '../monad'
 import { pipe } from 'fp-ts/function'
 import { some, none } from 'fp-ts/Option'
 import { left } from 'fp-ts/Either'
 
 afterEach(() => mock.reset())
 
-const mk = config('https://example.com')
+const mk = runFetchM('https://example.com')
 
 describe('Status combinator', () => {
   it('should return error if satisfied', async () => {

@@ -1,12 +1,12 @@
 import { withMethod } from './method'
-import { request, config } from '../monad'
+import { request, runFetchM } from '../monad'
 import mock from 'fetch-mock-jest'
 import { pipe } from 'fp-ts/function'
 
 beforeEach(() => mock.mock('https://example.com', 200))
 afterEach(() => mock.reset())
 
-const mk = config('https://example.com')
+const mk = runFetchM('https://example.com')
 
 describe('Method combinator', () => {
   it('should set method correctly', async () => {
@@ -23,7 +23,7 @@ describe('Method combinator', () => {
     await pipe(
       request,
       withMethod('DELETE'),
-      config('https://example.com', { method: 'GET' })
+      runFetchM('https://example.com', { method: 'GET' })
     )()
     expect(mock.lastOptions()).toStrictEqual({ method: 'GET' })
   })

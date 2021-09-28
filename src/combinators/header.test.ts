@@ -1,6 +1,6 @@
 import mock from 'fetch-mock-jest'
 import { union, toRecord, withHeaders } from './header'
-import { config, request } from '../monad'
+import { runFetchM, request } from '../monad'
 import { pipe } from 'fp-ts/function'
 
 beforeEach(() => mock.mock('https://example.com', 200))
@@ -57,7 +57,7 @@ describe('Merge two HeaderInit and create a new one', () => {
   })
 })
 
-const mk = config('https://example.com')
+const mk = runFetchM('https://example.com')
 
 describe('Header combinator', () => {
   it('should set headers correctly', async () => {
@@ -76,7 +76,7 @@ describe('Header combinator', () => {
     await pipe(
       request,
       withHeaders({ Authorization: 'BEARER ALWAYS_HAS_BEEN' }),
-      config('https://example.com', {
+      runFetchM('https://example.com', {
         headers: { Authorization: 'BEARER ALWAYS_HAS_BEEN' },
       })
     )()

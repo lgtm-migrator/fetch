@@ -3,13 +3,13 @@ import { withDecoder } from './decoder'
 import mock from 'fetch-mock-jest'
 import { Response } from 'cross-fetch'
 import { pipe } from 'fp-ts/function'
-import { config, request } from '../monad'
+import { runFetchM, request } from '../monad'
 import { json } from './parser'
 import { right } from 'fp-ts/Either'
 
 afterEach(() => mock.reset())
 
-const mk = config('https://example.com')
+const mk = runFetchM('https://example.com')
 
 describe('Decoder combinator', () => {
   it('should decode', async () => {
