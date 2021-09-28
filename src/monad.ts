@@ -1,7 +1,7 @@
 import type { ReaderTaskEither } from 'fp-ts/ReaderTaskEither'
 import { pipe } from 'fp-ts/function'
 import { left, right } from 'fp-ts/Either'
-import { unreachable } from './utils'
+import { assert } from './utils'
 import { withMethod } from './combinators/method'
 
 export type Config = {
@@ -19,10 +19,8 @@ export const request: fetchM<TypeError, Response> = (config: Config) => () =>
   fetch(config.input, config.init).then(
     x => right(x),
     (e: unknown) => {
-      if (e instanceof TypeError) {
-        return left(e)
-      }
-      return unreachable()
+      assert.TypeError(e)
+      return left(e)
     }
   )
 
