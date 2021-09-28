@@ -70,3 +70,23 @@ export const withJSON = <E extends Error, A>(
     withJSONBody(json, replacer, space),
     withHeaders({ 'Content-Type': 'application/json' })
   )
+
+export const withBlob = <E extends Error, A>(blob: Blob): Combinator<E, A> =>
+  local(({ input, init }) => ({
+    input,
+    init: {
+      body: blob,
+      ...init,
+    },
+  }))
+
+export const withArrayBuffer = <E extends Error, A>(
+  buf: ArrayBuffer
+): Combinator<E, A> =>
+  local(({ input, init }) => ({
+    input,
+    init: {
+      body: buf,
+      ...init,
+    },
+  }))
