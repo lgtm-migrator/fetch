@@ -1,3 +1,7 @@
+import type { Combinator, Config } from '../monad'
+import { pipe } from 'fp-ts/function'
+import { local } from 'fp-ts/ReaderTaskEither'
+
 type FormBlob = {
   blob: Blob
   filename?: string
@@ -27,3 +31,16 @@ type FormableKV = Record<
   string,
   string | Blob | FormBlob | { toString: () => string }
 >
+
+export const withForm = <E extends Error, A>(f: Formable): Combinator<E, A> =>
+  pipe(
+    local(
+      ({ input, init }): Config => ({
+        input,
+        init: {
+          body: mkFormData(f),
+          ...init,
+        },
+      })
+    )
+  )
