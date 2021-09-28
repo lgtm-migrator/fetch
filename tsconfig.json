@@ -2,11 +2,12 @@
   "extends": "@equt/tsconfig/tsconfig",
   "compilerOptions": {
     "lib": ["ESNext", "DOM"],
-    "target": "ES6",
-    "moduleResolution": "Node",
+    "target": "ESNext",
+    "module": "ES6",
     "types": ["@types/jest"],
-    "outDir": "es6",
+    "outDir": ".",
     "declaration": true
   },
+  "include": ["src"],
   "exclude": ["**/*.test.ts"]
 }
