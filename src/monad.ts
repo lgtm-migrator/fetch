@@ -8,6 +8,7 @@ import { withMethod } from './combinators/method'
 export type Config = {
   input: RequestInfo
   init?: RequestInit
+  fetch?: typeof fetch
 }
 
 export type fetchM<E extends Error, A> = ReaderTaskEither<Config, E, A>
@@ -17,7 +18,7 @@ export type Combinator<E1 extends Error, A, E2 extends Error = E1, B = A> = (
 ) => fetchM<E2 | E1, B>
 
 export const request: fetchM<TypeError, Response> = (config: Config) => () =>
-  fetch(config.input, config.init).then(
+  (config.fetch ?? fetch)(config.input, config.init).then(
     x => right(x),
     (e: unknown) => {
       assert.TypeError(e)
@@ -25,13 +26,11 @@ export const request: fetchM<TypeError, Response> = (config: Config) => () =>
     }
   )
 
-type TypeOfFetch = typeof fetch
-
 export const config =
   <E extends Error, A>(
     input: RequestInfo,
     init?: RequestInit,
-    fetch?: TypeOfFetch
+    fetch?: Config['fetch'],
   ) =>
   (m: fetchM<E, A>): TaskEither<E, A> =>
     m({ input, init, fetch })
