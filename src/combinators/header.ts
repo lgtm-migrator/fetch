@@ -25,7 +25,7 @@ export const withHeaders = <E extends Error, A>(
     ({ input, init }): Config => ({
       input,
       init: {
-        ...union(hs, init?.headers ?? {}),
+        headers: union(hs, init?.headers ?? {}),
         ...init,
       },
     })
