@@ -1,5 +1,8 @@
 {
   "name": "@equt/fetch",
+  "scripts": {
+    "test": "jest"
+  },
   "devDependencies": {
     "@equt/eslint-config-base": "^1.0.0",
     "@equt/prettier-config": "^1.0.3",
@@ -28,6 +31,6 @@
   },
   "jest": {
     "preset": "ts-jest",
-    "testEnviornment": "jsdom"
+    "testEnvironment": "jsdom"
   }
 }
