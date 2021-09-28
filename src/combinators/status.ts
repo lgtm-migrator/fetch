@@ -8,14 +8,12 @@ import { chainEitherKW } from 'fp-ts/ReaderTaskEither'
 export const guard = <E1 extends Error, E2 extends Error>(
   predicate: (n: number) => Option<E2>
 ): Combinator<E1, Response, E1 | E2> =>
-  pipe(
-    chainEitherKW(resp =>
-      pipe(
-        predicate(resp.status),
-        foldW(
-          () => right(resp),
-          e => left(e)
-        )
+  chainEitherKW(resp =>
+    pipe(
+      predicate(resp.status),
+      foldW(
+        () => right(resp),
+        e => left(e)
       )
     )
   )

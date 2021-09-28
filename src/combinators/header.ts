@@ -1,5 +1,4 @@
 import type { Combinator, Config } from '../monad'
-import { pipe } from 'fp-ts/function'
 import { local } from 'fp-ts/ReaderTaskEither'
 
 export const toRecord = (x: HeadersInit): Record<string, string> => {
@@ -22,14 +21,12 @@ export const union = (into: HeadersInit, from: HeadersInit): HeadersInit => ({
 export const withHeaders = <E extends Error, A>(
   hs: HeadersInit
 ): Combinator<E, A> =>
-  pipe(
-    local(
-      ({ input, init }): Config => ({
-        input,
-        init: {
-          ...init,
-          ...union(hs, init?.headers ?? {}),
-        },
-      })
-    )
+  local(
+    ({ input, init }): Config => ({
+      input,
+      init: {
+        ...init,
+        ...union(hs, init?.headers ?? {}),
+      },
+    })
   )
