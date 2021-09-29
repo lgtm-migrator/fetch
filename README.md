@@ -31,7 +31,7 @@ A request now would look like
 import { post, runFetchM } from '@equt/fetch'
 import { withJSON } from '@equt/fetch/combinators/body'
 import { withDecoder } from '@equt/fetch/combinators/decoder'
-import { json } from '@equt/fetch/combinators/parser'
+import { asJSON } from '@equt/fetch/combinators/parser'
 import { withBaseURL } from '@equt/fetch/combinators/url'
 import { pipe, absurd } from 'fp-ts/function'
 import { match } from 'fp-ts/TaskEither'
@@ -48,7 +48,7 @@ const createUser = pipe(
   withJSON({ mail: 'admin@example.com', password: 'ALWAYS_HAS_BEEN' }),
 
   // Parse the Response Body as JSON format
-  json(),
+  asJSON(),
 
   // Decode the Response Body JSON to a type
   withDecoder(
