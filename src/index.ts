@@ -3,6 +3,7 @@ import type { TaskEither } from 'fp-ts/TaskEither'
 import { pipe } from 'fp-ts/function'
 import { left, right } from 'fp-ts/Either'
 import { withMethod } from './combinators/method'
+import { guard } from './combinators/status'
 
 export type Config = {
   input: string
@@ -46,7 +47,7 @@ export const runFetchM =
   (m: fetchM<E, A>): TaskEither<E, A> =>
     m({ input, init, fetch })
 
-export const get = pipe(request, withMethod('GET'))
-export const post = pipe(request, withMethod('POST'))
-export const put = pipe(request, withMethod('PUT'))
-export const del = pipe(request, withMethod('DELETE'))
+export const get = pipe(request, withMethod('GET'), guard())
+export const post = pipe(request, withMethod('POST'), guard())
+export const put = pipe(request, withMethod('PUT'), guard())
+export const del = pipe(request, withMethod('DELETE'), guard())
