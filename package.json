@@ -10,7 +10,7 @@
   "scripts": {
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "clean": "rimraf combinators index.d.ts index.js",
+    "clean": "rimraf combinators index.d.ts index.js tsconfig.tsbuildinfo",
     "build": "tsc"
   },
   "devDependencies": {
