@@ -12,6 +12,10 @@ dependency. You have to install it before using this package.
 pnpm add fp-ts @equt/fetch
 ```
 
+Also, if you are gonna use decoding related combinators located in
+[decoder.ts](./src/combinators/decoder.ts). You will also need either of `zod`
+and `io-ts` (Currently not supported).
+
 ## Introduction
 
 Check the monad type `fetchM` and the combinator type `Combinator`.
@@ -38,7 +42,7 @@ const createUser = pipe(
   post,
 
   // Set the base URL from env
-  withBaseURL(import.meta.env.BASE_URL),
+  withBaseURL(process.env.HOST),
 
   // Set the Request body to JSON
   withJSON({ mail: 'admin@example.com', password: 'ALWAYS_HAS_BEEN' }),
