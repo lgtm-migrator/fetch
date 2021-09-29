@@ -50,4 +50,3 @@ export const runFetchM =
 export const get = pipe(request, withMethod('GET'), guard())
 export const post = pipe(request, withMethod('POST'), guard())
 export const put = pipe(request, withMethod('PUT'), guard())
-export const del = pipe(request, withMethod('DELETE'), guard())
