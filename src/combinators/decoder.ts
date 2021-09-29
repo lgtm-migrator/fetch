@@ -6,7 +6,7 @@ import { z } from 'zod'
 export const withDecoder = <E extends Error, S extends z.ZodTypeAny>(
   s: S,
   params?: Partial<z.ParseParamsNoData>
-): Combinator<E, unknown, z.ZodError, S> =>
+): Combinator<E, unknown, z.ZodError, z.infer<S>> =>
   chainTaskEitherKW(
     x => () =>
       s.parseAsync(x, params).then(
