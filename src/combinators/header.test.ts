@@ -72,7 +72,9 @@ describe('Header combinator', () => {
         Authorization: 'BEARER ALWAYS_HAS_BEEN',
       },
     })
+  })
 
+  it('headers in Config should overwrite others', async () => {
     await pipe(
       request,
       withHeaders({ Authorization: 'BEARER ALWAYS_HAS_BEEN' }),
