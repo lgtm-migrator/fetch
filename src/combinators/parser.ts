@@ -3,7 +3,7 @@ import type { Json } from 'fp-ts/Json'
 import { left, right } from 'fp-ts/Either'
 import { chainTaskEitherK } from 'fp-ts/ReaderTaskEither'
 
-export const json = <E>(): Combinator<
+export const asJSON = <E>(): Combinator<
   E,
   Response,
   MalformedResponseBody,
@@ -19,13 +19,13 @@ export const json = <E>(): Combinator<
       )
   )
 
-// export const blob = <E>(): Combinator<E, Response, E, Blob> =>
+// export const asBlob = <E>(): Combinator<E, Response, E, Blob> =>
 //   chainTaskEitherK(resp => () => resp.blob().then(x => right(x)))
 
-export const text = <E>(): Combinator<E, Response, E, string> =>
+export const asText = <E>(): Combinator<E, Response, E, string> =>
   chainTaskEitherK(resp => () => resp.text().then(x => right(x)))
 
-// export const formData = <E>(): Combinator<
+// export const asFormData = <E>(): Combinator<
 //   E,
 //   Response,
 //   E,

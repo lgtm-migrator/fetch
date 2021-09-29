@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/function'
 import { Response } from 'cross-fetch'
 import { right } from 'fp-ts/Either'
 import { runFetchM, request } from '..'
-import { json, text } from './parser'
+import { asJSON, asText } from './parser'
 
 afterEach(() => mock.reset())
 
@@ -16,7 +16,7 @@ describe('Parser combinator', () => {
       new Response(`{ "Earth": "Always Has Been" }`)
     )
 
-    expect(await pipe(request, json(), mk)()).toStrictEqual(
+    expect(await pipe(request, asJSON(), mk)()).toStrictEqual(
       right({
         Earth: 'Always Has Been',
       })
@@ -29,7 +29,7 @@ describe('Parser combinator', () => {
       new Response(`{ "Earth": "Always Has Been"`)
     )
 
-    expect(await pipe(request, json(), mk)()).toStrictEqual(
+    expect(await pipe(request, asJSON(), mk)()).toStrictEqual(
       expect.objectContaining({
         _tag: 'Left',
       })
@@ -39,7 +39,7 @@ describe('Parser combinator', () => {
   it('should be able to parse text', async () => {
     mock.mock('https://example.com', new Response(`Always Has Been`))
 
-    expect(await pipe(request, text(), mk)()).toStrictEqual(
+    expect(await pipe(request, asText(), mk)()).toStrictEqual(
       right('Always Has Been')
     )
   })

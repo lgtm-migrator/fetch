@@ -4,7 +4,7 @@ import mock from 'fetch-mock-jest'
 import { Response } from 'cross-fetch'
 import { pipe } from 'fp-ts/function'
 import { runFetchM, request } from '..'
-import { json } from './parser'
+import { asJSON } from './parser'
 import { right } from 'fp-ts/Either'
 
 afterEach(() => mock.reset())
@@ -21,7 +21,7 @@ describe('Decoder combinator', () => {
     expect(
       await pipe(
         request,
-        json(),
+        asJSON(),
         withDecoder(z.object({ Earth: z.string() })),
         mk
       )()
@@ -37,7 +37,7 @@ describe('Decoder combinator', () => {
     expect(
       await pipe(
         request,
-        json(),
+        asJSON(),
         withDecoder(z.object({ Earth: z.string().url() })),
         mk
       )()
