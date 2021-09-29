@@ -1,6 +1,6 @@
 import mock from 'fetch-mock-jest'
 import { Response, fetch as realFetch } from 'cross-fetch'
-import { right, left } from 'fp-ts/Either'
+import { left, right } from 'fp-ts/Either'
 import { request, runFetchM } from '.'
 import { pipe } from 'fp-ts/function'
 
@@ -23,6 +23,6 @@ describe('Plain request', () => {
   it('should throw TypeError if config is malformed', async () => {
     expect(
       await pipe(request, runFetchM('https://*', {}, realFetch))()
-    ).toStrictEqual(left(new TypeError('Only absolute URLs are supported')))
+    ).toStrictEqual(left({ kind: 'MalformedRequest' }))
   })
 })

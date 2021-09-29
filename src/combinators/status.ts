@@ -1,19 +1,16 @@
-import type { Option } from 'fp-ts/Option'
-import type { Combinator } from '..'
-import { pipe } from 'fp-ts/function'
-import { foldW } from 'fp-ts/Option'
+import type { Combinator, ClientError, ServerError } from '..'
 import { left, right } from 'fp-ts/Either'
-import { chainEitherKW } from 'fp-ts/ReaderTaskEither'
+import { chainEitherK } from 'fp-ts/ReaderTaskEither'
 
-export const guard = <E1 extends Error, E2 extends Error>(
-  predicate: (n: number) => Option<E2>
-): Combinator<E1, Response, E1 | E2> =>
-  chainEitherKW(resp =>
-    pipe(
-      predicate(resp.status),
-      foldW(
-        () => right(resp),
-        e => left(e)
-      )
-    )
-  )
+type NetworkError = ClientError | ServerError
+
+export const guard = <E>(): Combinator<E, Response, NetworkError> =>
+  chainEitherK<E | NetworkError, Response, Response>(resp => {
+    if (resp.status >= 400 && resp.status < 500) {
+      return left({ kind: 'ClientError', code: resp.status })
+    } else if (resp.status >= 500) {
+      return left({ kind: 'ServerError', code: resp.status })
+    } else {
+      return right(resp)
+    }
+  })

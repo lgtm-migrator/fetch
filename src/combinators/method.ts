@@ -3,9 +3,7 @@ import { local } from 'fp-ts/ReaderTaskEither'
 
 export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'HEAD' | 'DELETE' | 'OPTION'
 
-export const withMethod = <E extends Error, A>(
-  method: HTTPMethod
-): Combinator<E, A> =>
+export const withMethod = <E, A>(method: HTTPMethod): Combinator<E, A> =>
   local(
     ({ input, init }): Config => ({
       input,

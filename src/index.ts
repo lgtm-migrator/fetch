@@ -10,24 +10,39 @@ export type Config = {
   fetch?: typeof fetch
 }
 
-export type fetchM<E extends Error, A> = ReaderTaskEither<Config, E, A>
+export type fetchM<E, A> = ReaderTaskEither<Config, E, A>
 
-export type Combinator<E1 extends Error, A, E2 extends Error = E1, B = A> = (
+export type MalformedRequest = {
+  kind: 'MalformedRequest'
+}
+
+export type MalformedResponseBody = {
+  kind: 'MalformedResponseBody'
+}
+
+export type ClientError = {
+  kind: 'ClientError'
+  code: number
+}
+
+export type ServerError = {
+  kind: 'ServerError'
+  code: number
+}
+
+export type Combinator<E1, A, E2 = E1, B = A> = (
   m: fetchM<E1, A>
 ) => fetchM<E2 | E1, B>
 
-export const request: fetchM<TypeError, Response> = (config: Config) => () =>
-  (config.fetch ?? fetch)(config.input, config.init).then(
-    x => right(x),
-    (e: unknown) => left(new TypeError((e as Error).message))
-  )
+export const request: fetchM<MalformedRequest, Response> =
+  (config: Config) => () =>
+    (config.fetch ?? fetch)(config.input, config.init).then(
+      x => right(x),
+      () => left({ kind: 'MalformedRequest' })
+    )
 
 export const runFetchM =
-  <E extends Error, A>(
-    input: string,
-    init?: RequestInit,
-    fetch?: Config['fetch']
-  ) =>
+  <E, A>(input: string, init?: RequestInit, fetch?: Config['fetch']) =>
   (m: fetchM<E, A>): TaskEither<E, A> =>
     m({ input, init, fetch })
 

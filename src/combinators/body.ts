@@ -34,7 +34,7 @@ type FormableKV = Record<
   string | Blob | FormBlob | { toString: () => string }
 >
 
-export const withForm = <E extends Error, A>(f: Formable): Combinator<E, A> =>
+export const withForm = <E, A>(f: Formable): Combinator<E, A> =>
   local(
     ({ input, init }): Config => ({
       input,
@@ -45,7 +45,7 @@ export const withForm = <E extends Error, A>(f: Formable): Combinator<E, A> =>
     })
   )
 
-export const withJSONBody = <E extends Error, A>(
+export const withJSONBody = <E, A>(
   json: Json,
   // FIXME Overload
   // See https://github.com/microsoft/TypeScript/issues/26591
@@ -61,7 +61,7 @@ export const withJSONBody = <E extends Error, A>(
     },
   }))
 
-export const withJSON = <E extends Error, A>(
+export const withJSON = <E, A>(
   json: Json,
   replacer?: Parameters<typeof JSON.stringify>['1'],
   space?: Parameters<typeof JSON.stringify>['2']

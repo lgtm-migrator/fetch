@@ -1,31 +1,31 @@
-import type { Combinator } from '..'
+import type { Combinator, MalformedResponseBody } from '..'
 import type { Json } from 'fp-ts/Json'
 import { left, right } from 'fp-ts/Either'
 import { chainTaskEitherK } from 'fp-ts/ReaderTaskEither'
 
-export const json = <E extends Error>(): Combinator<
+export const json = <E>(): Combinator<
   E,
   Response,
-  SyntaxError,
+  MalformedResponseBody,
   Json
 > =>
-  chainTaskEitherK(
+  chainTaskEitherK<E | MalformedResponseBody, Response, Json>(
     resp => () =>
       resp.json().then(
         x => right(x as Json),
-        (e: unknown) => {
-          return left(new SyntaxError((e as Error).message))
+        () => {
+          return left({ kind: 'MalformedResponseBody' })
         }
       )
   )
 
-// export const blob = <E extends Error>(): Combinator<E, Response, E, Blob> =>
+// export const blob = <E>(): Combinator<E, Response, E, Blob> =>
 //   chainTaskEitherK(resp => () => resp.blob().then(x => right(x)))
 
-export const text = <E extends Error>(): Combinator<E, Response, E, string> =>
+export const text = <E>(): Combinator<E, Response, E, string> =>
   chainTaskEitherK(resp => () => resp.text().then(x => right(x)))
 
-// export const formData = <E extends Error>(): Combinator<
+// export const formData = <E>(): Combinator<
 //   E,
 //   Response,
 //   E,

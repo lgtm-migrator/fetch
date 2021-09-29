@@ -18,9 +18,7 @@ export const union = (into: HeadersInit, from: HeadersInit): HeadersInit => ({
   ...toRecord(from),
 })
 
-export const withHeaders = <E extends Error, A>(
-  hs: HeadersInit
-): Combinator<E, A> =>
+export const withHeaders = <E, A>(hs: HeadersInit): Combinator<E, A> =>
   local(
     ({ input, init }): Config => ({
       input,
