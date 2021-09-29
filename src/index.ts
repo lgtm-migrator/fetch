@@ -5,7 +5,7 @@ import { left, right } from 'fp-ts/Either'
 import { withMethod } from './combinators/method'
 
 export type Config = {
-  input: RequestInfo
+  input: string
   init?: RequestInit
   fetch?: typeof fetch
 }
@@ -24,7 +24,7 @@ export const request: fetchM<TypeError, Response> = (config: Config) => () =>
 
 export const runFetchM =
   <E extends Error, A>(
-    input: RequestInfo,
+    input: string,
     init?: RequestInit,
     fetch?: Config['fetch']
   ) =>
