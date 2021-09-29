@@ -90,5 +90,6 @@ const createUser = pipe(
 - `@equt/fetch` provides a bear bone `request` comparing to appy's one. This is
   extremely helpful if you want to parse Request Body into Blob or Stream, and
   also handle Body if `Response.ok` is not true.
+  (https://github.com/contactlab/appy/issues/322)
 - `@equt/fetch` allows you to pass your own error down, and has no limitation on
   your error type.
