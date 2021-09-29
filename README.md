@@ -82,3 +82,13 @@ const createUser = pipe(
   )
 )
 ```
+
+## Comparing to `@contactlab/appy`
+
+- `@equt/fetch` allows you to specify your `fetch` instance, and of course it'll
+  use the global fetch by default (https://github.com/contactlab/appy/pull/325)
+- `@equt/fetch` provides a bear bone `request` comparing to appy's one. This is
+  extremely helpful if you want to parse Request Body into Blob or Stream, and
+  also handle Body if `Response.ok` is not true.
+- `@equt/fetch` allows you to pass your own error down, and has no limitation on
+  your error type.
