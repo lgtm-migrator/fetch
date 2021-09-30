@@ -13,8 +13,8 @@ pnpm add fp-ts @equt/fetch
 ```
 
 Also, if you are gonna use decoding related combinators located in
-[decoder.ts](./src/combinators/decoder.ts). You will also need either of `zod`
-and `io-ts` (Currently not supported).
+[decoder.ts](./src/combinators/decoder.ts). You will also need either `zod` or
+`io-ts` (Currently not supported).
 
 ## Introduction
 
