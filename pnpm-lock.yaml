@@ -15,7 +15,6 @@ specifiers:
   rimraf: ^3.0.2
   ts-jest: ^27.0.5
   typescript: ^4.4.3
-  zod: 3.8.0
 
 devDependencies:
   '@equt/eslint-config-base': 1.0.0_13388322ed5f5557f11897bd277b61cc
@@ -32,7 +31,6 @@ devDependencies:
   rimraf: 3.0.2
   ts-jest: 27.0.5_3f00e57d4cc005a60af484dfb2e33bba
   typescript: 4.4.3
-  zod: 3.8.0
 
 packages:
 
@@ -4049,8 +4047,4 @@ packages:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 20.2.9
-    dev: true
-
-  /zod/3.8.0:
-    resolution: {integrity: sha512-wUlvc4RNzUGYBZ+Q+D+NFnOGQynekfeU7K+BjVFcF5H6QCmtM4fxpRcd/MsEpSZRqlLSNP7+Kg789p61Bs3GUQ==}
     dev: true

@@ -12,10 +12,6 @@ dependency. You have to install it before using this package.
 pnpm add fp-ts @equt/fetch
 ```
 
-Also, if you are gonna use decoding related combinators located in
-[decoder.ts](./src/combinators/decoder.ts). You will also need either `zod` or
-`io-ts` (Currently not supported).
-
 ## Introduction
 
 Check the monad type `fetchM` and the combinator type `Combinator`.
@@ -30,12 +26,10 @@ A request now would look like
 ```typescript
 import { post, runFetchM } from '@equt/fetch'
 import { withJSON } from '@equt/fetch/combinators/body'
-import { withDecoder } from '@equt/fetch/combinators/decoder'
 import { asJSON } from '@equt/fetch/combinators/parser'
 import { withBaseURL } from '@equt/fetch/combinators/url'
-import { pipe, absurd } from 'fp-ts/function'
+import { pipe, absurd, identity } from 'fp-ts/function'
 import { match } from 'fp-ts/TaskEither'
-import { z } from 'zod'
 
 const createUser = pipe(
   // Send the request with POST method
@@ -50,36 +44,23 @@ const createUser = pipe(
   // Parse the Response Body as JSON format
   asJSON(),
 
-  // Decode the Response Body JSON to a type
-  withDecoder(
-    z.object({
-      redirect: z.string().url(),
-    })
-  ),
-
   // Run the Monad at `user` endpoint
   runFetchM('user'),
 
   // Error handling
-  match(
-    e => {
-      switch (e.kind) {
-        case 'MalformedRequest':
-          // ...
-          break
-        case 'MalformedResponseBody':
-          // ...
-          break
-        case 'ZodDecodeError':
-          // ...
-          break
-        default:
-          absurd(e)
-      }
-      return 'https://example.com/help'
-    },
-    ({ redirect }) => redirect
-  )
+  match(e => {
+    switch (e.kind) {
+      case 'MalformedRequest':
+        // ...
+        break
+      case 'MalformedResponseBody':
+        // ...
+        break
+      default:
+        absurd(e)
+    }
+    return 'https://example.com/help'
+  }, identity)
 )
 ```
 

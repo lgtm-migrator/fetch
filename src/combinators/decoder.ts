@@ -1,22 +1,10 @@
+import { chainEitherK } from 'fp-ts/ReaderTaskEither'
+import type { ReaderEither } from 'fp-ts/ReaderEither'
 import type { Combinator } from '..'
-import { left, right } from 'fp-ts/Either'
-import { chainTaskEitherK } from 'fp-ts/ReaderTaskEither'
-import { z } from 'zod'
+import { pipe } from 'fp-ts/lib/function'
 
-export type DecodeError = {
-  kind: 'ZodDecodeError'
-  error: z.ZodError
-}
+export type Decoder<A, E, B> = ReaderEither<A, E, B>
 
-export const withDecoder = <E, S extends z.ZodTypeAny>(
-  s: S,
-  params?: Partial<z.ParseParamsNoData>
-): Combinator<E, unknown, DecodeError, z.infer<S>> =>
-  chainTaskEitherK<E | DecodeError, unknown, z.infer<S>>(
-    x => () =>
-      s.parseAsync(x, params).then(
-        x => right(x),
-        (error: unknown) =>
-          left({ kind: 'ZodDecodeError', error: error as z.ZodError })
-      )
-  )
+export const withDecoder = <E, A, B, DecodeError>(
+  decoder: Decoder<A, E, B>
+): Combinator<E, A, DecodeError, B> => pipe(decoder, chainEitherK)
