@@ -1,7 +1,7 @@
 import mock from 'fetch-mock-jest'
 import { pipe } from 'fp-ts/function'
 import { Response } from 'cross-fetch'
-import { right } from 'fp-ts/Either'
+import { left, right } from 'fp-ts/Either'
 import { runFetchM, request } from '..'
 import { asBlob, asJSON, asText } from './parser'
 
@@ -29,16 +29,20 @@ describe('JSON Parser combinator', () => {
       new Response(`{ "Earth": "Always Has Been"`)
     )
 
-    expect(await pipe(request, asJSON(), mk)()).toStrictEqual(
-      expect.objectContaining({
-        _tag: 'Left',
-      })
-    )
+    expect(
+      await pipe(
+        request,
+        asJSON(() => 'InvalidSyntax'),
+        mk
+      )()
+    ).toStrictEqual(left('InvalidSyntax'))
   })
 
   it('should set Accept header correctly', async () => {
-    mock.mock('https://example.com', 200)
+    mock.mock('https://example.com', new Response(`{}`))
+
     await pipe(request, asJSON(), mk)()
+
     expect(mock.lastCall()?.[1]).toStrictEqual({
       headers: {
         Accept: 'application/json',
@@ -61,7 +65,9 @@ describe('Blob Parser Combinator', () => {
 
   it('should set Accept header correctly', async () => {
     mock.mock('https://example.com', 200)
+
     await pipe(request, asBlob('application/pdf'), mk)()
+
     expect(mock.lastCall()?.[1]).toStrictEqual({
       headers: {
         Accept: 'application/pdf',

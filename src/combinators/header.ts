@@ -1,5 +1,6 @@
-import type { Combinator, Config } from '..'
+import type { Combinator } from '..'
 import { local } from 'fp-ts/ReaderTaskEither'
+import { mapSnd } from 'fp-ts/Tuple'
 
 export const toRecord = (x: HeadersInit): Record<string, string> => {
   if (Array.isArray(x)) {
@@ -13,18 +14,10 @@ export const toRecord = (x: HeadersInit): Record<string, string> => {
   }
 }
 
-export const union = (into: HeadersInit, from: HeadersInit): HeadersInit => ({
+export const merge = (into: HeadersInit, from: HeadersInit): HeadersInit => ({
   ...toRecord(into),
   ...toRecord(from),
 })
 
 export const withHeaders = <E, A>(hs: HeadersInit): Combinator<E, A> =>
-  local(
-    ({ input, init }): Config => ({
-      input,
-      init: {
-        headers: union(hs, init?.headers ?? {}),
-        ...init,
-      },
-    })
-  )
+  local(mapSnd(x => ({ headers: merge(hs, x.headers ?? {}), ...x })))

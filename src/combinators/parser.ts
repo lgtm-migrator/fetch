@@ -1,37 +1,49 @@
-import type { Combinator, MalformedResponseBody } from '..'
+import { bail, Combinator, MapError } from '..'
 import type { Json } from 'fp-ts/Json'
-import { left, right } from 'fp-ts/Either'
-import { chainTaskEitherK } from 'fp-ts/ReaderTaskEither'
+import { tryCatch } from 'fp-ts/TaskEither'
+import { chainTaskEitherKW } from 'fp-ts/ReaderTaskEither'
 import { flow } from 'fp-ts/function'
 import { withHeaders } from './header'
 
-export const asJSON = <E>(): Combinator<
-  E,
-  Response,
-  MalformedResponseBody,
-  Json
-> =>
-  flow(
+export function asJSON<E, F>(
+  mapError: MapError<F>
+): Combinator<E, Response, F, Json>
+export function asJSON<E>(): Combinator<E, Response, E, Json>
+export function asJSON<E, F>(
+  mapError: MapError<F> = bail
+): Combinator<E, Response, F, Json> {
+  return flow(
     withHeaders({ Accept: 'application/json' }),
-    chainTaskEitherK<E | MalformedResponseBody, Response, Json>(
-      resp => () =>
-        resp.json().then(
-          x => right(x as Json),
-          () => {
-            return left({ kind: 'MalformedResponseBody' })
-          }
-        )
+    chainTaskEitherKW(resp =>
+      tryCatch(() => resp.json().then(x => x as Json), mapError)
     )
   )
+}
 
-export const asBlob = <E>(MIME: string): Combinator<E, Response, E, Blob> =>
-  flow(
-    withHeaders({ Accept: MIME }),
-    chainTaskEitherK(resp => () => resp.blob().then(x => right(x)))
+export function asBlob<E, F>(
+  accept: string,
+  mapError: MapError<F>
+): Combinator<E, Response, F, Blob>
+export function asBlob<E>(accept: string): Combinator<E, Response, E, Blob>
+export function asBlob<E, F>(
+  accept: string,
+  mapError: MapError<F> = bail
+): Combinator<E, Response, F, Blob> {
+  return flow(
+    withHeaders({ Accept: accept }),
+    chainTaskEitherKW(resp => tryCatch(() => resp.blob(), mapError))
   )
+}
 
-export const asText = <E>(): Combinator<E, Response, E, string> =>
-  flow(
+export function asText<E, F>(
+  mapError: MapError<F>
+): Combinator<E, Response, F, string>
+export function asText<E>(): Combinator<E, Response, E, string>
+export function asText<E, F>(
+  mapError: MapError<F> = bail
+): Combinator<E, Response, F, string> {
+  return flow(
     withHeaders({ Accept: 'text/plain' }),
-    chainTaskEitherK(resp => () => resp.text().then(x => right(x)))
+    chainTaskEitherKW(resp => tryCatch(() => resp.text(), mapError))
   )
+}

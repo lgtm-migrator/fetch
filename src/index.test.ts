@@ -1,7 +1,7 @@
 import mock from 'fetch-mock-jest'
 import { Response, fetch as realFetch } from 'cross-fetch'
 import { left, right } from 'fp-ts/Either'
-import { request, runFetchM } from '.'
+import { request, mkRequest, runFetchM } from '.'
 import { pipe } from 'fp-ts/function'
 
 afterEach(() => mock.reset())
@@ -22,7 +22,10 @@ describe('Plain request', () => {
 
   it('should throw TypeError if config is malformed', async () => {
     expect(
-      await pipe(request, runFetchM('https://*', {}, realFetch))()
-    ).toStrictEqual(left({ kind: 'MalformedRequest' }))
+      await pipe(
+        mkRequest(() => 'InternalError', realFetch),
+        runFetchM('https://*')
+      )()
+    ).toStrictEqual(left('InternalError'))
   })
 })

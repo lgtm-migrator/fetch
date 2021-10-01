@@ -1,7 +1,8 @@
-import type { Combinator, Config } from '..'
+import type { Combinator } from '..'
 import type { Json } from 'fp-ts/Json'
 import { flow } from 'fp-ts/function'
 import { local } from 'fp-ts/ReaderTaskEither'
+import { mapSnd } from 'fp-ts/Tuple'
 import { withHeaders } from './header'
 
 type FormBlob = {
@@ -35,58 +36,32 @@ type FormableKV = Record<
 >
 
 export const withForm = <E, A>(f: Formable): Combinator<E, A> =>
-  local(
-    ({ input, init }): Config => ({
-      input,
-      init: {
-        body: mkFormData(f),
-        ...init,
-      },
-    })
-  )
+  local(mapSnd(x => ({ body: mkFormData(f), ...x })))
 
 export const withJSONBody = <E, A>(
   json: Json,
-  // FIXME Overload
-  // See https://github.com/microsoft/TypeScript/issues/26591
-  // Maybe we could handle it manually
-  replacer?: Parameters<typeof JSON.stringify>['1'],
+  replacer?: (
+    this: unknown,
+    key: string,
+    value: unknown
+  ) => unknown | (number | string)[] | null,
   space?: Parameters<typeof JSON.stringify>['2']
 ): Combinator<E, A> =>
-  local(({ input, init }) => ({
-    input,
-    init: {
-      body: JSON.stringify(json, replacer, space),
-      ...init,
-    },
-  }))
+  local(mapSnd(x => ({ body: JSON.stringify(json, replacer, space), ...x })))
 
 export const withJSON = <E, A>(
   json: Json,
-  replacer?: Parameters<typeof JSON.stringify>['1'],
+  replacer?: (
+    this: unknown,
+    key: string,
+    value: unknown
+  ) => unknown | (number | string)[] | null,
   space?: Parameters<typeof JSON.stringify>['2']
 ): Combinator<E, A> =>
   flow(
-    withJSONBody(json, replacer, space),
-    withHeaders({ 'Content-Type': 'application/json' })
+    withHeaders({ 'Content-Type': 'application/json' }),
+    withJSONBody(json, replacer, space)
   )
 
-// export const withBlob = <E extends Error, A>(blob: Blob): Combinator<E, A> =>
-//   local(({ input, init }) => ({
-//     input,
-//     init: {
-//       body: blob,
-//       ...init,
-//     },
-//   }))
-
-// export const withArrayBuffer = <E extends Error, A>(
-//   buf: ArrayBuffer
-// ): Combinator<E, A> =>
-//   local(({ input, init }) => ({
-//     input,
-//     init: {
-//       body: buf,
-//       ...init,
-//     },
-//   }))
+export const withBlob = <E extends Error, A>(blob: Blob): Combinator<E, A> =>
+  local(mapSnd(x => ({ body: blob, ...x })))

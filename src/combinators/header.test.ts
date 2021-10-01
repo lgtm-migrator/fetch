@@ -1,5 +1,5 @@
 import mock from 'fetch-mock-jest'
-import { union, toRecord, withHeaders } from './header'
+import { merge, toRecord, withHeaders } from './header'
 import { runFetchM, request } from '..'
 import { pipe } from 'fp-ts/function'
 
@@ -37,7 +37,7 @@ describe('Convert HeaderInit to Record<string, string>', () => {
 describe('Merge two HeaderInit and create a new one', () => {
   it('without intersection', () => {
     expect(
-      union(
+      merge(
         { Authorization: 'BEARER ALWAYS_HAS_BEEN' },
         { Accept: 'application/json' }
       )
@@ -49,7 +49,7 @@ describe('Merge two HeaderInit and create a new one', () => {
 
   it('with intersection', () => {
     expect(
-      union(
+      merge(
         { Authorization: 'BEARER ALWAYS_HAS_BEEN' },
         { Authorization: 'BEARER WAIT_ITS_ALL_OHIO' }
       )
