@@ -1,7 +1,7 @@
 import mock from 'fetch-mock-jest'
 import { Response, fetch as realFetch } from 'cross-fetch'
 import { left, right } from 'fp-ts/Either'
-import { request, mkRequest, runFetchM } from '.'
+import { request, mkRequest, runFetchM, bail } from '.'
 import { pipe } from 'fp-ts/function'
 
 afterEach(() => mock.reset())
@@ -28,4 +28,9 @@ describe('Plain request', () => {
       )()
     ).toStrictEqual(left('InternalError'))
   })
+})
+
+it('bail should throws parameter as error', () => {
+  expect(() => bail(new Error('Wait'))).toThrowError(new Error('Wait'))
+  expect(() => bail('Wait')).toThrowError(new Error('Wait'))
 })

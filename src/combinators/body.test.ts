@@ -1,7 +1,7 @@
 import mock from 'fetch-mock-jest'
 import { pipe } from 'fp-ts/function'
 import { post, runFetchM } from '..'
-import { withForm, withJSON, mkFormData } from './body'
+import { withForm, withJSON, mkFormData, withBlob } from './body'
 
 beforeEach(() => mock.mock('https://example.com', 200))
 afterEach(() => mock.reset())
@@ -70,6 +70,17 @@ describe('Form body combinator', () => {
     expect(mock.lastCall()?.[1]).toStrictEqual({
       method: 'POST',
       body: form,
+    })
+  })
+})
+
+describe('Blob body combbinator', () => {
+  it('should encode FormData', async () => {
+    await pipe(post, withBlob(new Blob([])), mk)()
+
+    expect(mock.lastCall()?.[1]).toStrictEqual({
+      method: 'POST',
+      body: new Blob([]),
     })
   })
 })
