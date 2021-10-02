@@ -22,3 +22,12 @@ directory.
 Use `runFetchM` just like `fetch` to get a `TaskEither`.
 
 See the [examples](/src/examples) to get a basic intuition.
+
+## Compare to `@contactlab/appy`
+
+- You could pass your custom error type down.
+- Fined-grained control over reponse,
+  - Instead of always parsing `Response` body as `text`, parse it into anything
+    you want.
+  - Handle the request body even if the `Response.ok` is not `true`.
+- Support more combinators.
