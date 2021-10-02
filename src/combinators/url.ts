@@ -1,23 +1,8 @@
-import type { Either } from 'fp-ts/Either'
-import type { Config, Combinator, MapError } from '..'
-import { ask, chain, chainW, fromEither, local } from 'fp-ts/ReaderTaskEither'
+import type { Combinator, MapError } from '..'
 import { tryCatch, map } from 'fp-ts/Either'
-import { pipe, flow } from 'fp-ts/function'
+import { pipe } from 'fp-ts/function'
 import { bail } from '..'
-
-export const localEW =
-  <E, F, A>(f: (r: Config) => Either<F, Config>): Combinator<E, A, F> =>
-  m =>
-    pipe(
-      ask<Config>(),
-      chain<Config, F, Config, Config>(flow(f, fromEither)),
-      chainW(x =>
-        pipe(
-          m,
-          local(() => x)
-        )
-      )
-    )
+import { withLocalEither } from './generic'
 
 export function withBaseURL<E, F, A>(
   url: URL | string | undefined,
@@ -30,7 +15,7 @@ export function withBaseURL<E, F, A>(
   url: URL | string | undefined,
   mapError: MapError<F> = bail
 ): Combinator<E, A, F> {
-  return localEW(([input, init]) =>
+  return withLocalEither(([input, init]) =>
     pipe(
       tryCatch(() => new URL(input, url).href, mapError),
       map(s => [s, init])
@@ -64,7 +49,7 @@ export function withURLSearchParams<E, F, A>(
   params: Record<string, string>,
   mapError: MapError<F> = bail
 ): Combinator<E, A, F> {
-  return localEW(([input, init]) =>
+  return withLocalEither(([input, init]) =>
     pipe(
       tryCatch(() => {
         const url = new URL(input)

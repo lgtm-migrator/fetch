@@ -8,7 +8,7 @@ export type Config = [string, RequestInit]
 
 export type FetchM<E, A> = ReaderTaskEither<Config, E, A>
 
-export type MapError<E> = (err: unknown) => E
+export type MapError<E, S = unknown> = (s: S) => E
 
 export const bail: MapError<never> = e => {
   if (e instanceof Error) {

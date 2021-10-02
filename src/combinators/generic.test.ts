@@ -1,4 +1,4 @@
-import { withDecoder } from './decoder'
+import { withDecoder } from './generic'
 import mock from 'fetch-mock-jest'
 import { Response } from 'cross-fetch'
 import { pipe } from 'fp-ts/function'

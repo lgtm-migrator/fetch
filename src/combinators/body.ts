@@ -1,9 +1,9 @@
 import type { Combinator } from '..'
 import type { Json } from 'fp-ts/Json'
 import { flow } from 'fp-ts/function'
-import { local } from 'fp-ts/ReaderTaskEither'
 import { mapSnd } from 'fp-ts/Tuple'
 import { withHeaders } from './header'
+import { withLocal } from './generic'
 
 type FormBlob = {
   blob: Blob
@@ -36,7 +36,7 @@ type FormableKV = Record<
 >
 
 export const withForm = <E, A>(f: Formable): Combinator<E, A> =>
-  local(mapSnd(x => ({ body: mkFormData(f), ...x })))
+  withLocal(mapSnd(x => ({ body: mkFormData(f), ...x })))
 
 export const withJSONBody = <E, A>(
   json: Json,
@@ -47,7 +47,9 @@ export const withJSONBody = <E, A>(
   ) => unknown | (number | string)[] | null,
   space?: Parameters<typeof JSON.stringify>['2']
 ): Combinator<E, A> =>
-  local(mapSnd(x => ({ body: JSON.stringify(json, replacer, space), ...x })))
+  withLocal(
+    mapSnd(x => ({ body: JSON.stringify(json, replacer, space), ...x }))
+  )
 
 export const withJSON = <E, A>(
   json: Json,
@@ -64,4 +66,4 @@ export const withJSON = <E, A>(
   )
 
 export const withBlob = <E extends Error, A>(blob: Blob): Combinator<E, A> =>
-  local(mapSnd(x => ({ body: blob, ...x })))
+  withLocal(mapSnd(x => ({ body: blob, ...x })))
