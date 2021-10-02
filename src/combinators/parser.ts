@@ -5,6 +5,13 @@ import { flow } from 'fp-ts/function'
 import { withHeaders } from './header'
 import { withTaskDecoder } from './generic'
 
+/**
+ * Parse the {@link Response} body as {@link Json}
+ *
+ * @param mapError An instance of {@link MapError}
+ *
+ * @since 1.0.0
+ */
 export function asJSON<E, F>(
   mapError: MapError<F>
 ): Combinator<E, Response, F, Json>
@@ -20,6 +27,14 @@ export function asJSON<E, F>(
   )
 }
 
+/**
+ * Parse the {@link Response} body as {@link Blob}
+ *
+ * @param accept Set the `Accept` MIME header
+ * @param mapError An instance of {@link MapError}
+ *
+ * @since 1.0.0
+ */
 export function asBlob<E, F>(
   accept: string,
   mapError: MapError<F>
@@ -35,6 +50,13 @@ export function asBlob<E, F>(
   )
 }
 
+/**
+ * Parse the {@link Response} body as {@link string}
+ *
+ * @param mapError An instance of {@link MapError}
+ *
+ * @since 1.0.0
+ */
 export function asText<E, F>(
   mapError: MapError<F>
 ): Combinator<E, Response, F, string>

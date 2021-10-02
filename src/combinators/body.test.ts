@@ -87,11 +87,19 @@ describe('Form body combinator', () => {
 
 describe('Blob body combbinator', () => {
   it('should encode FormData', async () => {
-    await pipe(request, withMethod('POST'), withBlob(new Blob([])), mk)()
+    await pipe(
+      request,
+      withMethod('POST'),
+      withBlob(new Blob([]), 'application/pdf'),
+      mk
+    )()
 
     expect(mock.lastCall()?.[1]).toStrictEqual({
       method: 'POST',
       body: new Blob([]),
+      headers: {
+        'Content-Type': 'application/pdf',
+      },
     })
   })
 })
