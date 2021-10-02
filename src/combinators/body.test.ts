@@ -1,7 +1,8 @@
 import mock from 'fetch-mock-jest'
 import { pipe } from 'fp-ts/function'
-import { post, runFetchM } from '..'
+import { runFetchM, request } from '..'
 import { withForm, withJSON, mkFormData, withBlob } from './body'
+import { withMethod } from './method'
 
 beforeEach(() => mock.mock('https://example.com', 200))
 afterEach(() => mock.reset())
@@ -48,7 +49,12 @@ const mk = runFetchM('https://example.com')
 
 describe('JSON body combinator', () => {
   it('should encode JSON & set header', async () => {
-    await pipe(post, withJSON({ Earth: 'Always Has Been' }), mk)()
+    await pipe(
+      request,
+      withMethod('POST'),
+      withJSON({ Earth: 'Always Has Been' }),
+      mk
+    )()
 
     expect(mock.lastCall()?.[1]).toStrictEqual({
       body: '{"Earth":"Always Has Been"}',
@@ -62,7 +68,12 @@ describe('JSON body combinator', () => {
 
 describe('Form body combinator', () => {
   it('should encode FormData', async () => {
-    await pipe(post, withForm({ Earth: 'Always Has Been' }), mk)()
+    await pipe(
+      request,
+      withMethod('POST'),
+      withForm({ Earth: 'Always Has Been' }),
+      mk
+    )()
 
     const form = new FormData()
     form.set('Earth', 'Always Has Been')
@@ -76,7 +87,7 @@ describe('Form body combinator', () => {
 
 describe('Blob body combbinator', () => {
   it('should encode FormData', async () => {
-    await pipe(post, withBlob(new Blob([])), mk)()
+    await pipe(request, withMethod('POST'), withBlob(new Blob([])), mk)()
 
     expect(mock.lastCall()?.[1]).toStrictEqual({
       method: 'POST',

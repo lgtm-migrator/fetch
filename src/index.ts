@@ -1,8 +1,7 @@
 import type { ReaderTaskEither } from 'fp-ts/ReaderTaskEither'
 import type { TaskEither } from 'fp-ts/TaskEither'
-import { withMethod } from './combinators/method'
 import { tryCatch } from 'fp-ts/TaskEither'
-import { pipe, tupled } from 'fp-ts/function'
+import { tupled } from 'fp-ts/function'
 
 export type Config = [string, RequestInit]
 
@@ -33,6 +32,3 @@ export const runFetchM =
   (input: string, init?: RequestInit) =>
   <E, A>(m: FetchM<E, A>): TaskEither<E, A> =>
     m([input, init ?? {}])
-
-export const get = request
-export const post = pipe(request, withMethod('POST'))
