@@ -71,11 +71,28 @@ export const mkRequest =
     tryCatch(
       () => tupled(fetchImpl ?? fetch)(r),
       e => {
-        if (e instanceof DOMException) {
-          const init = snd(r) as RequestInit & {
-            _ABORT_MAP_ERROR: MapError<unknown>
-          }
-          return init._ABORT_MAP_ERROR(e) as E
+        // For two controller combinators, a.k.a., withSignal & withTimeout, we could have
+        // two `MapError` passed in. But that is techniqually not even possible, since the
+        // abortion error is raised only when the `fetch` Promise is getting resolved.
+        // The trick here is we abuse the reader env to pass the `MapError` down, and when
+        // resolving the `fetch` Promise, we search for that special key. So on the user side,
+        // it seems like the error handling part `MapError` is right inside the cominator.
+
+        type ExtendedRequestInit = RequestInit & {
+          _ABORT_MAP_ERROR: MapError<unknown>
+        }
+
+        const init = snd(r)
+        if (
+          // If the key exists, indicating user has used either of two controller combinators
+          (init as ExtendedRequestInit)._ABORT_MAP_ERROR &&
+          // and not that the DOMException error only raises on abrotion.
+          e instanceof DOMException
+        ) {
+          // We cast the error into `E` to satisfy the compiler, but we know we have set the correct
+          // error type in the combinator itself, so the error type union must contains the right
+          // type.
+          return (init as ExtendedRequestInit)._ABORT_MAP_ERROR(e) as E
         }
         return mapError(e)
       }

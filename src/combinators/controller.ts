@@ -20,6 +20,7 @@ export function withSignal<E, A, F>(
   signal: AbortSignal,
   mapError: MapError<F> = bail
 ): Combinator<E, A, F> {
+  // How could this even be possible? See the impl details of `mkRequest`
   return withLocal(mapSnd(x => ({ signal, _ABORT_MAP_ERROR: mapError, ...x })))
 }
 
