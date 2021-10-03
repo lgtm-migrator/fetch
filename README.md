@@ -1,7 +1,8 @@
 [![codecov](https://codecov.io/gh/equt/fetch/branch/main/graph/badge.svg?token=EgscdLwP1m)](https://codecov.io/gh/equt/fetch)
 
-> This repository is a fork of https://github.com/contactlab/appy. `Req<A>` in
-> appy is equal to `FetchM<Identity, A>` in this package.
+> This repository is a fork of
+> [`contactlab/appy`](https://github.com/contactlab/appy). `Req<A>` in appy is
+> equal to `FetchM<Identity, A>` in this package.
 
 ## Installation
 
@@ -26,7 +27,7 @@ See the [examples](/src/examples) to get a basic intuition.
 ## Compare to `@contactlab/appy`
 
 - You could pass your custom error type down.
-- Fined-grained control over reponse,
+- Fined-grained control of `Response`,
   - Instead of always parsing `Response` body as `text`, parse it into anything
     you want.
   - Handle the request body even if the `Response.ok` is not `true`.
