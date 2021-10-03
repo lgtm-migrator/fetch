@@ -1,4 +1,4 @@
-import type { Combinator } from '..'
+import { bail, Combinator, MapError } from '..'
 import { mapSnd } from 'fp-ts/Tuple'
 import { rightIO, chain, chainFirst } from 'fp-ts/ReaderTaskEither'
 import { withLocal } from './generic'
@@ -9,31 +9,37 @@ import { pipe } from 'fp-ts/function'
  *
  * @param signal Abort signal {@link AbortSignal}
  *
- * Please note, the thrown `AbortError` must be handled specifically during creating request,
- * a.k.a, `mkRequest`.
- *
- * You cannot distinguish between a manually aborted request and a timeout request.
- *
  * @since 1.0.0
  */
-export const withSignal = <E, A>(signal: AbortSignal): Combinator<E, A> =>
-  withLocal(mapSnd(x => ({ signal, ...x })))
+export function withSignal<E, A, F>(
+  signal: AbortSignal,
+  mapError: MapError<F>
+): Combinator<E, A, F>
+export function withSignal<E, A>(signal: AbortSignal): Combinator<E, A>
+export function withSignal<E, A, F>(
+  signal: AbortSignal,
+  mapError: MapError<F> = bail
+): Combinator<E, A, F> {
+  return withLocal(mapSnd(x => ({ signal, _ABORT_MAP_ERROR: mapError, ...x })))
+}
 
 /**
  * Set the request timeout.
  *
  * @param miliseconds Duration in miliseconds
  *
- * Please note, the thrown `AbortError` must be handled specifically during creating request,
- * a.k.a, `mkRequest`.
- *
- * You cannot distinguish between a manually aborted request and a timeout request.
- *
  * @since 1.0.0
  */
-export const withTimeout =
-  <E, A>(miliseconds: number): Combinator<E, A> =>
-  m => {
+export function withTimeout<E, A, F>(
+  miliseconds: number,
+  mapError: MapError<F>
+): Combinator<E, A, F>
+export function withTimeout<E, A>(miliseconds: number): Combinator<E, A>
+export function withTimeout<E, A, F>(
+  miliseconds: number,
+  mapError: MapError<F> = bail
+): Combinator<E, A, F> {
+  return m => {
     const controller = new AbortController()
 
     return pipe(
@@ -41,9 +47,10 @@ export const withTimeout =
       chain(id =>
         pipe(
           m,
-          withSignal<E, A>(controller.signal),
+          withSignal<E, A, F>(controller.signal, mapError),
           chainFirst(() => rightIO(() => clearTimeout(id)))
         )
       )
     )
   }
+}

@@ -2,6 +2,7 @@ import type { ReaderTaskEither } from 'fp-ts/ReaderTaskEither'
 import type { TaskEither } from 'fp-ts/TaskEither'
 import { tryCatch } from 'fp-ts/TaskEither'
 import { tupled } from 'fp-ts/function'
+import { snd } from 'fp-ts/Tuple'
 
 /**
  * {@link FetchM} Monad Environment.
@@ -67,7 +68,18 @@ export type Combinator<E1, A, E2 = E1, B = A> = (
 export const mkRequest =
   <E>(mapError: MapError<E>, fetchImpl?: typeof fetch): FetchM<E, Response> =>
   r =>
-    tryCatch(() => tupled(fetchImpl ?? fetch)(r), mapError)
+    tryCatch(
+      () => tupled(fetchImpl ?? fetch)(r),
+      e => {
+        if (e instanceof DOMException) {
+          const init = snd(r) as RequestInit & {
+            _ABORT_MAP_ERROR: MapError<unknown>
+          }
+          return init._ABORT_MAP_ERROR(e) as E
+        }
+        return mapError(e)
+      }
+    )
 
 /**
  * A special instance of {@link FetchM} which always {@link bail}s errors and utilizes global {@link fetch}.

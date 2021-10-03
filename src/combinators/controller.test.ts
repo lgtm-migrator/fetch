@@ -3,7 +3,7 @@ import { Response } from 'cross-fetch'
 import { pipe } from 'fp-ts/lib/function'
 import { left, right } from 'fp-ts/Either'
 import { withSignal, withTimeout } from './controller'
-import { mkRequest, runFetchM } from '..'
+import { request, runFetchM } from '..'
 
 afterEach(() => mock.reset())
 
@@ -14,29 +14,23 @@ describe('Signal Combinator', () => {
     mock.mock('https://example.com', 200)
     const controller = new AbortController()
     const req = pipe(
-      mkRequest(() => 'Aborted'),
-      withSignal(controller.signal),
+      request,
+      withSignal(controller.signal, () => 'Aborted'),
       mk
     )
     controller.abort()
     const result = await req()
     expect(result).toStrictEqual(left('Aborted'))
   })
-
-  // TODO We cannot test the order of AbortControllers, since we cannot identify them currently.
 })
 
 describe('Timeout combinator', () => {
   it('should do nothing is returned before timeout', async () => {
     const response = new Response('Alwaays Has Been', {})
     mock.mock('https://example.com', response, { delay: 500 })
-    expect(
-      await pipe(
-        mkRequest(() => 'Aborted'),
-        withTimeout(1000),
-        mk
-      )()
-    ).toStrictEqual(right(response))
+    expect(await pipe(request, withTimeout(1000), mk)()).toStrictEqual(
+      right(response)
+    )
   })
 
   it('should throw if timeout', async () => {
@@ -44,8 +38,8 @@ describe('Timeout combinator', () => {
     mock.mock('https://example.com', response, { delay: 500 })
     expect(
       await pipe(
-        mkRequest(() => 'Aborted'),
-        withTimeout(200),
+        request,
+        withTimeout(200, () => 'Aborted'),
         mk
       )()
     ).toStrictEqual(left('Aborted'))
