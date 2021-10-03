@@ -35,7 +35,7 @@ import { asJSON } from '../combinators/parser'
 import { withDecoder } from '../combinators/generic'
 import { pipe } from 'fp-ts/function'
 
-export type ErrorKind = 'Internal Error' | 'Timeout' | 'Decoder Error'
+export type ErrorKind = 'Internal Error' | 'Timeout'
 
 export type CreateUserResult = {
   succeeded: boolean
@@ -45,19 +45,13 @@ export type CreateUserResult = {
 declare const decoder: Decoder<Json, ErrorKind, CreateUserResult>
 
 export const create = pipe(
-  mkRequest((e: unknown): ErrorKind => {
-    if (e instanceof DOMException) {
-      return 'Timeout'
-    } else {
-      return 'Internal Error'
-    }
-  }),
+  mkRequest((): ErrorKind => 'Internal Error'),
 
   // Send the request as a `POST`
   withMethod('POST'),
 
   // Set request timeout to 3000
-  withTimeout(3000),
+  withTimeout(3000, (): ErrorKind => 'Timeout'),
 
   // Set the request body
   withJSON({
