@@ -2,7 +2,7 @@
 
 > This repository is a fork of
 > [`contactlab/appy`](https://github.com/contactlab/appy). `Req<A>` in appy is
-> equal to `FetchM<Identity, A>` in this package.
+> equal to `FetchM<RequestError | ResponseError, A>` in this package.
 
 ## Installation
 
