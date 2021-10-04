@@ -14,14 +14,14 @@ transition from one Monad to another.
 
 `FetchM<E, A>` is the core of this package, it is a Monad that
 
-- either returns type `A` after `runFetchM`,
+- either returns type `A` on succeeded,
 - or fails with type `E` once the first error occurs.
 
 A combinator `Combinator<E, A, F, B>` is simply an alias of function
 `FetchM<E, A> => FetchM<F = E, B = A>`.
 
 With the above two types, the `pipe` function provided by the peer dep `fp-ts`,
-and many combinators setting inside the [`combinators`](/src/combinators)
+and many combinators sitting inside the [`combinators`](/src/combinators)
 directory, we could now write our `Request` building & `Response` handling logic
 like
 
