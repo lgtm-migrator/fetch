@@ -8,17 +8,23 @@
 
 ## Introduction
 
-**TLDR** We could abstract the process of fetching data (building `Request` and
-handling `Response`) as a Monad, and everything now could be expressed as a
-transition from one Monad to another.
+We could abstract the process of fetching data (building `Request` and handling
+`Response`) as a Monad, and everything now could be expressed as a transition
+from one Monad to another.
+
+### Core
 
 `FetchM<E, A>` is the core of this package, it is a Monad that
 
 - either returns type `A` on succeeded,
 - or fails with type `E` once the first error occurs.
 
-A combinator `Combinator<E, A, F, B>` is simply an alias of function
-`FetchM<E, A> => FetchM<F = E, B = A>`.
+Internally, the Monad maintains an environment describing how the `Request`
+should be built. A combinator `Combinator<E, A, F, B>` is simply an alias of
+function `FetchM<E, A> => FetchM<F = E, B = A>`. Each combinator changes the
+local environment or transforms the `Response` object.
+
+### Basic Example
 
 With the above two types, the `pipe` function provided by the peer dep `fp-ts`,
 and many combinators sitting inside the [`combinators`](/src/combinators)
@@ -27,13 +33,13 @@ like
 
 ```typescript
 import type { Json } from 'fp-ts/lib/Json'
-import type { Decoder } from '../combinators/generic'
-import { mkRequest, runFetchM } from '..'
-import { withMethod } from '../combinators/method'
-import { withTimeout } from '../combinators/controller'
-import { withJSON } from '../combinators/body'
-import { asJSON } from '../combinators/parser'
-import { withDecoder } from '../combinators/generic'
+import type { Decoder } from '@equt/fetch/combinators/generic'
+import { mkRequest, runFetchM } from '@equt/fetch'
+import { withMethod } from '@equt/fetch/combinators/method'
+import { withTimeout } from '@equt/fetch/combinators/controller'
+import { withJSON } from '@equt/fetch/combinators/body'
+import { asJSON } from '@equt/fetch/combinators/parser'
+import { withDecoder } from '@equt/fetch/combinators/generic'
 import { pipe } from 'fp-ts/function'
 
 export type ErrorKind = 'Internal Error' | 'Timeout' | 'Respone Syntax Error'
@@ -73,13 +79,46 @@ export const create = pipe(
 
 The intuitive and declarative pipeline structure illustrates the logical flow of
 the communication between the client and the server. Errors now could be easily
-handled within your context, and the type of the error is totally defined by
+handled within context, and the type of the error is totally defined by
 yourself.
 
 The `create` function defined above will give you a
 `TaskEither<ErrorKind, CreateUserResult>`, you could continue applying
 transformations upon the right value using packages like `monocle-ts`, or notify
 the user with the left value and send log report back to your server.
+
+### Do Not Repeat Yourself
+
+Since function composition satisfies associativity property, you could always
+split the above function into mutliple parts.
+
+You may like to define a global pattern like
+
+```typescript
+import { request } from '@equt/fetch'
+import { withBaseURL } from '@equt/fetch/combinators/url'
+import { withMethod } from '@equt/fetch/method'
+import { withTimeout } from '@equt/fetch/controller'
+import { withHeader } from '@equt/fetch/header'
+import { pipe } from 'fp-ts/function'
+
+declare const TOKEN: string
+
+export const api = pipe(
+  request,
+  withBaseURL(process.env.API_HOST),
+  withMethod('POST'),
+  withTimeout(3000),
+  withHeader({ Authorization: `Bearer ${TOKEN}` })
+)
+```
+
+The above code defines a generic client for all requests inside the code base.
+Put it in your project once, and use it everywhere, so every request will share
+the `Authorization` header and the timeout settings immediately.
+
+The combinator comes later will overwrite or merge the previous one. So you
+could change the HTTP method specifically.
 
 ## Installation
 
