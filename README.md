@@ -117,8 +117,26 @@ The above code defines a generic client for all requests inside the code base.
 Put it in your project once, and use it everywhere, so every request will share
 the `Authorization` header and the timeout settings immediately.
 
-The combinator comes later will overwrite or merge the previous one. So you
+The combinator comes later will overwrite or merge the previous one, so you
 could change the HTTP method specifically.
+
+```typescript
+import { withURLSearchParams } from '@equt/fetch/combinators/url'
+import { withMethod } from '@equt/fetch/method'
+import { pipe } from 'fp-ts/function'
+import { api } from 'lib'
+
+export const detail = pipe(
+  // Reuse the API settings above
+  api,
+
+  // Overwrite the HTTP method
+  withMethod('GET'),
+
+  // Add search params
+  withURLSearchParams({ id: 1 })
+)
+```
 
 ## Installation
 
