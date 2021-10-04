@@ -8,7 +8,7 @@ import { asJSON } from '../combinators/parser'
 import { withDecoder } from '../combinators/generic'
 import { pipe } from 'fp-ts/function'
 
-export type ErrorKind = 'Internal Error' | 'Timeout'
+export type ErrorKind = 'Internal Error' | 'Timeout' | 'Respone Syntax Error'
 
 export type CreateUserResult = {
   succeeded: boolean
@@ -33,7 +33,7 @@ export const create = pipe(
   }),
 
   // Parse the response body as JSON
-  asJSON(),
+  asJSON((): ErrorKind => 'Respone Syntax Error'),
 
   // Decode the JSON into our type
   withDecoder(decoder),
