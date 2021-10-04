@@ -9,7 +9,7 @@
 ## Introduction
 
 We could abstract the process of fetching data (building `Request` and handling
-`Response`) as a Monad, and everything now could be expressed as a transition
+`Response`) as a Monad, and actions like setting body or adding header could be now expressed as a transition
 from one Monad to another.
 
 ### Core
@@ -89,7 +89,7 @@ the user with the left value and send log report back to your server.
 
 ### Do Not Repeat Yourself
 
-Since function composition satisfies associativity property, you could always
+Since function composition satisfies the associativity law, you could always
 split the above function into mutliple parts.
 
 You may like to define a global pattern like
