@@ -26,7 +26,7 @@ describe('Signal Combinator', () => {
 
 describe('Timeout combinator', () => {
   it('should do nothing is returned before timeout', async () => {
-    const response = new Response('Alwaays Has Been', {})
+    const response = new Response('Always Has Been', {})
     mock.mock('https://example.com', response, { delay: 500 })
     expect(await pipe(request, withTimeout(1000), mk)()).toStrictEqual(
       right(response)
@@ -34,7 +34,7 @@ describe('Timeout combinator', () => {
   })
 
   it('should throw if timeout', async () => {
-    const response = new Response('Alwaays Has Been', {})
+    const response = new Response('Always Has Been', {})
     mock.mock('https://example.com', response, { delay: 500 })
     expect(
       await pipe(

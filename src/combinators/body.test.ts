@@ -85,7 +85,7 @@ describe('Form body combinator', () => {
   })
 })
 
-describe('Blob body combbinator', () => {
+describe('Blob body combinator', () => {
   it('should encode FormData', async () => {
     await pipe(
       request,

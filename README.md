@@ -9,8 +9,8 @@
 ## Introduction
 
 We could abstract the process of fetching data (building `Request` and handling
-`Response`) as a Monad, and actions like setting body or adding header could be now expressed as a transition
-from one Monad to another.
+`Response`) as a Monad, and actions like setting body or adding header could be
+now expressed as a transition from one Monad to another.
 
 ### Core
 
@@ -42,7 +42,11 @@ import { asJSON } from '@equt/fetch/combinators/parser'
 import { withDecoder } from '@equt/fetch/combinators/generic'
 import { pipe } from 'fp-ts/function'
 
-export type ErrorKind = 'Internal Error' | 'Timeout' | 'Respone Syntax Error'
+export type ErrorKind =
+  | 'Internal Error'
+  | 'Timeout'
+  | 'Response Syntax Error'
+  | 'Decode Error'
 
 export type CreateUserResult = {
   succeeded: boolean
@@ -79,8 +83,7 @@ export const create = pipe(
 
 The intuitive and declarative pipeline structure illustrates the logical flow of
 the communication between the client and the server. Errors now could be easily
-handled within context, and the type of the error is totally defined by
-yourself.
+handled within context, and the type of the error is defined by yourself.
 
 The `create` function defined above will give you a
 `TaskEither<ErrorKind, CreateUserResult>`, you could continue applying
@@ -90,7 +93,7 @@ the user with the left value and send log report back to your server.
 ### Do Not Repeat Yourself
 
 Since function composition satisfies the associativity law, you could always
-split the above function into mutliple parts.
+split the above function into multiple parts.
 
 You may like to define a global pattern like
 
@@ -113,11 +116,11 @@ export const api = pipe(
 )
 ```
 
-The above code defines a generic client for all requests inside the code base.
+The above code defines a generic client for all requests inside the codebase.
 Put it in your project once, and use it everywhere, so every request will share
 the `Authorization` header and the timeout settings immediately.
 
-The combinator comes later will overwrite or merge the previous one, so you
+The combinator coming later will overwrite or merge the previous one, so you
 could change the HTTP method specifically.
 
 ```typescript
