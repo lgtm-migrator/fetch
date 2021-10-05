@@ -158,3 +158,9 @@ pnpm add fp-ts @equt/fetch
     want.
   - Handle the request body even if the `Response.ok` is not `true`.
 - Support more combinators like `withForm`, `withBlob`, `withBaseURL`, etc.
+
+<sub>LICENSE [MIT] • Author [@equt] • Issue [New]</sub>
+
+[mit]: ./LICENSE.md
+[@equt]: https://github.com/equt
+[new]: https://github.com/equt/fetch/issues/new
