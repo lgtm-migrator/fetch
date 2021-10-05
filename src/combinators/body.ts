@@ -39,11 +39,11 @@ export const mkFormData = (form: Formable): FormData =>
  *
  * @since 1.0.0
  */
-export type Formable = FormableK | FormableKV
+export type Formable = FormableK | FormableKW
 
 type FormableK = Record<string, string | Blob | FormBlob>
 
-type FormableKV = Record<
+type FormableKW = Record<
   string,
   string | Blob | FormBlob | { toString: () => string }
 >
