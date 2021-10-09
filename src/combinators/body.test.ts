@@ -25,24 +25,6 @@ describe('Create FormData', () => {
 
     expect(generated).toStrictEqual(expected)
   })
-
-  it('build from weak Formable', () => {
-    const generated = mkFormData({
-      id: 1,
-      license: new Blob(['DATA']),
-      backup: {
-        blob: new Blob(['DATA']),
-        filename: 'Backup',
-      },
-    })
-
-    const expected = new FormData()
-    expected.set('id', '1')
-    expected.set('license', new Blob(['DATA']))
-    expected.set('backup', new Blob(['DATA']), 'Backup')
-
-    expect(generated).toStrictEqual(expected)
-  })
 })
 
 const mk = runFetchM('https://example.com')

@@ -10,15 +10,13 @@ type FormBlob = {
   filename?: string
 }
 
-const isFormBlob = (x: unknown): x is FormBlob => !!(x as FormBlob).blob
-
 /**
  * Create a {@link FormData} from a form like object {@link Formable}.
  *
  * @param form Form like object {@link Formable}
  * @returns Form Data {@link FormData}
  *
- * @since 1.0.0
+ * @since 1.1.0
  */
 export const mkFormData = (form: Formable): FormData =>
   Object.entries(form).reduce((m, [k, v]) => {
@@ -26,10 +24,8 @@ export const mkFormData = (form: Formable): FormData =>
       m.set(k, v)
     } else if (v instanceof Blob) {
       m.set(k, v)
-    } else if (isFormBlob(v)) {
-      m.set(k, v.blob, v.filename)
     } else {
-      m.set(k, v.toString())
+      m.set(k, v.blob, v.filename)
     }
     return m
   }, new FormData())
@@ -37,23 +33,16 @@ export const mkFormData = (form: Formable): FormData =>
 /**
  * Form like object.
  *
- * @since 1.0.0
+ * @since 1.1.0
  */
-export type Formable = FormableK | FormableKW
-
-type FormableK = Record<string, string | Blob | FormBlob>
-
-type FormableKW = Record<
-  string,
-  string | Blob | FormBlob | { toString: () => string }
->
+export type Formable = Record<string, string | Blob | FormBlob>
 
 /**
  * Set the request body as {@link FormData}.
  *
  * @param f Form like object {@link Formable}
  *
- * @since 1.0.0
+ * @since 1.1.0
  */
 export const withForm = <E, A>(f: Formable): Combinator<E, A> =>
   withLocal(mapSnd(x => ({ body: mkFormData(f), ...x })))
