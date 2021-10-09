@@ -7,7 +7,14 @@ import { withLocal } from './generic'
  *
  * @since 1.0.0
  */
-export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'HEAD' | 'DELETE' | 'OPTION'
+export type HTTPMethod =
+  | 'GET'
+  | 'POST'
+  | 'PUT'
+  | 'HEAD'
+  | 'DELETE'
+  | 'OPTION'
+  | 'PATCH'
 
 /**
  * Set the request HTTP method.
