@@ -22,6 +22,16 @@ describe('Signal Combinator', () => {
     const result = await req()
     expect(result).toStrictEqual(left('Aborted'))
   })
+
+  it('should throw if no MapError provided', async () => {
+    mock.mock('https://example.com', 200)
+    const controller = new AbortController()
+    const req = pipe(request, withSignal(controller.signal), mk)
+    controller.abort()
+    await expect(async () => await req()).rejects.toThrowError(
+      'The operation was aborted.'
+    )
+  })
 })
 
 describe('Timeout combinator', () => {

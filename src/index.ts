@@ -87,7 +87,8 @@ export const mkRequest =
           // If the key exists, indicating user has used either of two controller combinators
           (init as ExtendedRequestInit)._ABORT_MAP_ERROR &&
           // and not that the DOMException error only raises on abortion.
-          e instanceof DOMException
+          e instanceof DOMException &&
+          e.name === 'AbortError'
         ) {
           // We cast the error into `E` to satisfy the compiler, but we know we have set the correct
           // error type in the combinator itself, so the error type union must contains the right
