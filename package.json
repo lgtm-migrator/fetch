@@ -7,6 +7,11 @@
   "publishConfig": {
     "access": "public"
   },
+  "keywords": [
+    "fp-ts",
+    "fetch",
+    "HTTP"
+  ],
   "scripts": {
     "test": "jest",
     "test:coverage": "jest --coverage",
