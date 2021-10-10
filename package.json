@@ -12,6 +12,13 @@
     "fetch",
     "HTTP"
   ],
+  "files": [
+    "README.md",
+    "LICENSE.md",
+    "index.js",
+    "index.d.ts",
+    "combinators"
+  ],
   "scripts": {
     "test": "jest",
     "test:coverage": "jest --coverage",
