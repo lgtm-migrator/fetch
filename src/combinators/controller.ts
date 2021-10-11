@@ -1,6 +1,6 @@
 import { bail, Combinator, MapError } from '..'
 import { mapSnd } from 'fp-ts/Tuple'
-import { rightIO, chain } from 'fp-ts/ReaderTaskEither'
+import { rightIO, chain, chainFirst } from 'fp-ts/ReaderTaskEither'
 import { withLocal } from './generic'
 import { pipe } from 'fp-ts/function'
 
@@ -41,16 +41,19 @@ export function withTimeout<E, A, F>(
   mapError: MapError<F> = bail
 ): Combinator<E, A, F> {
   return m => {
-    let controller = new AbortController()
+    let controller: AbortController
 
     return pipe(
-      rightIO(() => setTimeout(() => controller.abort(), miliseconds)),
+      rightIO(() => {
+        controller = new AbortController()
+        return setTimeout(() => controller.abort(), miliseconds)
+      }),
       chain(id =>
-        pipe(m, withSignal<E, A, F>(controller.signal, mapError), x => {
-          clearTimeout(id)
-          controller = new AbortController()
-          return x
-        })
+        pipe(
+          m,
+          withSignal<E, A, F>(controller.signal, mapError),
+          chainFirst(() => rightIO(() => clearTimeout(id)))
+        )
       )
     )
   }
