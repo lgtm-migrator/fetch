@@ -26,3 +26,5 @@ In addition to all the features provided by
 - Minor changes
   - Combinator setting the `JSON` `Request` body will automatically set a
     corresponding `Content-Type` header
+  - `contactlab/appy` does not reset the built-in `AbortController` for `withTimeout` combinator,
+    so you cannot reuse an already timeout request, it will always get aborted immediately.
