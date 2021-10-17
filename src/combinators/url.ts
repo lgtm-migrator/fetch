@@ -1,9 +1,7 @@
 import type { Combinator, MapError } from '..'
-import { tryCatch, map } from 'fp-ts/Either'
 import { mapSnd } from 'fp-ts/Tuple'
-import { pipe } from 'fp-ts/function'
 import { bail } from '..'
-import { withLocal, withLocalEither } from './generic'
+import { withLocal } from './generic'
 
 /**
  * Set the base URL for the request.
@@ -36,6 +34,7 @@ export function withBaseURL<E, F, A>(
  * @returns Record `Record<string, string>`
  *
  * @since 1.0.0
+ * @deprecated Since 1.2.0, the {@link withURLSearchParams} no longer uses this function internally.
  */
 export const toRecord = (params: URLSearchParams): Record<string, string> => {
   const obj: Record<string, string> = {}
@@ -51,6 +50,7 @@ export const toRecord = (params: URLSearchParams): Record<string, string> => {
  * @returns Search parameters {@link URLSearchParams}
  *
  * @since 1.0.0
+ * @deprecated Since 1.2.0, the {@link withURLSearchParams} no longer uses this function internally.
  */
 export const merge = (
   into: URLSearchParams,
@@ -70,7 +70,7 @@ export const merge = (
  * @param params URL parameters in `Record<string, string>`
  * @param mapError An instance of {@link MapError}
  *
- * @since 1.0.0
+ * @since 1.2.0
  */
 export function withURLSearchParams<E, F, A>(
   params: Record<string, string>,
@@ -83,17 +83,21 @@ export function withURLSearchParams<E, F, A>(
   params: Record<string, string>,
   mapError: MapError<F> = bail
 ): Combinator<E, A, F> {
-  return withLocalEither(([input, init]) =>
-    pipe(
-      tryCatch(() => {
-        const url = new URL(input)
-        url.search = merge(
-          new URLSearchParams(params),
-          url.searchParams
-        ).toString()
-        return url.href
-      }, mapError),
-      map(s => [s, init])
-    )
+  type ExtendedRequestInit = RequestInit & {
+    _URL_SEARCH_PARAMS?: Record<string, string>
+  }
+
+  return withLocal(
+    mapSnd(x => {
+      const { _URL_SEARCH_PARAMS, ...rest } = x as ExtendedRequestInit
+      return {
+        _URL_SEARCH_PARAMS_MAP_ERROR: mapError,
+        _URL_SEARCH_PARAMS: {
+          ...params,
+          ..._URL_SEARCH_PARAMS,
+        },
+        ...rest,
+      }
+    })
   )
 }
