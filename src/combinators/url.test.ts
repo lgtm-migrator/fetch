@@ -18,6 +18,17 @@ describe('Base URL combinator', () => {
     expect(mock.lastUrl()).toStrictEqual('https://example.com/wait')
   })
 
+  it('latter should overwrite the former', async () => {
+    mock.mock('https://example.com/wait', 200)
+    await pipe(
+      request,
+      withBaseURL('https://example.org'),
+      withBaseURL('https://example.com'),
+      runFetchM('/wait')
+    )()
+    expect(mock.lastUrl()).toStrictEqual('https://example.com/wait')
+  })
+
   // it('should throws if URL is invalid', async () => {
   //   expect(
   //     await pipe(
