@@ -1,7 +1,6 @@
 import { bail, Combinator, MapError } from '..'
 import { mapSnd } from 'fp-ts/Tuple'
-import { rightIO, chain, chainFirst } from 'fp-ts/ReaderTaskEither'
-import { withLocal } from './generic'
+import { local, rightIO, chain, chainFirst } from 'fp-ts/ReaderTaskEither'
 import { pipe } from 'fp-ts/function'
 
 /**
@@ -21,7 +20,7 @@ export function withSignal<E, A, F>(
   mapError: MapError<F> = bail
 ): Combinator<E, A, F> {
   // How could this even be possible? See the impl details of `mkRequest`
-  return withLocal(mapSnd(x => ({ signal, _ABORT_MAP_ERROR: mapError, ...x })))
+  return local(mapSnd(x => ({ signal, _ABORT_MAP_ERROR: mapError, ...x })))
 }
 
 /**

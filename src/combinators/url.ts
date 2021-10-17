@@ -1,7 +1,7 @@
 import type { Combinator, MapError } from '..'
+import { local } from 'fp-ts/ReaderTaskEither'
 import { mapSnd } from 'fp-ts/Tuple'
 import { bail } from '..'
-import { withLocal } from './generic'
 
 /**
  * Set the base URL for the request.
@@ -22,7 +22,7 @@ export function withBaseURL<E, F, A>(
   url: URL | string | undefined,
   mapError: MapError<F> = bail
 ): Combinator<E, A, F> {
-  return withLocal(
+  return local(
     mapSnd(x => ({ _BASE_URL: url, _BASE_URL_MAP_ERROR: mapError, ...x }))
   )
 }
@@ -87,7 +87,7 @@ export function withURLSearchParams<E, F, A>(
     _URL_SEARCH_PARAMS?: Record<string, string>
   }
 
-  return withLocal(
+  return local(
     mapSnd(x => {
       const { _URL_SEARCH_PARAMS, ...rest } = x as ExtendedRequestInit
       return {

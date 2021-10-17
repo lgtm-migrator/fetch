@@ -1,6 +1,6 @@
 import type { Combinator } from '..'
+import { local } from 'fp-ts/ReaderTaskEither'
 import { mapSnd } from 'fp-ts/Tuple'
-import { withLocal } from './generic'
 
 /**
  * All possible HTTP methods
@@ -24,4 +24,4 @@ export type HTTPMethod =
  * @since 1.0.0
  */
 export const withMethod = <E, A>(method: HTTPMethod): Combinator<E, A> =>
-  withLocal(mapSnd(x => ({ method, ...x })))
+  local(mapSnd(x => ({ method, ...x })))

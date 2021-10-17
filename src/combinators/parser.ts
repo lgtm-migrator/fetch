@@ -1,9 +1,9 @@
 import { bail, Combinator, MapError } from '..'
 import type { Json } from 'fp-ts/Json'
+import { chainTaskEitherKW } from 'fp-ts/ReaderTaskEither'
 import { tryCatch } from 'fp-ts/TaskEither'
 import { flow } from 'fp-ts/function'
 import { withHeaders } from './header'
-import { withTaskDecoder } from './generic'
 
 /**
  * Parse the {@link Response} body as {@link Json}
@@ -21,7 +21,7 @@ export function asJSON<E, F>(
 ): Combinator<E, Response, F, Json> {
   return flow(
     withHeaders({ Accept: 'application/json' }),
-    withTaskDecoder(resp =>
+    chainTaskEitherKW(resp =>
       tryCatch(() => resp.json().then(x => x as Json), mapError)
     )
   )
@@ -46,7 +46,7 @@ export function asBlob<E, F>(
 ): Combinator<E, Response, F, Blob> {
   return flow(
     withHeaders({ Accept: accept }),
-    withTaskDecoder(resp => tryCatch(() => resp.blob(), mapError))
+    chainTaskEitherKW(resp => tryCatch(() => resp.blob(), mapError))
   )
 }
 
@@ -66,6 +66,6 @@ export function asText<E, F>(
 ): Combinator<E, Response, F, string> {
   return flow(
     withHeaders({ Accept: 'text/plain' }),
-    withTaskDecoder(resp => tryCatch(() => resp.text(), mapError))
+    chainTaskEitherKW(resp => tryCatch(() => resp.text(), mapError))
   )
 }
