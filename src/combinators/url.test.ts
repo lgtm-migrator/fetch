@@ -88,4 +88,34 @@ describe('URL Parameters Combinator', () => {
       'https://example.com/?wait=always&has=been'
     )
   })
+
+  it('should work well with `withBaseURL`, regardless the order (normal)', async () => {
+    mock.mock('https://example.com/orio?wait=always&has=been', 200)
+
+    await pipe(
+      request,
+      withBaseURL('https://example.com/'),
+      withURLSearchParams({ wait: 'always', has: 'been' }),
+      runFetchM('orio')
+    )()
+
+    expect(mock.lastCall()?.[0]).toStrictEqual(
+      'https://example.com/orio?wait=always&has=been'
+    )
+  })
+
+  it('should work well with `withBaseURL`, regardless the order (reversed)', async () => {
+    mock.mock('https://example.com/orio?wait=always&has=been', 200)
+
+    await pipe(
+      request,
+      withURLSearchParams({ wait: 'always', has: 'been' }),
+      withBaseURL('https://example.com/'),
+      runFetchM('orio')
+    )()
+
+    expect(mock.lastCall()?.[0]).toStrictEqual(
+      'https://example.com/orio?wait=always&has=been'
+    )
+  })
 })
