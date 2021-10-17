@@ -1,8 +1,9 @@
 import type { Combinator, MapError } from '..'
 import { tryCatch, map } from 'fp-ts/Either'
+import { mapSnd } from 'fp-ts/Tuple'
 import { pipe } from 'fp-ts/function'
 import { bail } from '..'
-import { withLocalEither } from './generic'
+import { withLocal, withLocalEither } from './generic'
 
 /**
  * Set the base URL for the request.
@@ -23,11 +24,8 @@ export function withBaseURL<E, F, A>(
   url: URL | string | undefined,
   mapError: MapError<F> = bail
 ): Combinator<E, A, F> {
-  return withLocalEither(([input, init]) =>
-    pipe(
-      tryCatch(() => new URL(input, url).href, mapError),
-      map(s => [s, init])
-    )
+  return withLocal(
+    mapSnd(x => ({ _BASE_URL: url, _BASE_URL_MAP_ERROR: mapError, ...x }))
   )
 }
 
