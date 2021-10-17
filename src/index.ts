@@ -86,38 +86,22 @@ const buildBaseURL = <E>(config: Config): TaskEither<E, Config> => {
 
 // NOTE This has to be called after the buildBaseURL, since it assume the `input`
 // in the config is always a valid URL.
-const buildURLParams = <E>(config: Config): TaskEither<E, Config> => {
+const buildURLParams = (config: Config): Config => {
   type ExtendedRequestInit = RequestInit & {
-    _URL_SEARCH_PARAMS_MAP_ERROR: MapError<E>
     _URL_SEARCH_PARAMS: Record<string, string>
   }
 
   const [input, init] = config
 
-  if (
-    (init as ExtendedRequestInit)._URL_SEARCH_PARAMS_MAP_ERROR &&
-    (init as ExtendedRequestInit)._URL_SEARCH_PARAMS
-  ) {
-    return pipe(
-      tryCatch(
-        () =>
-          Promise.resolve(
-            new URLSearchParams(
-              (init as ExtendedRequestInit)._URL_SEARCH_PARAMS
-            )
-          ),
-        (init as ExtendedRequestInit)._URL_SEARCH_PARAMS_MAP_ERROR
-      ),
-      map<URLSearchParams, Config>(params => {
-        // We simply assume the input is a valid URL
-        const url = new URL(input)
-        url.search = params.toString()
-        return [url.href, init]
-      })
-    )
+  if ((init as ExtendedRequestInit)._URL_SEARCH_PARAMS) {
+    // We simply assume the input is a valid URL
+    const url = new URL(input)
+    url.search = new URLSearchParams(
+      (init as ExtendedRequestInit)._URL_SEARCH_PARAMS
+    ).toString()
+    return [url.href, init]
   }
-
-  return right(config)
+  return config
 }
 
 /**
@@ -134,7 +118,7 @@ export const mkRequest =
   r =>
     pipe(
       buildBaseURL<E>(r),
-      chain(r => buildURLParams(r)),
+      map(r => buildURLParams(r)),
       chain(r =>
         tryCatch(
           () => tupled(fetchImpl ?? fetch)(r),

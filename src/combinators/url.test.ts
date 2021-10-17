@@ -1,7 +1,7 @@
 import mock from 'fetch-mock-jest'
 import { pipe } from 'fp-ts/function'
 import { request, runFetchM } from '..'
-import { withBaseURL, merge, withURLSearchParams } from './url'
+import { withBaseURL, withURLSearchParams } from './url'
 
 // FIXME URL doesn't throw if invalid
 
@@ -38,25 +38,6 @@ describe('Base URL combinator', () => {
   //     )()
   //   ).toStrictEqual(left('InternalError'))
   // })
-})
-
-it('Merge two URLSearchParams', () => {
-  expect(
-    merge(
-      new URLSearchParams({
-        wait: 'Always Has Been',
-        earth: 'Its All Orio',
-      }),
-      new URLSearchParams({
-        wait: 'R > N',
-      })
-    ).toString()
-  ).toStrictEqual(
-    new URLSearchParams({
-      wait: 'R > N',
-      earth: 'Its All Orio',
-    }).toString()
-  )
 })
 
 describe('URL Parameters Combinator', () => {
