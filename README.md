@@ -1,6 +1,58 @@
 ![codecov](https://badgen.net/codecov/c/github/equt/fetch)
 [![npm](https://badgen.net/npm/v/@equt/fetch)](https://www.npmjs.com/package/@equt/fetch)
 
+```typescript
+type Error = 'InternalError' | 'ServerError'
+
+const base = pipe(
+  mkRequest((): Error => 'InternalError'),
+  withBaseURL(process.env.BASE_URL, (): Error => 'InternalError'),
+  withTimeout(3_000),
+  asJSON((): Error => 'ServerError')
+)
+
+export const createUser = (username: string, password: string) =>
+  pipe(
+    base,
+    withMethod('POST'),
+    withJSON({
+      username,
+      password,
+    }),
+    runFetchM('user')
+  )
+
+export const getUserAvatar = (username: string, size: string = '1x') =>
+  pipe(
+    base,
+    withURLSearchParams({
+      username,
+      size,
+    }),
+    runFetchM('avatar')
+  )
+
+export const authorized = pipe(
+  base,
+  withHeaders({
+    Authorization: `Bearer SECRETS`,
+  })
+)
+
+export const listCollection =
+  (cursor: number, size: number = 10) =>
+  (collection: string) =>
+    pipe(
+      authorized,
+      withURLSearchParams({
+        collection,
+        cursor,
+        size,
+      }),
+      runFetch('collection')
+    )
+```
+
 In addition to all the features provided by
 [`contactlab/appy`](https://github.com/contactlab/appy), this package
 
