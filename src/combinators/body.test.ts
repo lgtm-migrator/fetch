@@ -8,7 +8,7 @@ beforeEach(() => mock.mock('https://example.com', 200))
 afterEach(() => mock.reset())
 
 describe('Create FormData', () => {
-  it('build from strict Formable', () => {
+  it('build from Formable', () => {
     const generated = mkFormData({
       name: 'John',
       license: new Blob(['DATA']),
@@ -65,10 +65,29 @@ describe('Form body combinator', () => {
       body: form,
     })
   })
+
+  it('should encode FormData progressively', async () => {
+    await pipe(
+      request,
+      withMethod('POST'),
+      withForm({ Earth: 'Always Has Been', Me: 'Orio' }),
+      withForm({ Me: 'Wait' }),
+      mk
+    )()
+
+    const form = new FormData()
+    form.set('Earth', 'Always Has Been')
+    form.set('Me', 'Wait')
+
+    expect(mock.lastCall()?.[1]).toStrictEqual({
+      method: 'POST',
+      body: form,
+    })
+  })
 })
 
 describe('Blob body combinator', () => {
-  it('should encode FormData', async () => {
+  it('should encode Blob', async () => {
     await pipe(
       request,
       withMethod('POST'),

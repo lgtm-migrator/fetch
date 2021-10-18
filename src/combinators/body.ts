@@ -31,6 +31,22 @@ export const mkFormData = (form: Formable): FormData =>
   }, new FormData())
 
 /**
+ * Collect a {@link FormData} into a {@link Formable}.
+ *
+ * @param form A {@link FormData}
+ * @returns An object satisfies {@link Formable}
+ *
+ * @since 2.1.0
+ */
+export const collectFormable = (form: FormData): Formable => {
+  const obj: Formable = {}
+  form.forEach((v, k) => {
+    obj[k] = v
+  })
+  return obj
+}
+
+/**
  * Form like object.
  *
  * @since 1.1.0
@@ -42,10 +58,25 @@ export type Formable = Record<string, string | Blob | FormBlob>
  *
  * @param f Form like object {@link Formable}
  *
- * @since 1.1.0
+ * @since 2.1.0
  */
-export const withForm = <E, A>(f: Formable): Combinator<E, A> =>
-  local(mapSnd(x => ({ body: mkFormData(f), ...x })))
+export const withForm = <E, A>(form: Formable): Combinator<E, A> =>
+  local(
+    mapSnd(({ body, ...rest }) => {
+      if (body instanceof FormData) {
+        const formable = collectFormable(body)
+        return {
+          body: mkFormData({
+            ...form,
+            ...formable,
+          }),
+          ...rest,
+        }
+      } else {
+        return { body: mkFormData(form), ...rest }
+      }
+    })
+  )
 
 /**
  * Set the request body as JSON.
