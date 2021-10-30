@@ -48,13 +48,18 @@ export const bail: MapError<never> = e => {
 /**
  * Transform from one {@link FetchM} to another {@link FetchM}.
  *
- * Previous errors will be preserved.
+ * A combinator is an alias for a function mapping from one {@link FetchM} to
+ * another {@link FetchM}.
+ *
+ * Before 2.2.0, previous errors union will always gets preserved. But starting
+ * from 2.2.0, the type signature is relaxed to allow you create combinators that
+ * recover the errors, or conditionally applied.
  *
  * @since 1.0.0
  */
 export type Combinator<E1, A, E2 = E1, B = A> = (
   m: FetchM<E1, A>
-) => FetchM<E2 | E1, B>
+) => FetchM<E2, B>
 
 const buildBaseURL = <E>(config: Config): TaskEither<E, Config> => {
   type ExtendedRequestInit = RequestInit & {

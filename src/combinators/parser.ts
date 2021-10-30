@@ -14,11 +14,11 @@ import { withHeaders } from './header'
  */
 export function asJSON<E, F>(
   mapError: MapError<F>
-): Combinator<E, Response, F, Json>
+): Combinator<E, Response, E | F, Json>
 export function asJSON<E>(): Combinator<E, Response, E, Json>
 export function asJSON<E, F>(
   mapError: MapError<F> = bail
-): Combinator<E, Response, F, Json> {
+): Combinator<E, Response, E | F, Json> {
   return flow(
     withHeaders({ Accept: 'application/json' }),
     chainTaskEitherKW(resp =>
@@ -38,12 +38,12 @@ export function asJSON<E, F>(
 export function asBlob<E, F>(
   accept: string,
   mapError: MapError<F>
-): Combinator<E, Response, F, Blob>
+): Combinator<E, Response, E | F, Blob>
 export function asBlob<E>(accept: string): Combinator<E, Response, E, Blob>
 export function asBlob<E, F>(
   accept: string,
   mapError: MapError<F> = bail
-): Combinator<E, Response, F, Blob> {
+): Combinator<E, Response, E | F, Blob> {
   return flow(
     withHeaders({ Accept: accept }),
     chainTaskEitherKW(resp => tryCatch(() => resp.blob(), mapError))
@@ -59,11 +59,11 @@ export function asBlob<E, F>(
  */
 export function asText<E, F>(
   mapError: MapError<F>
-): Combinator<E, Response, F, string>
+): Combinator<E, Response, E | F, string>
 export function asText<E>(): Combinator<E, Response, E, string>
 export function asText<E, F>(
   mapError: MapError<F> = bail
-): Combinator<E, Response, F, string> {
+): Combinator<E, Response, E | F, string> {
   return flow(
     withHeaders({ Accept: 'text/plain' }),
     chainTaskEitherKW(resp => tryCatch(() => resp.text(), mapError))
