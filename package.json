@@ -22,6 +22,7 @@
   "scripts": {
     "test": "jest",
     "test:coverage": "jest --coverage",
+    "lint": "tsc && eslint .",
     "clean": "rimraf combinators index.d.ts index.js tsconfig.tsbuildinfo",
     "build": "tsc"
   },
