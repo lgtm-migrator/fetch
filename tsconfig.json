@@ -4,7 +4,6 @@
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
     "module": "ES6",
-    "noEmit": true,
     "types": ["@types/jest"],
     "outDir": ".",
     "declaration": true
