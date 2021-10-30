@@ -24,6 +24,7 @@
     "test:coverage": "jest --coverage",
     "lint": "tsc && eslint .",
     "clean": "rimraf combinators index.d.ts index.js tsconfig.tsbuildinfo",
+    "prepublish": "pnpm build",
     "build": "tsc"
   },
   "devDependencies": {
