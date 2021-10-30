@@ -25,6 +25,7 @@
     "lint": "tsc --noEmit && eslint .",
     "clean": "rimraf combinators index.d.ts index.js tsconfig.tsbuildinfo",
     "prepublish": "pnpm build",
+    "postpublish": "pnpm clean",
     "build": "tsc"
   },
   "devDependencies": {
