@@ -1,9 +1,10 @@
 import mock from 'fetch-mock-jest'
+import { left } from 'fp-ts/Either'
 import { pipe } from 'fp-ts/function'
 import { request, runFetchM } from '..'
 import { withMethod } from './method'
 import { withJSON } from './body'
-import { when, fail } from './generic'
+import { when, fail, localE } from './generic'
 
 beforeEach(() => mock.mock('https://example.com', 200))
 afterEach(() => mock.reset())
@@ -48,6 +49,18 @@ describe('fail', () => {
       await pipe(
         request,
         fail(() => 'Always has been'),
+        mk
+      )()
+    ).toStrictEqual(expect.objectContaining({ _tag: 'Left' }))
+  })
+})
+
+describe('localE', () => {
+  it('raise an error', async () => {
+    expect(
+      await pipe(
+        request,
+        localE(() => left('Always has been')),
         mk
       )()
     ).toStrictEqual(expect.objectContaining({ _tag: 'Left' }))

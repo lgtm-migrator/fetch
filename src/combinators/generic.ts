@@ -1,7 +1,15 @@
-import type { Combinator } from '..'
+import type { Either } from 'fp-ts/Either'
+import type { Combinator, Config } from '..'
 import type { Lazy } from 'fp-ts/function'
-import { left } from 'fp-ts/ReaderTaskEither'
-import { flow, identity } from 'fp-ts/function'
+import {
+  ask,
+  left,
+  local,
+  chain,
+  chainW,
+  fromEither,
+} from 'fp-ts/ReaderTaskEither'
+import { pipe, flow, identity } from 'fp-ts/function'
 
 /**
  * Apply a combinator conditionally.
@@ -25,3 +33,22 @@ export const when = <E, A, F, B>(
  */
 export const fail = <E, A, F, B>(error: Lazy<F>): Combinator<E, A, E | F, B> =>
   flow(error, left)
+
+/**
+ * Abuse version of {@link local}, which might raise an error.
+ *
+ * @since 2.2.3
+ */
+export const localE =
+  <E, A, F>(f: (a: Config) => Either<F, Config>): Combinator<E, A, E | F> =>
+  m =>
+    pipe(
+      ask<Config>(),
+      chain<Config, F, Config, Config>(flow(f, fromEither)),
+      chainW(x =>
+        pipe(
+          m,
+          local(() => x)
+        )
+      )
+    )
