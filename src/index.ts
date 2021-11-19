@@ -177,6 +177,6 @@ export const request = mkRequest(bail)
  * @since 1.0.0
  */
 export const runFetchM =
-  (input: string, init?: RequestInit) =>
-  <E, A>(m: FetchM<E, A>): TaskEither<E, A> =>
+  <E, A>(input: string, init?: RequestInit) =>
+  (m: FetchM<E, A>): TaskEither<E, A> =>
     m([input, init ?? {}])
