@@ -6,7 +6,7 @@ type Error = 'InternalError' | 'ServerError'
 
 const base = pipe(
   mkRequest((): Error => 'InternalError'),
-  withBaseURL(process.env.BASE_URL, (): Error => 'InternalError'),
+  withBaseURL(import.meta.env.BASE_URL, (): Error => 'InternalError'),
   withTimeout(3_000),
   asJSON((): Error => 'ServerError'),
 )
