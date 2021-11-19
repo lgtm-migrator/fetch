@@ -35,7 +35,7 @@ describe('JSON body combinator', () => {
       request,
       withMethod('POST'),
       withJSON({ Earth: 'Always Has Been' }),
-      mk
+      mk,
     )()
 
     expect(mock.lastCall()?.[1]).toStrictEqual({
@@ -54,7 +54,7 @@ describe('Form body combinator', () => {
       request,
       withMethod('POST'),
       withForm({ Earth: 'Always Has Been' }),
-      mk
+      mk,
     )()
 
     const form = new FormData()
@@ -72,7 +72,7 @@ describe('Form body combinator', () => {
       withMethod('POST'),
       withForm({ Earth: 'Always Has Been', Me: 'Orio' }),
       withForm({ Me: 'Wait' }),
-      mk
+      mk,
     )()
 
     const form = new FormData()
@@ -92,7 +92,7 @@ describe('Blob body combinator', () => {
       request,
       withMethod('POST'),
       withBlob(new Blob([]), 'application/pdf'),
-      mk
+      mk,
     )()
 
     expect(mock.lastCall()?.[1]).toStrictEqual({

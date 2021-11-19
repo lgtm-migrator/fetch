@@ -12,12 +12,12 @@ import { pipe } from 'fp-ts/function'
  */
 export function withSignal<E, A, F>(
   signal: AbortSignal,
-  mapError: MapError<F>
+  mapError: MapError<F>,
 ): Combinator<E, A, E | F>
 export function withSignal<E, A>(signal: AbortSignal): Combinator<E, A>
 export function withSignal<E, A, F>(
   signal: AbortSignal,
-  mapError: MapError<F> = bail
+  mapError: MapError<F> = bail,
 ): Combinator<E, A, E | F> {
   // How could this even be possible? See the impl details of `mkRequest`
   return local(mapSnd(x => ({ signal, _ABORT_MAP_ERROR: mapError, ...x })))
@@ -32,12 +32,12 @@ export function withSignal<E, A, F>(
  */
 export function withTimeout<E, A, F>(
   miliseconds: number,
-  mapError: MapError<F>
+  mapError: MapError<F>,
 ): Combinator<E, A, E | F>
 export function withTimeout<E, A>(miliseconds: number): Combinator<E, A>
 export function withTimeout<E, A, F>(
   miliseconds: number,
-  mapError: MapError<F> = bail
+  mapError: MapError<F> = bail,
 ): Combinator<E, A, E | F> {
   return m => {
     let controller: AbortController
@@ -51,9 +51,9 @@ export function withTimeout<E, A, F>(
         pipe(
           m,
           withSignal<E, A, F>(controller.signal, mapError),
-          chainFirst(() => rightIO(() => clearTimeout(id)))
-        )
-      )
+          chainFirst(() => rightIO(() => clearTimeout(id))),
+        ),
+      ),
     )
   }
 }

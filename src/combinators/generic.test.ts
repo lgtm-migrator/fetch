@@ -17,7 +17,7 @@ describe('when', () => {
       request,
       withMethod('POST'),
       when(true, withJSON({ Earth: 'Always Has Been' })),
-      mk
+      mk,
     )()
 
     expect(mock.lastCall()?.[1]).toStrictEqual({
@@ -35,10 +35,10 @@ describe('when', () => {
         request,
         when(
           false,
-          fail(() => 'Always has been')
+          fail(() => 'Always has been'),
         ),
-        mk
-      )()
+        mk,
+      )(),
     ).toStrictEqual(expect.objectContaining({ _tag: 'Right' }))
   })
 })
@@ -49,8 +49,8 @@ describe('fail', () => {
       await pipe(
         request,
         fail(() => 'Always has been'),
-        mk
-      )()
+        mk,
+      )(),
     ).toStrictEqual(expect.objectContaining({ _tag: 'Left' }))
   })
 })
@@ -61,8 +61,8 @@ describe('localE', () => {
       await pipe(
         request,
         localE(() => left('Always has been')),
-        mk
-      )()
+        mk,
+      )(),
     ).toStrictEqual(expect.objectContaining({ _tag: 'Left' }))
   })
 })

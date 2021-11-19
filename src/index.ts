@@ -58,7 +58,7 @@ export const bail: MapError<never> = e => {
  * @since 1.0.0
  */
 export type Combinator<E1, A, E2 = E1, B = A> = (
-  m: FetchM<E1, A>
+  m: FetchM<E1, A>,
 ) => FetchM<E2, B>
 
 const buildBaseURL = <E>(config: Config): TaskEither<E, Config> => {
@@ -78,11 +78,11 @@ const buildBaseURL = <E>(config: Config): TaskEither<E, Config> => {
       tryCatch(
         () =>
           Promise.resolve(
-            new URL(input, (init as ExtendedRequestInit)._BASE_URL).href
+            new URL(input, (init as ExtendedRequestInit)._BASE_URL).href,
           ),
-        (init as ExtendedRequestInit)._BASE_URL_MAP_ERROR
+        (init as ExtendedRequestInit)._BASE_URL_MAP_ERROR,
       ),
-      map<string, Config>(s => [s, init])
+      map<string, Config>(s => [s, init]),
     )
   }
 
@@ -102,7 +102,7 @@ const buildURLParams = (config: Config): Config => {
     // We simply assume the input is a valid URL
     const url = new URL(input)
     url.search = new URLSearchParams(
-      (init as ExtendedRequestInit)._URL_SEARCH_PARAMS
+      (init as ExtendedRequestInit)._URL_SEARCH_PARAMS,
     ).toString()
     return [url.href, init]
   }
@@ -153,9 +153,9 @@ export const mkRequest =
               return (init as ExtendedRequestInit)._ABORT_MAP_ERROR(e) as E
             }
             return mapError(e)
-          }
-        )
-      )
+          },
+        ),
+      ),
     )
 
 /**

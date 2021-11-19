@@ -11,7 +11,7 @@ describe('Convert HeaderInit to Record<string, string>', () => {
     expect(
       toRecord({
         Authorization: 'BEARER WAIT_ITS_ALL_OHIO',
-      })
+      }),
     ).toStrictEqual({
       Authorization: 'BEARER WAIT_ITS_ALL_OHIO',
     })
@@ -19,7 +19,7 @@ describe('Convert HeaderInit to Record<string, string>', () => {
 
   it('should create Record from entries', () => {
     expect(
-      toRecord([['Authorization', 'BEARER ALWAYS_HAS_BEEN']])
+      toRecord([['Authorization', 'BEARER ALWAYS_HAS_BEEN']]),
     ).toStrictEqual({
       Authorization: 'BEARER ALWAYS_HAS_BEEN',
     })
@@ -27,7 +27,7 @@ describe('Convert HeaderInit to Record<string, string>', () => {
 
   it('should iterate over Headers to create Record', () => {
     expect(
-      toRecord(new Headers([['Authorization', 'BEARER ALWAYS_HAS_BEEN']]))
+      toRecord(new Headers([['Authorization', 'BEARER ALWAYS_HAS_BEEN']])),
     ).toStrictEqual({
       authorization: 'BEARER ALWAYS_HAS_BEEN',
     })
@@ -39,8 +39,8 @@ describe('Merge two HeaderInit and create a new one', () => {
     expect(
       merge(
         { Authorization: 'BEARER ALWAYS_HAS_BEEN' },
-        { Accept: 'application/json' }
-      )
+        { Accept: 'application/json' },
+      ),
     ).toStrictEqual({
       Authorization: 'BEARER ALWAYS_HAS_BEEN',
       Accept: 'application/json',
@@ -51,8 +51,8 @@ describe('Merge two HeaderInit and create a new one', () => {
     expect(
       merge(
         { Authorization: 'BEARER ALWAYS_HAS_BEEN' },
-        { Authorization: 'BEARER WAIT_ITS_ALL_OHIO' }
-      )
+        { Authorization: 'BEARER WAIT_ITS_ALL_OHIO' },
+      ),
     ).toStrictEqual({ Authorization: 'BEARER WAIT_ITS_ALL_OHIO' })
   })
 })
@@ -64,7 +64,7 @@ describe('Header combinator', () => {
     await pipe(
       request,
       withHeaders({ Authorization: 'BEARER ALWAYS_HAS_BEEN' }),
-      mk
+      mk,
     )()
 
     expect(mock.lastCall()?.[1]).toStrictEqual({
@@ -80,7 +80,7 @@ describe('Header combinator', () => {
       withHeaders({ Authorization: 'BEARER ALWAYS_HAS_BEEN' }),
       runFetchM('https://example.com', {
         headers: { Authorization: 'BEARER ALWAYS_HAS_BEEN' },
-      })
+      }),
     )()
 
     expect(mock.lastCall()?.[1]).toStrictEqual({
@@ -95,7 +95,7 @@ describe('Header combinator', () => {
       request,
       withHeaders({ Authorization: 'BEARER WAIT_ITS_ALL_OHIO' }),
       withHeaders({ Authorization: 'BEARER ALWAYS_HAS_BEEN' }),
-      mk
+      mk,
     )()
 
     expect(mock.lastCall()?.[1]).toStrictEqual({

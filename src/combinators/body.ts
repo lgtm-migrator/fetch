@@ -75,7 +75,7 @@ export const withForm = <E, A>(form: Formable): Combinator<E, A> =>
       } else {
         return { body: mkFormData(form), ...rest }
       }
-    })
+    }),
   )
 
 /**
@@ -95,9 +95,9 @@ export const withJSONBody = <E, A>(
   replacer?: (
     this: unknown,
     key: string,
-    value: unknown
+    value: unknown,
   ) => unknown | (number | string)[] | null,
-  space?: Parameters<typeof JSON.stringify>['2']
+  space?: Parameters<typeof JSON.stringify>['2'],
 ): Combinator<E, A> =>
   local(mapSnd(x => ({ body: JSON.stringify(json, replacer, space), ...x })))
 
@@ -118,13 +118,13 @@ export const withJSON = <E, A>(
   replacer?: (
     this: unknown,
     key: string,
-    value: unknown
+    value: unknown,
   ) => unknown | (number | string)[] | null,
-  space?: Parameters<typeof JSON.stringify>['2']
+  space?: Parameters<typeof JSON.stringify>['2'],
 ): Combinator<E, A> =>
   flow(
     withHeaders({ 'Content-Type': 'application/json' }),
-    withJSONBody(json, replacer, space)
+    withJSONBody(json, replacer, space),
   )
 
 /**
@@ -137,9 +137,9 @@ export const withJSON = <E, A>(
  */
 export const withBlob = <E extends Error, A>(
   blob: Blob,
-  contentType: string
+  contentType: string,
 ): Combinator<E, A> =>
   flow(
     withHeaders({ 'Content-Type': contentType }),
-    local(mapSnd(x => ({ body: blob, ...x })))
+    local(mapSnd(x => ({ body: blob, ...x }))),
   )

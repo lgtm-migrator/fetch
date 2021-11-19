@@ -16,7 +16,7 @@ describe('Plain request', () => {
     mock.mock('https://example.com', resp)
 
     expect(
-      await pipe(request, runFetchM('https://example.com'))()
+      await pipe(request, runFetchM('https://example.com'))(),
     ).toStrictEqual(right(resp))
   })
 
@@ -24,8 +24,8 @@ describe('Plain request', () => {
     expect(
       await pipe(
         mkRequest(() => 'InternalError', realFetch),
-        runFetchM('https://*')
-      )()
+        runFetchM('https://*'),
+      )(),
     ).toStrictEqual(left('InternalError'))
   })
 })

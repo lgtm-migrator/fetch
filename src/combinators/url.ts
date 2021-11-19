@@ -13,17 +13,17 @@ import { bail } from '..'
  */
 export function withBaseURL<E, F, A>(
   url: URL | string | undefined,
-  mapError: MapError<F>
+  mapError: MapError<F>,
 ): Combinator<E, A, E | F>
 export function withBaseURL<E, A>(
-  url: URL | string | undefined
+  url: URL | string | undefined,
 ): Combinator<E, A>
 export function withBaseURL<E, F, A>(
   url: URL | string | undefined,
-  mapError: MapError<F> = bail
+  mapError: MapError<F> = bail,
 ): Combinator<E, A, E | F> {
   return local(
-    mapSnd(x => ({ _BASE_URL: url, _BASE_URL_MAP_ERROR: mapError, ...x }))
+    mapSnd(x => ({ _BASE_URL: url, _BASE_URL_MAP_ERROR: mapError, ...x })),
   )
 }
 
@@ -38,7 +38,7 @@ export function withBaseURL<E, F, A>(
  * @since 2.0.0
  */
 export const withURLSearchParams = <E, A>(
-  params: Record<string, string>
+  params: Record<string, string>,
 ): Combinator<E, A> => {
   type ExtendedRequestInit = RequestInit & {
     _URL_SEARCH_PARAMS?: Record<string, string>
@@ -54,6 +54,6 @@ export const withURLSearchParams = <E, A>(
         },
         ...rest,
       }
-    })
+    }),
   )
 }

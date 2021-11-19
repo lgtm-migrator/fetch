@@ -16,7 +16,7 @@ describe('Signal Combinator', () => {
     const req = pipe(
       request,
       withSignal(controller.signal, () => 'Aborted'),
-      mk
+      mk,
     )
     controller.abort()
     const result = await req()
@@ -29,7 +29,7 @@ describe('Signal Combinator', () => {
     const req = pipe(request, withSignal(controller.signal), mk)
     controller.abort()
     await expect(async () => await req()).rejects.toThrowError(
-      'The operation was aborted.'
+      'The operation was aborted.',
     )
   })
 })
@@ -39,7 +39,7 @@ describe('Timeout combinator', () => {
     const response = new Response('Always Has Been', {})
     mock.mock('https://example.com', response, { delay: 500 })
     expect(await pipe(request, withTimeout(1000), mk)()).toStrictEqual(
-      right(response)
+      right(response),
     )
   })
 
@@ -50,8 +50,8 @@ describe('Timeout combinator', () => {
       await pipe(
         request,
         withTimeout(200, () => 'Aborted'),
-        mk
-      )()
+        mk,
+      )(),
     ).toStrictEqual(left('Aborted'))
   })
 })

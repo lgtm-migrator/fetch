@@ -21,7 +21,7 @@ import { pipe, flow, identity } from 'fp-ts/function'
  */
 export const when = <E, A, F, B>(
   condition: boolean,
-  combinator: Combinator<E, A, F, B>
+  combinator: Combinator<E, A, F, B>,
 ): Combinator<E, A, E | F, A | B> => (condition ? combinator : identity)
 
 /**
@@ -48,7 +48,7 @@ export const localE =
       chainW(x =>
         pipe(
           m,
-          local(() => x)
-        )
-      )
+          local(() => x),
+        ),
+      ),
     )

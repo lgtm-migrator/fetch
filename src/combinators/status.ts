@@ -13,8 +13,8 @@ import { pipe } from 'fp-ts/function'
  */
 export const ensureStatus = <E, F>(
   f: (code: number) => boolean,
-  mapError: MapError<F, Response>
+  mapError: MapError<F, Response>,
 ): Combinator<E, Response, E | F> =>
   chainEitherKW(resp =>
-    f(resp.status) ? right(resp) : pipe(resp, mapError, left)
+    f(resp.status) ? right(resp) : pipe(resp, mapError, left),
   )

@@ -13,7 +13,7 @@ describe('Base URL combinator', () => {
     await pipe(
       request,
       withBaseURL('https://example.com'),
-      runFetchM('/wait')
+      runFetchM('/wait'),
     )()
     expect(mock.lastUrl()).toStrictEqual('https://example.com/wait')
   })
@@ -24,7 +24,7 @@ describe('Base URL combinator', () => {
       request,
       withBaseURL('https://example.org'),
       withBaseURL('https://example.com'),
-      runFetchM('/wait')
+      runFetchM('/wait'),
     )()
     expect(mock.lastUrl()).toStrictEqual('https://example.com/wait')
   })
@@ -47,11 +47,11 @@ describe('URL Parameters Combinator', () => {
     await pipe(
       request,
       withURLSearchParams({ wait: 'always' }),
-      runFetchM('https://example.com')
+      runFetchM('https://example.com'),
     )()
 
     expect(mock.lastCall()?.[0]).toStrictEqual(
-      'https://example.com/?wait=always'
+      'https://example.com/?wait=always',
     )
   })
 
@@ -62,11 +62,11 @@ describe('URL Parameters Combinator', () => {
       request,
       withURLSearchParams({ wait: 'been', has: 'been' }),
       withURLSearchParams({ wait: 'always' }),
-      runFetchM('https://example.com')
+      runFetchM('https://example.com'),
     )()
 
     expect(mock.lastCall()?.[0]).toStrictEqual(
-      'https://example.com/?wait=always&has=been'
+      'https://example.com/?wait=always&has=been',
     )
   })
 
@@ -77,11 +77,11 @@ describe('URL Parameters Combinator', () => {
       request,
       withBaseURL('https://example.com/'),
       withURLSearchParams({ wait: 'always', has: 'been' }),
-      runFetchM('orio')
+      runFetchM('orio'),
     )()
 
     expect(mock.lastCall()?.[0]).toStrictEqual(
-      'https://example.com/orio?wait=always&has=been'
+      'https://example.com/orio?wait=always&has=been',
     )
   })
 
@@ -92,11 +92,11 @@ describe('URL Parameters Combinator', () => {
       request,
       withURLSearchParams({ wait: 'always', has: 'been' }),
       withBaseURL('https://example.com/'),
-      runFetchM('orio')
+      runFetchM('orio'),
     )()
 
     expect(mock.lastCall()?.[0]).toStrictEqual(
-      'https://example.com/orio?wait=always&has=been'
+      'https://example.com/orio?wait=always&has=been',
     )
   })
 })

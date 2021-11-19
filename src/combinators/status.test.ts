@@ -16,10 +16,10 @@ describe('Status Combinator', () => {
         request,
         ensureStatus(
           n => n < 400,
-          () => 'Bad Response'
+          () => 'Bad Response',
         ),
-        mk
-      )()
+        mk,
+      )(),
     ).toStrictEqual(left('Bad Response'))
   })
 
@@ -30,10 +30,10 @@ describe('Status Combinator', () => {
         request,
         ensureStatus(
           n => n < 400,
-          () => 'Bad Response'
+          () => 'Bad Response',
         ),
-        mk
-      )()
+        mk,
+      )(),
     ).toStrictEqual(expect.objectContaining({ _tag: 'Right' }))
   })
 })

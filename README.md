@@ -8,7 +8,7 @@ const base = pipe(
   mkRequest((): Error => 'InternalError'),
   withBaseURL(process.env.BASE_URL, (): Error => 'InternalError'),
   withTimeout(3_000),
-  asJSON((): Error => 'ServerError')
+  asJSON((): Error => 'ServerError'),
 )
 
 export const createUser = (username: string, password: string) =>
@@ -19,7 +19,7 @@ export const createUser = (username: string, password: string) =>
       username,
       password,
     }),
-    runFetchM('user')
+    runFetchM('user'),
   )
 
 export const getUserAvatar = (username: string, size: string = '1x') =>
@@ -29,14 +29,14 @@ export const getUserAvatar = (username: string, size: string = '1x') =>
       username,
       size,
     }),
-    runFetchM('avatar')
+    runFetchM('avatar'),
   )
 
 export const authorized = pipe(
   base,
   withHeaders({
     Authorization: `Bearer SECRETS`,
-  })
+  }),
 )
 
 export const listCollection =
@@ -49,7 +49,7 @@ export const listCollection =
         cursor,
         size,
       }),
-      runFetch('collection')
+      runFetch('collection'),
     )
 ```
 

@@ -23,7 +23,7 @@ describe('Method combinator', () => {
     await pipe(
       request,
       withMethod('DELETE'),
-      runFetchM('https://example.com', { method: 'GET' })
+      runFetchM('https://example.com', { method: 'GET' }),
     )()
     expect(mock.lastOptions()).toStrictEqual({ method: 'GET' })
   })

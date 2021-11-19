@@ -20,40 +20,62 @@
     "combinators"
   ],
   "scripts": {
+    "build": "tsc",
+    "clean": "rimraf combinators index.d.ts index.js tsconfig.tsbuildinfo",
+    "lint": "eslint .",
+    "postpublish": "pnpm clean",
+    "prepare": "husky install",
+    "prepublish": "pnpm build",
+    "spell": "cspell '*.json' README.md '**/*.ts'",
+    "format": "prettier --check '**/*.ts' README.md",
     "test": "jest",
     "test:coverage": "jest --coverage",
-    "lint": "tsc --noEmit && eslint .",
-    "clean": "rimraf combinators index.d.ts index.js tsconfig.tsbuildinfo",
-    "prepublish": "pnpm build",
-    "postpublish": "pnpm clean",
-    "build": "tsc"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@equt/eslint-config-base": "^8.0.0",
-    "@equt/prettier-config": "^1.0.3",
-    "@equt/tsconfig": "^0.1.4",
-    "@types/jest": "^27.0.2",
-    "codecov": "^3.8.3",
+    "@equt/eslint-config": "^8.0.4",
+    "@equt/prettier-config": "^1.0.4",
+    "@equt/tsconfig": "^1.3.0",
+    "@types/jest": "^27.0.3",
     "cross-fetch": "^3.1.4",
-    "eslint": "^8.0.1",
+    "cspell": "^5.13.0",
+    "eslint": "^8.2.0",
     "fetch-mock-jest": "^1.5.1",
     "fp-ts": "2.11.5",
     "husky": "^7.0.4",
-    "jest": "^27.2.5",
+    "jest": "^27.3.1",
     "prettier": "^2.4.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^27.0.7",
-    "typescript": "^4.4.4"
+    "typescript": "^4.5.2"
   },
   "peerDependencies": {
     "fp-ts": ">=2.11.0"
   },
   "prettier": "@equt/prettier-config",
   "eslintConfig": {
-    "extends": "@equt/eslint-config-base"
+    "extends": "@equt"
   },
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "jsdom"
+  },
+  "cspell": {
+    "words": [
+      "abortable",
+      "appy",
+      "codecov",
+      "combinator",
+      "combinators",
+      "contactlab",
+      "equt",
+      "miliseconds",
+      "orio",
+      "pnpm",
+      "postpublish",
+      "tsbuildinfo",
+      "tupled",
+      "typecheck"
+    ]
   }
 }
