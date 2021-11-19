@@ -1,5 +1,5 @@
 import mock from 'fetch-mock-jest'
-import { left } from 'fp-ts/Either'
+import { left, right } from 'fp-ts/Either'
 import { pipe } from 'fp-ts/function'
 import { request, runFetchM } from '..'
 import { withMethod } from './method'
@@ -64,5 +64,15 @@ describe('localE', () => {
         mk,
       )(),
     ).toStrictEqual(expect.objectContaining({ _tag: 'Left' }))
+  })
+
+  it('update the config', async () => {
+    await pipe(
+      request,
+      localE(() => right(['https://example.com', {}])),
+      mk,
+    )()
+
+    expect(mock.lastCall()?.[0]).toBe('https://example.com/')
   })
 })
