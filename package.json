@@ -25,7 +25,6 @@
     "lint": "eslint .",
     "postpublish": "pnpm clean",
     "prepare": "husky install",
-    "prepublish": "pnpm build",
     "spell": "cspell '*.json' README.md '**/*.ts'",
     "format": "prettier --check '**/*.ts' README.md",
     "test": "jest",
