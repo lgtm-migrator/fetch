@@ -23,7 +23,6 @@
     "build": "tsc",
     "clean": "rimraf combinators index.d.ts index.js tsconfig.tsbuildinfo",
     "lint": "eslint .",
-    "postpublish": "pnpm clean",
     "prepare": "husky install",
     "spell": "cspell '*.json' README.md '**/*.ts'",
     "format": "prettier --check '**/*.ts' README.md",
