@@ -54,6 +54,10 @@
   "eslintConfig": {
     "extends": "@equt"
   },
+  "eslintIgnore": [
+    "node_modules",
+    "coverage"
+  ],
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "jsdom"
