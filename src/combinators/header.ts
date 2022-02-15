@@ -1,7 +1,9 @@
 import { local } from 'fp-ts/ReaderTaskEither'
 import { mapSnd } from 'fp-ts/Tuple'
+import type { Lazy } from 'fp-ts/function'
 
 import type { Combinator } from '..'
+import { eager } from '../utils'
 
 /**
  * Collect {@link HeadersInit} as {@link Record}, where keys and values are both {@link string}
@@ -44,5 +46,9 @@ export const merge = (into: HeadersInit, from: HeadersInit): HeadersInit => ({
  *
  * @since 1.0.0
  */
-export const withHeaders = <E, A>(headers: HeadersInit): Combinator<E, A> =>
-  local(mapSnd(x => ({ headers: merge(headers, x.headers ?? {}), ...x })))
+export const withHeaders = <E, A>(
+  headers: HeadersInit | Lazy<HeadersInit>,
+): Combinator<E, A> =>
+  local(
+    mapSnd(x => ({ headers: merge(eager(headers), x.headers ?? {}), ...x })),
+  )

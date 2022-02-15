@@ -1,9 +1,11 @@
 import type { Json } from 'fp-ts/Json'
 import { chainTaskEitherKW } from 'fp-ts/ReaderTaskEither'
 import { tryCatch } from 'fp-ts/TaskEither'
+import type { Lazy } from 'fp-ts/function'
 import { flow } from 'fp-ts/function'
 
 import { Combinator, MapError, bail } from '..'
+import { eager } from '../utils'
 import { withHeaders } from './header'
 
 /**
@@ -37,16 +39,18 @@ export function asJSON<E, F>(
  * @since 1.0.0
  */
 export function asBlob<E, F>(
-  accept: string,
+  accept: string | Lazy<string>,
   mapError: MapError<F>,
 ): Combinator<E, Response, E | F, Blob>
-export function asBlob<E>(accept: string): Combinator<E, Response, E, Blob>
+export function asBlob<E>(
+  accept: string | Lazy<string>,
+): Combinator<E, Response, E, Blob>
 export function asBlob<E, F>(
-  accept: string,
+  accept: Lazy<string> | string,
   mapError: MapError<F> = bail,
 ): Combinator<E, Response, E | F, Blob> {
   return flow(
-    withHeaders({ Accept: accept }),
+    withHeaders({ Accept: eager(accept) }),
     chainTaskEitherKW(resp => tryCatch(() => resp.blob(), mapError)),
   )
 }

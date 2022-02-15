@@ -1,9 +1,11 @@
 import type { Json } from 'fp-ts/Json'
 import { local } from 'fp-ts/ReaderTaskEither'
 import { mapSnd } from 'fp-ts/Tuple'
+import type { Lazy } from 'fp-ts/function'
 import { flow } from 'fp-ts/function'
 
 import type { Combinator } from '..'
+import { eager } from '../utils'
 import { withHeaders } from './header'
 
 type FormBlob = {
@@ -61,20 +63,26 @@ export type Formable = Record<string, string | Blob | FormBlob>
  *
  * @since 2.1.0
  */
-export const withForm = <E, A>(form: Formable): Combinator<E, A> =>
+export const withForm = <E, A>(
+  form: Formable | Lazy<Formable>,
+): Combinator<E, A> =>
   local(
     mapSnd(({ body, ...rest }) => {
+      const _form = eager(form)
       if (body instanceof FormData) {
         const formable = collectFormable(body)
         return {
           body: mkFormData({
-            ...form,
+            ..._form,
             ...formable,
           }),
           ...rest,
         }
       } else {
-        return { body: mkFormData(form), ...rest }
+        return {
+          body: mkFormData(_form),
+          ...rest,
+        }
       }
     }),
   )
@@ -92,7 +100,7 @@ export const withForm = <E, A>(form: Formable): Combinator<E, A> =>
  * @since 1.0.0
  */
 export const withJSONBody = <E, A>(
-  json: Json,
+  json: Json | Lazy<Json>,
   replacer?: (
     this: unknown,
     key: string,
@@ -100,7 +108,9 @@ export const withJSONBody = <E, A>(
   ) => unknown | (number | string)[] | null,
   space?: Parameters<typeof JSON.stringify>['2'],
 ): Combinator<E, A> =>
-  local(mapSnd(x => ({ body: JSON.stringify(json, replacer, space), ...x })))
+  local(
+    mapSnd(x => ({ body: JSON.stringify(eager(json), replacer, space), ...x })),
+  )
 
 /**
  * Set the request body as JSON.
@@ -115,7 +125,7 @@ export const withJSONBody = <E, A>(
  * @since 1.0.0
  */
 export const withJSON = <E, A>(
-  json: Json,
+  json: Json | Lazy<Json>,
   replacer?: (
     this: unknown,
     key: string,
@@ -137,10 +147,10 @@ export const withJSON = <E, A>(
  * @since 1.0.0
  */
 export const withBlob = <E extends Error, A>(
-  blob: Blob,
+  blob: Blob | Lazy<Blob>,
   contentType: string,
 ): Combinator<E, A> =>
   flow(
     withHeaders({ 'Content-Type': contentType }),
-    local(mapSnd(x => ({ body: blob, ...x }))),
+    local(mapSnd(x => ({ body: eager(blob), ...x }))),
   )

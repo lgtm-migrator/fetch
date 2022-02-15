@@ -3,6 +3,9 @@ import type { TaskEither } from 'fp-ts/TaskEither'
 import { chain, map, right, tryCatch } from 'fp-ts/TaskEither'
 import { snd } from 'fp-ts/Tuple'
 import { pipe, tupled } from 'fp-ts/function'
+import type { Lazy } from 'fp-ts/function'
+
+import { eager } from './utils'
 
 /**
  * {@link FetchM} Monad Environment.
@@ -177,6 +180,9 @@ export const request = mkRequest(bail)
  * @since 1.0.0
  */
 export const runFetchM =
-  <E, A>(input: string, init?: RequestInit) =>
+  <E, A>(
+    input: string | Lazy<string>,
+    init?: RequestInit | Lazy<RequestInit>,
+  ) =>
   (m: FetchM<E, A>): TaskEither<E, A> =>
-    m([input, init ?? {}])
+    m([eager(input), eager(init) ?? {}])

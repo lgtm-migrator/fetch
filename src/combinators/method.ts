@@ -1,7 +1,9 @@
 import { local } from 'fp-ts/ReaderTaskEither'
 import { mapSnd } from 'fp-ts/Tuple'
+import type { Lazy } from 'fp-ts/function'
 
 import type { Combinator } from '..'
+import { eager } from '../utils'
 
 /**
  * All possible HTTP methods
@@ -24,5 +26,6 @@ export type HTTPMethod =
  *
  * @since 1.0.0
  */
-export const withMethod = <E, A>(method: HTTPMethod): Combinator<E, A> =>
-  local(mapSnd(x => ({ method, ...x })))
+export const withMethod = <E, A>(
+  method: HTTPMethod | Lazy<HTTPMethod>,
+): Combinator<E, A> => local(mapSnd(x => ({ method: eager(method), ...x })))
