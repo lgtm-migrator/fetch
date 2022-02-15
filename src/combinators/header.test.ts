@@ -1,7 +1,9 @@
-import mock from 'fetch-mock-jest'
-import { merge, toRecord, withHeaders } from './header'
-import { runFetchM, request } from '..'
 import { pipe } from 'fp-ts/function'
+
+import mock from 'fetch-mock-jest'
+
+import { request, runFetchM } from '..'
+import { merge, toRecord, withHeaders } from './header'
 
 beforeEach(() => mock.mock('https://example.com', 200))
 afterEach(() => mock.reset())

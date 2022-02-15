@@ -1,6 +1,8 @@
-import mock from 'fetch-mock-jest'
-import { pipe } from 'fp-ts/function'
 import { left } from 'fp-ts/Either'
+import { pipe } from 'fp-ts/function'
+
+import mock from 'fetch-mock-jest'
+
 import { request, runFetchM } from '..'
 import { ensureStatus } from './status'
 

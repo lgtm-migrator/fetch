@@ -1,7 +1,9 @@
-import { withMethod } from './method'
-import { request, runFetchM } from '..'
-import mock from 'fetch-mock-jest'
 import { pipe } from 'fp-ts/function'
+
+import mock from 'fetch-mock-jest'
+
+import { request, runFetchM } from '..'
+import { withMethod } from './method'
 
 beforeEach(() => mock.mock('https://example.com', 200))
 afterEach(() => mock.reset())

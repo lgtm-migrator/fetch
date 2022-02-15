@@ -1,5 +1,7 @@
-import mock from 'fetch-mock-jest'
 import { pipe } from 'fp-ts/function'
+
+import mock from 'fetch-mock-jest'
+
 import { request, runFetchM } from '..'
 import { withBaseURL, withURLSearchParams } from './url'
 

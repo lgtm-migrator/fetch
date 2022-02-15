@@ -1,7 +1,8 @@
-import { bail, Combinator, MapError } from '..'
+import { chain, chainFirst, local, rightIO } from 'fp-ts/ReaderTaskEither'
 import { mapSnd } from 'fp-ts/Tuple'
-import { local, rightIO, chain, chainFirst } from 'fp-ts/ReaderTaskEither'
 import { pipe } from 'fp-ts/function'
+
+import { Combinator, MapError, bail } from '..'
 
 /**
  * Set an abort signal.

@@ -1,8 +1,9 @@
-import { bail, Combinator, MapError } from '..'
 import type { Json } from 'fp-ts/Json'
 import { chainTaskEitherKW } from 'fp-ts/ReaderTaskEither'
 import { tryCatch } from 'fp-ts/TaskEither'
 import { flow } from 'fp-ts/function'
+
+import { Combinator, MapError, bail } from '..'
 import { withHeaders } from './header'
 
 /**

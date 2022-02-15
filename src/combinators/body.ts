@@ -1,8 +1,9 @@
-import type { Combinator } from '..'
 import type { Json } from 'fp-ts/Json'
 import { local } from 'fp-ts/ReaderTaskEither'
-import { flow } from 'fp-ts/function'
 import { mapSnd } from 'fp-ts/Tuple'
+import { flow } from 'fp-ts/function'
+
+import type { Combinator } from '..'
 import { withHeaders } from './header'
 
 type FormBlob = {

@@ -1,6 +1,7 @@
-import type { Combinator } from '..'
 import { local } from 'fp-ts/ReaderTaskEither'
 import { mapSnd } from 'fp-ts/Tuple'
+
+import type { Combinator } from '..'
 
 /**
  * All possible HTTP methods

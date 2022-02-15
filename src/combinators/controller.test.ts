@@ -1,9 +1,11 @@
-import mock from 'fetch-mock-jest'
-import { Response } from 'cross-fetch'
-import { pipe } from 'fp-ts/lib/function'
 import { left, right } from 'fp-ts/Either'
-import { withSignal, withTimeout } from './controller'
+import { pipe } from 'fp-ts/lib/function'
+
+import { Response } from 'cross-fetch'
+import mock from 'fetch-mock-jest'
+
 import { request, runFetchM } from '..'
+import { withSignal, withTimeout } from './controller'
 
 afterEach(() => mock.reset())
 

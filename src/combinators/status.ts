@@ -1,7 +1,8 @@
-import type { Combinator, MapError } from '..'
-import { chainEitherKW } from 'fp-ts/ReaderTaskEither'
 import { left, right } from 'fp-ts/Either'
+import { chainEitherKW } from 'fp-ts/ReaderTaskEither'
 import { pipe } from 'fp-ts/function'
+
+import type { Combinator, MapError } from '..'
 
 /**
  * Guard the {@link Response} status code.

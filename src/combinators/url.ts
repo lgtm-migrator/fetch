@@ -1,6 +1,7 @@
-import type { Combinator, MapError } from '..'
 import { local } from 'fp-ts/ReaderTaskEither'
 import { mapSnd } from 'fp-ts/Tuple'
+
+import type { Combinator, MapError } from '..'
 import { bail } from '..'
 
 /**

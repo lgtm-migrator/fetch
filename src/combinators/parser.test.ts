@@ -1,8 +1,10 @@
-import mock from 'fetch-mock-jest'
-import { pipe } from 'fp-ts/function'
-import { Response } from 'cross-fetch'
 import { left, right } from 'fp-ts/Either'
-import { runFetchM, request } from '..'
+import { pipe } from 'fp-ts/function'
+
+import { Response } from 'cross-fetch'
+import mock from 'fetch-mock-jest'
+
+import { request, runFetchM } from '..'
 import { asBlob, asJSON, asText } from './parser'
 
 afterEach(() => mock.reset())

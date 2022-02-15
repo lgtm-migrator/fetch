@@ -1,7 +1,9 @@
-import mock from 'fetch-mock-jest'
 import { pipe } from 'fp-ts/function'
-import { runFetchM, request } from '..'
-import { withForm, withJSON, mkFormData, withBlob } from './body'
+
+import mock from 'fetch-mock-jest'
+
+import { request, runFetchM } from '..'
+import { mkFormData, withBlob, withForm, withJSON } from './body'
 import { withMethod } from './method'
 
 beforeEach(() => mock.mock('https://example.com', 200))
