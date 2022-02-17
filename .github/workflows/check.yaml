@@ -16,7 +16,7 @@ jobs:
           node-version: '16'
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: pnpm format
+      - run: pnpm check
 
   spell:
     runs-on: ubuntu-latest
@@ -44,7 +44,7 @@ jobs:
           node-version: '16'
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: pnpm check
+      - run: pnpm lint
 
   format:
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
           node-version: '16'
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
+      - run: pnpm format
 
   test:
     runs-on: ubuntu-latest
