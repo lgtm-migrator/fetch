@@ -78,6 +78,14 @@ export function asText<E, F>(
   )
 }
 
+/**
+ * Decode a {@link Json} type using [`io-ts`](https://github.com/gcanti/io-ts)
+ *
+ * @param codeC Extends {@link Mixed}
+ * @param mapError An instance of {@link MapError}
+ *
+ * @since 2.5.0
+ */
 export function decodeAs<E, F, C extends Mixed>(
   codeC: C,
   mapError: MapError<F, Errors>,
