@@ -11,6 +11,7 @@ import type { Lazy } from 'fp-ts/function'
 import { flow, identity, pipe } from 'fp-ts/function'
 
 import type { Combinator, Config } from '..'
+import { eager } from '../utils'
 
 /**
  * Apply a combinator conditionally.
@@ -21,9 +22,9 @@ import type { Combinator, Config } from '..'
  * @since 2.2.1
  */
 export const when = <E, A, F, B>(
-  condition: boolean,
+  condition: boolean | Lazy<boolean>,
   combinator: Combinator<E, A, F, B>,
-): Combinator<E, A, E | F, A | B> => (condition ? combinator : identity)
+): Combinator<E, A, E | F, A | B> => (eager(condition) ? combinator : identity)
 
 /**
  * Throw an error
