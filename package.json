@@ -27,8 +27,7 @@
     "prepare": "husky install",
     "spell": "cspell '*.json' README.md '**/*.ts'",
     "format": "prettier --check '**/*.ts' README.md",
-    "test": "jest",
-    "test:coverage": "jest --coverage",
+    "test": "jest --coverage",
     "check": "tsc --noEmit"
   },
   "devDependencies": {
