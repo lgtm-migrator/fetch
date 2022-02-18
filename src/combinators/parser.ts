@@ -87,15 +87,15 @@ export function asText<E, F>(
  * @since 2.5.0
  */
 export function decodeAs<E, F, C extends Mixed>(
-  codeC: C,
+  codeC: C | Lazy<C>,
   mapError: MapError<F, Errors>,
 ): Combinator<E, Json, E | F, TypeOf<C>>
 export function decodeAs<E, C extends Mixed>(
-  codeC: C,
+  codeC: C | Lazy<C>,
 ): Combinator<E, Json, E, TypeOf<C>>
 export function decodeAs<E, F, C extends Mixed>(
-  codeC: C,
+  codeC: C | Lazy<C>,
   mapError: MapError<F, Errors> = bail,
 ): Combinator<E, Json, E | F, TypeOf<C>> {
-  return chainEitherKW(flow(codeC.decode, mapLeft(mapError)))
+  return chainEitherKW(flow(eager(codeC).decode, mapLeft(mapError)))
 }
