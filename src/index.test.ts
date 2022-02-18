@@ -4,7 +4,7 @@ import { pipe } from 'fp-ts/function'
 import { Response, fetch as realFetch } from 'cross-fetch'
 import mock from 'fetch-mock-jest'
 
-import { bail, mkRequest, request, runFetchM } from '.'
+import { bail, mkRequest, request, runFetchM, runFetchMFlipped } from '.'
 
 afterEach(() => mock.reset())
 
@@ -19,6 +19,9 @@ describe('Plain request', () => {
 
     expect(
       await pipe(request, runFetchM('https://example.com'))(),
+    ).toStrictEqual(right(resp))
+    expect(
+      await pipe(request, runFetchMFlipped)('https://example.com')(),
     ).toStrictEqual(right(resp))
   })
 
