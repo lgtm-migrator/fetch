@@ -1,8 +1,11 @@
+import { mapLeft } from 'fp-ts/Either'
 import type { Json } from 'fp-ts/Json'
-import { chainTaskEitherKW } from 'fp-ts/ReaderTaskEither'
+import { chainEitherKW, chainTaskEitherKW } from 'fp-ts/ReaderTaskEither'
 import { tryCatch } from 'fp-ts/TaskEither'
 import type { Lazy } from 'fp-ts/function'
 import { flow } from 'fp-ts/function'
+
+import type { Errors, Mixed, TypeOf } from 'io-ts'
 
 import { Combinator, MapError, bail } from '..'
 import { eager } from '../utils'
@@ -73,4 +76,18 @@ export function asText<E, F>(
     withHeaders({ Accept: 'text/plain' }),
     chainTaskEitherKW(resp => tryCatch(() => resp.text(), mapError)),
   )
+}
+
+export function decodeAs<E, F, C extends Mixed>(
+  codeC: C,
+  mapError: MapError<F, Errors>,
+): Combinator<E, Json, E | F, TypeOf<C>>
+export function decodeAs<E, C extends Mixed>(
+  codeC: C,
+): Combinator<E, Json, E, TypeOf<C>>
+export function decodeAs<E, F, C extends Mixed>(
+  codeC: C,
+  mapError: MapError<F, Errors> = bail,
+): Combinator<E, Json, E | F, TypeOf<C>> {
+  return chainEitherKW(flow(codeC.decode, mapLeft(mapError)))
 }
