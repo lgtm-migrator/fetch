@@ -190,7 +190,6 @@ export const request = mkRequest(bail)
  *
  * @param input URL
  * @param init Request init {@link RequestInit}
- * @returns The result {@link TaskEither}
  *
  * @since 1.0.0
  */
@@ -201,6 +200,43 @@ export const runFetchM =
   ) =>
   (m: FetchM<E, A>): TaskEither<E, A> =>
     m([eager(input), eager(init) ?? {}])
+
+/**
+ * Call {@link runFetchM} returned {@link TaskEither} to produce a {@link Promise}.
+ *
+ * @param input URL
+ * @param init Request init {@link RequestInit}
+ *
+ * @since 2.11.0
+ */
+export const runFetchMP =
+  <E, A>(
+    input: string | Lazy<string>,
+    init?: RequestInit | Lazy<RequestInit>,
+  ) =>
+  (m: FetchM<E, A>) =>
+    m([eager(input), eager(init) ?? {}])()
+
+/**
+ * Throw the left value from {@link runFetchMP}.
+ *
+ * @param input URL
+ * @param init Request init {@link RequestInit}
+ *
+ * @since 2.11.0
+ */
+export const runFetchMPT =
+  <E, A>(
+    input: string | Lazy<string>,
+    init?: RequestInit | Lazy<RequestInit>,
+  ) =>
+  async (m: FetchM<E, A>) =>
+    pipe(
+      await m([eager(input), eager(init) ?? {}])(),
+      match(e => {
+        throw e
+      }, identity),
+    )
 
 /**
  * The flipped version of {@link runFetchM}.
