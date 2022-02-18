@@ -3,9 +3,10 @@ import { pipe } from 'fp-ts/function'
 
 import { Response } from 'cross-fetch'
 import mock from 'fetch-mock-jest'
+import * as t from 'io-ts'
 
 import { request, runFetchM } from '..'
-import { asBlob, asJSON, asText } from './parser'
+import { asBlob, asJSON, asText, decodeAs } from './parser'
 
 afterEach(() => mock.reset())
 
@@ -85,5 +86,45 @@ describe('Text Parser Combinator', () => {
     expect(await pipe(request, asText(), mk)()).toStrictEqual(
       right('Always Has Been'),
     )
+  })
+})
+
+describe('CodeC requiring io-ts', () => {
+  it('should be able to decode', async () => {
+    mock.mock(
+      'https://example.com',
+      new Response(`{ "Earth": "Always Has Been" }`),
+    )
+
+    expect(
+      await pipe(
+        request,
+        asJSON(),
+        decodeAs(
+          t.type({
+            Earth: t.string,
+          }),
+        ),
+        mk,
+      )(),
+    ).toStrictEqual(right({ Earth: 'Always Has Been' }))
+  })
+
+  it('should be able to report', async () => {
+    mock.mock('https://example.com', new Response(`{ "Earth": 42 }`))
+
+    expect(
+      await pipe(
+        request,
+        asJSON(),
+        decodeAs(
+          t.type({
+            Earth: t.string,
+          }),
+          es => es.map(e => e.context.map(e => e.key).join('.')),
+        ),
+        mk,
+      )(),
+    ).toStrictEqual(left(['.Earth']))
   })
 })
