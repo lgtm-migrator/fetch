@@ -46,6 +46,25 @@ describe('Plain request', () => {
         runFetchM('https://*'),
       )(),
     ).toStrictEqual(left('InternalError'))
+    expect(
+      await pipe(
+        mkRequest(() => 'InternalError', realFetch),
+        runFetchMFlipped,
+      )('https://*')(),
+    ).toStrictEqual(left('InternalError'))
+    expect(
+      await pipe(
+        mkRequest(() => 'InternalError', realFetch),
+        runFetchMFlippedP,
+      )('https://*'),
+    ).toStrictEqual(left('InternalError'))
+    expect(
+      async () =>
+        await pipe(
+          mkRequest(() => 'InternalError', realFetch),
+          runFetchMFlippedPT,
+        )('https://*'),
+    ).rejects.toMatch('InternalError')
   })
 })
 
