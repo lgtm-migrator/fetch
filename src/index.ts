@@ -28,6 +28,20 @@ export type Config = [string, RequestInit]
 export type FetchM<E, A> = ReaderTaskEither<Config, E, A>
 
 /**
+ * Inspect the error type for a {@link FetchM}.
+ *
+ * @since 2.10.0
+ */
+export type InspectError<M> = M extends FetchM<infer E, unknown> ? E : never
+
+/**
+ * Inspect the return type for a {@link FetchM}.
+ *
+ * @since 2.10.0
+ */
+export type InspectReturn<M> = M extends FetchM<unknown, infer A> ? A : never
+
+/**
  * An mapping from type `S` to an arbitrary error type `E`.
  *
  * @since 1.0.0
