@@ -4,7 +4,15 @@ import { pipe } from 'fp-ts/function'
 import { Response, fetch as realFetch } from 'cross-fetch'
 import mock from 'fetch-mock-jest'
 
-import { bail, mkRequest, request, runFetchM, runFetchMFlipped } from '.'
+import {
+  bail,
+  mkRequest,
+  request,
+  runFetchM,
+  runFetchMFlipped,
+  runFetchMFlippedP,
+  runFetchMFlippedPT,
+} from '.'
 
 afterEach(() => mock.reset())
 
@@ -23,6 +31,12 @@ describe('Plain request', () => {
     expect(
       await pipe(request, runFetchMFlipped)('https://example.com')(),
     ).toStrictEqual(right(resp))
+    expect(
+      await pipe(request, runFetchMFlippedP)('https://example.com'),
+    ).toStrictEqual(right(resp))
+    expect(
+      await pipe(request, runFetchMFlippedPT)('https://example.com'),
+    ).toStrictEqual(resp)
   })
 
   it('should throw TypeError if config is malformed', async () => {
