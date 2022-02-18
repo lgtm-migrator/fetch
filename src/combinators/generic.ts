@@ -32,7 +32,7 @@ export const when = <E, A, F, B>(
  *
  * @since 2.2.1
  */
-export const fail = <E, A, F, B>(error: Lazy<F>): Combinator<E, A, E | F, B> =>
+export const fail = <E, A, F>(error: Lazy<F>): Combinator<E, A, E | F, A> =>
   flow(error, left)
 
 /**
