@@ -1,8 +1,9 @@
+import { match } from 'fp-ts/Either'
 import type { ReaderTaskEither } from 'fp-ts/ReaderTaskEither'
 import type { TaskEither } from 'fp-ts/TaskEither'
 import { chain, map, right, tryCatch } from 'fp-ts/TaskEither'
 import { snd } from 'fp-ts/Tuple'
-import { pipe, tupled } from 'fp-ts/function'
+import { identity, pipe, tupled } from 'fp-ts/function'
 import type { Lazy } from 'fp-ts/function'
 
 import { eager } from './utils'
@@ -198,3 +199,35 @@ export const runFetchMFlipped =
   <E, A>(m: FetchM<E, A>) =>
   (input: string | Lazy<string>, init?: RequestInit | Lazy<RequestInit>) =>
     m([eager(input), eager(init) ?? {}])
+
+/**
+ * Call {@link runFetchMFlipped} returned {@link TaskEither} to produce a {@link Promise}.
+ *
+ * @param m The Monad {@link FetchM}
+ *
+ * @since 2.9.0
+ */
+export const runFetchMFlippedP =
+  <E, A>(m: FetchM<E, A>) =>
+  (input: string | Lazy<string>, init?: RequestInit | Lazy<RequestInit>) =>
+    m([eager(input), eager(init) ?? {}])()
+
+/**
+ * Throw the left value from {@link runFetchMFlippedP}.
+ *
+ * @param m The Monad {@link FetchM}
+ *
+ * @since 2.9.0
+ */
+export const runFetchMFlippedPT =
+  <E, A>(m: FetchM<E, A>) =>
+  async (
+    input: string | Lazy<string>,
+    init?: RequestInit | Lazy<RequestInit>,
+  ) =>
+    pipe(
+      await m([eager(input), eager(init) ?? {}])(),
+      match(e => {
+        throw e
+      }, identity),
+    )
