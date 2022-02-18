@@ -186,3 +186,15 @@ export const runFetchM =
   ) =>
   (m: FetchM<E, A>): TaskEither<E, A> =>
     m([eager(input), eager(init) ?? {}])
+
+/**
+ * The flipped version of {@link runFetchM}.
+ *
+ * @param m The Monad {@link FetchM}
+ *
+ * @since 2.7.0
+ */
+export const runFetchMFlipped =
+  <E, A>(m: FetchM<E, A>) =>
+  (input: string | Lazy<string>, init?: RequestInit | Lazy<RequestInit>) =>
+    m([eager(input), eager(init) ?? {}])
