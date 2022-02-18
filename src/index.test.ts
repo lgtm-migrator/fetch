@@ -12,6 +12,8 @@ import {
   runFetchMFlipped,
   runFetchMFlippedP,
   runFetchMFlippedPT,
+  runFetchMP,
+  runFetchMPT,
 } from '.'
 
 afterEach(() => mock.reset())
@@ -28,6 +30,12 @@ describe('Plain request', () => {
     expect(
       await pipe(request, runFetchM('https://example.com'))(),
     ).toStrictEqual(right(resp))
+    expect(
+      await pipe(request, runFetchMP('https://example.com')),
+    ).toStrictEqual(right(resp))
+    expect(
+      await pipe(request, runFetchMPT('https://example.com')),
+    ).toStrictEqual(resp)
     expect(
       await pipe(request, runFetchMFlipped)('https://example.com')(),
     ).toStrictEqual(right(resp))
@@ -46,6 +54,19 @@ describe('Plain request', () => {
         runFetchM('https://*'),
       )(),
     ).toStrictEqual(left('InternalError'))
+    expect(
+      await pipe(
+        mkRequest(() => 'InternalError', realFetch),
+        runFetchMP('https://*'),
+      ),
+    ).toStrictEqual(left('InternalError'))
+    expect(
+      async () =>
+        await pipe(
+          mkRequest(() => 'InternalError', realFetch),
+          runFetchMPT('https://*'),
+        ),
+    ).rejects.toMatch('InternalError')
     expect(
       await pipe(
         mkRequest(() => 'InternalError', realFetch),
