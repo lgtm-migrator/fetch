@@ -7,8 +7,8 @@ This package wraps the
 TypeScript, allowing you to build up request & parse response progressively.
 
 This package is inspired by the
-[`contactlab/appy`](https://github.com/contactlab/appy). See [this
-section](#Differences between `contactlab/appy`) for more details.
+[`contactlab/appy`](https://github.com/contactlab/appy). See
+[this section](#differences-between-contactlabappy) for more details.
 
 ## Introduction
 
