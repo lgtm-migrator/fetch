@@ -1,80 +1,203 @@
 ![codecov](https://badgen.net/codecov/c/github/equt/fetch)
 [![npm](https://badgen.net/npm/v/@equt/fetch)](https://www.npmjs.com/package/@equt/fetch)
 
-```typescript
-type Error = 'InternalError' | 'ServerError'
+This package wraps the
+[Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) using
+[`fp-ts`](https://github.com/gcanti/fp-ts), a functional programming library in
+TypeScript, allowing you to build up request & parse response progressively.
 
-const base = pipe(
-  mkRequest((): Error => 'InternalError'),
-  withBaseURL(import.meta.env.BASE_URL, (): Error => 'InternalError'),
-  withTimeout(3_000),
-  asJSON((): Error => 'ServerError'),
-)
+This package is inspired by the
+[`contactlab/appy`](https://github.com/contactlab/appy). See [this
+section](#Differences between `contactlab/appy`) for more details.
 
-export const createUser = (username: string, password: string) =>
-  pipe(
-    base,
-    withMethod('POST'),
-    withJSON({
-      username,
-      password,
-    }),
-    runFetchM('user'),
-  )
+## Introduction
 
-export const getUserAvatar = (username: string, size: string = '1x') =>
-  pipe(
-    base,
-    withURLSearchParams({
-      username,
-      size,
-    }),
-    runFetchM('avatar'),
-  )
+The following few sections introduce the most important features of this
+package. Even readers without experience of `fp-ts` should be able to
+understand.
 
-export const authorized = pipe(
-  base,
+### Combinators
+
+This package provides some common functions, e.g., `withHeaders` and `asJSON`,
+to allow you both to modify the request as well as parse the response. This
+request-response pattern is made possible by the `pipe` function provided by
+`fp-ts`, which mimics the pipe operator in many other languages (or `.` in
+Haskell).
+
+These functions, known as `Combinator`s, either change how the request should be
+built up, or tell the response how it could get parsed. Comparing to the
+middleware solution, this fully utilizes the type system, i.e., where has been
+modified and what should be expected is now completely reflected in the type
+signature, without having to dive into the source code and worrying about side
+effects.
+
+For example, the following code snippet sets an `Authorization` header, add
+user's id as a search parameter, and parse the response body into JSON.
+
+```ts
+import { request } from '@equt/fetch'
+import {
+  asJSON,
+  withHeaders,
+  withURLSearchParams,
+} from '@equt/fetch/combinators'
+
+const getUserProfile = pipe(
+  request,
   withHeaders({
-    Authorization: `Bearer SECRETS`,
+    Authorization: `BEARER ${user.access_token}`,
   }),
+  withURLSearchParams({
+    id: user.id,
+  }),
+  asJSON(),
 )
-
-export const listCollection =
-  (cursor: number, size: number = 10) =>
-  (collection: string) =>
-    pipe(
-      authorized,
-      withURLSearchParams({
-        collection,
-        cursor,
-        size,
-      }),
-      runFetch('collection'),
-    )
 ```
 
-In addition to all the features provided by
-[`contactlab/appy`](https://github.com/contactlab/appy), this package
+### Error Handling
 
-- Support custom error type `E`, instead of just providing
-  [two built-in error types](https://github.com/contactlab/appy/blob/c65d49b652221eba3009b32a88c7a22d9b6d2364/src/request.ts#L60).
-- Full access to `Response`, instead of directly parsing into `string`
-  (`contactlab/appy`
-  [instead](https://github.com/contactlab/appy/blob/c65d49b652221eba3009b32a88c7a22d9b6d2364/src/request.ts#L123)
-  forced you to parse everything into a `string`, even for `JSON` and binary
-  data format).
-- Choose to continue the procedure without an error if the `Response.ok` is
-  `false` (`contactlab/appy`
-  [instead](https://github.com/contactlab/appy/blob/c65d49b652221eba3009b32a88c7a22d9b6d2364/src/request.ts#L116-L121)
-  only allows you to handle an ok `Response`)
-- A neat helper `runFetchM` to run the Monad instance, accepting the same
-  parameters just like the plain `fetch` function,
-  [no more unexpected pair type](https://github.com/contactlab/appy/blob/c65d49b652221eba3009b32a88c7a22d9b6d2364/README.md#L44-L51).
-- More useful combinators
-  - `withBaseURL` to set a base URL
-  - `withForm` to set the `Request` to a `FormData`, and could be built from
-    arbitrary valid `Record`
-  - Also combinators to handle `Request` & `Response` body in binary format
-- Minor changes
-  - Combinator setting the `JSON` `Request` body will automatically set a
-    corresponding `Content-Type` header
+Any built-in combinator that could throw in its context provides an optional
+parameter named `mapError`, this allows you to handle the error right in that
+combinator. Instead of throwing directly, you transforms it into whatever you
+want, e.g., notify the UI to show a toast for a timeout request.
+
+Leaving that parameter undefined implicitly tells the combinator to throw the
+error, just like what we've done above. To create a more _safe_ one, we could
+rewrite it into the following form
+
+```ts
+import { mkRequest } from '@equt/fetch'
+import {
+  asJSON,
+  withHeaders,
+  withURLSearchParams,
+} from '@equt/fetch/combinators'
+
+type Err = 'NETWORK_ERROR' | 'MALFORMED_JSON'
+
+const getUserProfile = pipe(
+  mkRequest((): Err => 'NETWORK_ERROR'),
+  withHeaders({
+    Authorization: `BEARER ${user.access_token}`,
+  }),
+  withURLSearchParams({
+    id: user.id,
+  }),
+  asJSON((): Err => 'MALFORMED_JSON'),
+)
+```
+
+Since we've explicitly told what to do with all the possible errors, the
+`getUserProfile` now **never throws an error**.
+
+### Execution
+
+The request-response pipeline will not be executed until we run it manually.
+This could be done by the provided `runFetchM` and its variants, they all accept
+the same parameters just like the `fetch` function.
+
+```ts
+import { mkRequest, runFetchMFlippedP } from '@equt/fetch'
+import {
+  asJSON,
+  withHeaders,
+  withURLSearchParams,
+} from '@equt/fetch/combinators'
+
+type Err = 'NETWORK_ERROR' | 'MALFORMED_JSON'
+
+const getUserProfile = pipe(
+  mkRequest((): Err => 'NETWORK_ERROR'),
+  withHeaders({
+    Authorization: `BEARER ${user.access_token}`,
+  }),
+  withURLSearchParams({
+    id: user.id,
+  }),
+  asJSON((): Err => 'MALFORMED_JSON'),
+  runFetchMFlippedP,
+)
+```
+
+Now `getUserProfile` is of the type
+`(input: string) => Promise<Either<Err, Json>>`, indicating you'll either get an
+error of type `Err`, or a valid JSON object.
+
+### Laziness
+
+Sometimes, values might not be ready when constructing the request, e.g., `user`
+might not available when building up the `getUserProfile`. Or, if you're using
+the `useState` hook from React (Reactivity API for Vue 3 users), you will always
+want to use the latest value instead of the one when defining the pipeline.
+
+Almost all combinators provided by this library accept lazy values. So we could
+rewrite `getUserProfile` into
+
+```ts
+import { mkRequest, runFetchMFlippedP } from '@equt/fetch'
+import {
+  asJSON,
+  withHeaders,
+  withURLSearchParams,
+} from '@equt/fetch/combinators'
+
+type Err = 'NETWORK_ERROR' | 'MALFORMED_JSON'
+
+const getUserProfile = pipe(
+  mkRequest((): Err => 'NETWORK_ERROR'),
+  withHeaders(() => ({
+    Authorization: `BEARER ${user.access_token}`,
+  })),
+  withURLSearchParams(() => ({
+    id: user.id,
+  })),
+  asJSON((): Err => 'MALFORMED_JSON'),
+  runFetchMFlippedP,
+)
+```
+
+### Code Reusing
+
+We could write more APIs just like `getUserProfile`, and we'll soon find out
+some common patterns shared among them, e.g., `withHeaders` that set user's
+authorization code, which could be reused in the whole codebase.
+
+This could be easily done by moving the `withHeaders` into a standalone
+function.
+
+```ts
+import type { Combinator } from '@equt/fetch'
+
+const withAuthorization = <E, A>(token: string): Combinator<E, A> =>
+  withHeaders({
+    Authorization: `BEARER ${token}`,
+  })
+```
+
+Congrats, you've created your first combinator. This combinator doesn't change
+anything in the type level, i.e., neither changes the response `A` from the
+previous combinator's output, nor changes the possible error type.
+
+## Advanced Topics
+
+### Differences between `contactlab/appy`
+
+This package could be viewed as a fork of `contactlab/appy` but with some
+opinionated enhancements.
+
+The main problem of `appy` is forcing the user to adapt the only two error types
+built inside, and this makes the `Either` type completely no sense. Due to being
+a superset of JavaScript, TypeScript lacks tons of modern features, but with a
+custom type, user can create a discriminated union and using the `switch` to
+mimic the pattern matching.
+
+Another weird decision is `appy` parses response into a string, and always throw
+an error when the response status is not 200. This package instead allows you to
+parse the response body into whatever you want, and let you determine what to do
+on different status code using the combinator `ensureStatus`.
+
+This package also allows some combinators be called multiple times. Combinators
+like `withHeaders`, `withForm`, and `withURLSearchParams` will merge the new
+values into the old one, which is more intuitive in my opinion.
+
+Considering the changeset is relatively large, I rewrote it from scratch.
