@@ -13,7 +13,7 @@ This package is inspired by the
 ## Introduction
 
 The following few sections introduce the most important features of this
-package. Even readers without experience of `fp-ts` should be able to
+package. Even readers without experience in `fp-ts` should be able to
 understand.
 
 ### Combinators
@@ -27,7 +27,7 @@ Haskell).
 These functions, known as `Combinator`s, either change how the request should be
 built up, or tell the response how it could get parsed. Comparing to the
 middleware solution, this fully utilizes the type system, i.e., where has been
-modified and what should be expected is now completely reflected in the type
+modified and what should be expected is now fully reflected in the type
 signature, without having to dive into the source code and worrying about side
 effects.
 
@@ -62,7 +62,7 @@ combinator. Instead of throwing directly, you transforms it into whatever you
 want, e.g., notify the UI to show a toast for a timeout request.
 
 Leaving that parameter undefined implicitly tells the combinator to throw the
-error, just like what we've done above. To create a more _safe_ one, we could
+error, just like what we've done above. To create a _safer_ one, we could
 rewrite it into the following form
 
 ```ts
@@ -88,7 +88,7 @@ const getUserProfile = pipe(
 ```
 
 Since we've explicitly told what to do with all the possible errors, the
-`getUserProfile` now **never throws an error**.
+`getUserProfile` now **never throws**.
 
 ### Execution
 
@@ -122,6 +122,9 @@ const getUserProfile = pipe(
 Now `getUserProfile` is of the type
 `(input: string) => Promise<Either<Err, Json>>`, indicating you'll either get an
 error of type `Err`, or a valid JSON object.
+
+For [SWR](https://swr.vercel.app) users, the `runFetchMFlippedPT` gives you a
+valid `fetcher`, and the `error` is guaranteed to be of the type `Err`.
 
 ### Laziness
 
@@ -158,8 +161,8 @@ const getUserProfile = pipe(
 
 ### Code Reusing
 
-We could write more APIs just like `getUserProfile`, and we'll soon find out
-some common patterns shared among them, e.g., `withHeaders` that set user's
+We could write more APIs just like `getUserProfile`, and will soon find out some
+common patterns shared among them, e.g., `withHeaders` that set user's
 authorization code, which could be reused in the whole codebase.
 
 This could be easily done by moving the `withHeaders` into a standalone
@@ -189,12 +192,12 @@ The main problem of `appy` is forcing the user to adapt the only two error types
 built inside, and this makes the `Either` type completely no sense. Due to being
 a superset of JavaScript, TypeScript lacks tons of modern features, but with a
 custom type, user can create a discriminated union and using the `switch` to
-mimic the pattern matching.
+kinda pretending as using the pattern matching.
 
-Another weird decision is `appy` parses response into a string, and always throw
-an error when the response status is not 200. This package instead allows you to
-parse the response body into whatever you want, and let you determine what to do
-on different status code using the combinator `ensureStatus`.
+Another weird decision is `appy` parses every response into a string, and always
+throw an error when the response status is not 200. This package instead allows
+you to parse the response body into whatever you want, and let you determine
+what to do on different status code using the combinator `ensureStatus`.
 
 This package also allows some combinators be called multiple times. Combinators
 like `withHeaders`, `withForm`, and `withURLSearchParams` will merge the new
