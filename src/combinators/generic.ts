@@ -23,8 +23,8 @@ import { eager } from '../utils'
  */
 export const when = <E, A, F, B>(
   condition: boolean | Lazy<boolean>,
-  combinator: Combinator<E, A, F, B>,
-): Combinator<E, A, E | F, A | B> => (eager(condition) ? combinator : identity)
+  onSatisfied: Combinator<E, A, F, B>,
+): Combinator<E, A, E | F, A | B> => (eager(condition) ? onSatisfied : identity)
 
 /**
  * Throw an error

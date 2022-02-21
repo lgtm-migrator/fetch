@@ -13,9 +13,9 @@ import type { Combinator, MapError } from '..'
  * @since 1.0.0
  */
 export const ensureStatus = <E, F>(
-  f: (code: number) => boolean,
-  mapError: MapError<F, Response>,
+  statusIsValid: (code: number) => boolean,
+  otherwise: MapError<F, Response>,
 ): Combinator<E, Response, E | F> =>
   chainEitherKW(resp =>
-    f(resp.status) ? right(resp) : pipe(resp, mapError, left),
+    statusIsValid(resp.status) ? right(resp) : pipe(resp, otherwise, left),
   )
