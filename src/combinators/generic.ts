@@ -1,10 +1,17 @@
-import type { Either } from 'fp-ts/Either'
-import { ask, chain, chainW, fromEither, left, local } from 'fp-ts/ReaderTaskEither'
-import type { Lazy } from 'fp-ts/function'
-import { flow, identity, pipe } from 'fp-ts/function'
+import type {Either} from 'fp-ts/Either'
+import {
+  ask,
+  chain,
+  chainW,
+  fromEither,
+  left,
+  local,
+} from 'fp-ts/ReaderTaskEither'
+import type {Lazy} from 'fp-ts/function'
+import {flow, identity, pipe} from 'fp-ts/function'
 
-import type { Combinator, Config } from '..'
-import { eager } from '../utils'
+import type {Combinator, Config} from '..'
+import {eager} from '../utils'
 
 /**
  * Apply a combinator conditionally.
