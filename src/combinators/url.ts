@@ -12,7 +12,7 @@ type MaybeURLLike = URL | string | undefined
  * Set the base URL for the request.
  *
  * @param url The base URL
- * @param mapError An instance of {@link MapError}, if omit, {@link bail} will be used instead.
+ * @param mapError An instance of {@link MapError}, if omitted, {@link bail} will be used instead.
  *
  * @since 1.0.0
  */

@@ -59,7 +59,7 @@ export type Formable = Record<string, string | Blob | FormBlob>
 /**
  * Set the request body as {@link FormData}.
  *
- * @param f Form like object {@link Formable}
+ * @param form Form like object {@link Formable}
  *
  * @since 2.1.0
  */

@@ -2,12 +2,13 @@ import { chain, chainFirst, local, rightIO } from 'fp-ts/ReaderTaskEither'
 import { mapSnd } from 'fp-ts/Tuple'
 import { pipe } from 'fp-ts/function'
 
-import { Combinator, MapError, bail } from '..'
+import { bail, Combinator, MapError } from '..'
 
 /**
  * Set an abort signal.
  *
  * @param signal Abort signal {@link AbortSignal}
+ * @param mapError An instance of {@link MapError}
  *
  * @since 1.0.0
  */
@@ -27,17 +28,18 @@ export function withSignal<E, A, F>(
 /**
  * Set the request timeout.
  *
- * @param miliseconds Duration in miliseconds
+ * @param milliseconds Duration in milliseconds
+ * @param mapError An instance of {@link MapError}
  *
  * @since 1.0.0
  */
 export function withTimeout<E, A, F>(
-  miliseconds: number,
+  milliseconds: number,
   mapError: MapError<F>,
 ): Combinator<E, A, E | F>
-export function withTimeout<E, A>(miliseconds: number): Combinator<E, A>
+export function withTimeout<E, A>(milliseconds: number): Combinator<E, A>
 export function withTimeout<E, A, F>(
-  miliseconds: number,
+  milliseconds: number,
   mapError: MapError<F> = bail,
 ): Combinator<E, A, E | F> {
   return m => {
@@ -46,7 +48,7 @@ export function withTimeout<E, A, F>(
     return pipe(
       rightIO(() => {
         controller = new AbortController()
-        return setTimeout(() => controller.abort(), miliseconds)
+        return setTimeout(() => controller.abort(), milliseconds)
       }),
       chain(id =>
         pipe(

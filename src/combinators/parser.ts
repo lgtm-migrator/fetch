@@ -7,7 +7,7 @@ import { flow } from 'fp-ts/function'
 
 import type { Errors, Mixed, TypeOf } from 'io-ts'
 
-import { Combinator, MapError, bail } from '..'
+import { bail, Combinator, MapError } from '..'
 import { eager } from '../utils'
 import { withHeaders } from './header'
 
@@ -27,9 +27,7 @@ export function asJSON<E, F>(
 ): Combinator<E, Response, E | F, Json> {
   return flow(
     withHeaders({ Accept: 'application/json' }),
-    chainTaskEitherKW(resp =>
-      tryCatch(() => resp.json().then(x => x as Json), mapError),
-    ),
+    chainTaskEitherKW(resp => tryCatch(() => resp.json(), mapError)),
   )
 }
 

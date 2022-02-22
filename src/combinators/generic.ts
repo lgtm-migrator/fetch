@@ -1,12 +1,5 @@
 import type { Either } from 'fp-ts/Either'
-import {
-  ask,
-  chain,
-  chainW,
-  fromEither,
-  left,
-  local,
-} from 'fp-ts/ReaderTaskEither'
+import { ask, chain, chainW, fromEither, left, local } from 'fp-ts/ReaderTaskEither'
 import type { Lazy } from 'fp-ts/function'
 import { flow, identity, pipe } from 'fp-ts/function'
 
@@ -17,7 +10,7 @@ import { eager } from '../utils'
  * Apply a combinator conditionally.
  *
  * @param condition Whether should the combinator runs or not
- * @param combinator The {@link Combinator}
+ * @param onSatisfied The {@link Combinator}
  *
  * @since 2.2.1
  */

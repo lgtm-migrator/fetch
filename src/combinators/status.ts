@@ -7,8 +7,8 @@ import type { Combinator, MapError } from '..'
 /**
  * Guard the {@link Response} status code.
  *
- * @param f An predication whether the status code is valid.
- * @param mapError An instance of {@link MapError}
+ * @param statusIsValid An predication whether the status code is valid.
+ * @param otherwise An instance of {@link MapError}
  *
  * @since 1.0.0
  */

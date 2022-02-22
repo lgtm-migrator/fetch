@@ -3,8 +3,8 @@ import type { ReaderTaskEither } from 'fp-ts/ReaderTaskEither'
 import type { TaskEither } from 'fp-ts/TaskEither'
 import { chain, map, right, tryCatch } from 'fp-ts/TaskEither'
 import { snd } from 'fp-ts/Tuple'
-import { identity, pipe, tupled } from 'fp-ts/function'
 import type { Lazy } from 'fp-ts/function'
+import { identity, pipe, tupled } from 'fp-ts/function'
 
 import { eager } from './utils'
 
@@ -20,7 +20,7 @@ export type Config = [string, RequestInit]
 /**
  * Main Monad of this package. The stack contains
  *
- * - A {@link Reader} of {@link Config}
+ * - A Reader of {@link Config}
  * - A {@link TaskEither} represents an asynchronous computation which can yield result `A` or raise an Error of type `E` eventually.
  *
  * @since 1.0.0
@@ -42,7 +42,7 @@ export type InspectError<M> = M extends FetchM<infer E, unknown> ? E : never
 export type InspectReturn<M> = M extends FetchM<unknown, infer A> ? A : never
 
 /**
- * An mapping from type `S` to an arbitrary error type `E`.
+ * A mapping from type `S` to an arbitrary error type `E`.
  *
  * @since 1.0.0
  */
@@ -69,8 +69,8 @@ export const bail: MapError<never> = e => {
  * A combinator is an alias for a function mapping from one {@link FetchM} to
  * another {@link FetchM}.
  *
- * Before 2.2.0, previous errors union will always gets preserved. But starting
- * from 2.2.0, the type signature is relaxed to allow you create combinators that
+ * Before 2.2.0, previous errors union will always get preserved. But starting
+ * from 2.2.0, the type signature is relaxed to allow you to create combinators that
  * recover the errors, or conditionally applied.
  *
  * @since 1.0.0
@@ -166,7 +166,7 @@ export const mkRequest =
               e.name === 'AbortError'
             ) {
               // We cast the error into `E` to satisfy the compiler, but we know we have set the correct
-              // error type in the combinator itself, so the error type union must contains the right
+              // error type in the combinator itself, so the error type union must contain the right
               // type.
               return (init as ExtendedRequestInit)._ABORT_MAP_ERROR(e) as E
             }
