@@ -24,7 +24,6 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint .",
-    "prepare": "husky install",
     "spell": "cspell '*.json' README.md '**/*.ts'",
     "format": "prettier --check '**/*.ts' README.md",
     "test": "jest --coverage",
