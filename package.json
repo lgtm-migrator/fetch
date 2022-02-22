@@ -1,6 +1,6 @@
 {
   "name": "@equt/fetch",
-  "version": "2.11.4",
+  "version": "2.11.5",
   "license": "MIT",
   "main": "./dist/cjs/index.js",
   "module": "./dist/es/index.js",
@@ -11,8 +11,8 @@
       "require": "./dist/cjs/utils.js"
     },
     "combinators": {
-      "import": "./dist/es/combinators.js",
-      "require": "./dist/cjs/combinators.js"
+      "import": "./dist/es/combinators/index.js",
+      "require": "./dist/cjs/combinators/index.js"
     }
   },
   "publishConfig": {
