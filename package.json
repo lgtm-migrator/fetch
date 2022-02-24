@@ -1,20 +1,10 @@
 {
   "name": "@equt/fetch",
-  "version": "2.11.5",
+  "version": "2.12.0",
   "license": "MIT",
   "main": "./dist/cjs/index.js",
   "module": "./dist/es/index.js",
   "types": "./dist/es/index.d.ts",
-  "exports": {
-    "utils": {
-      "import": "./dist/es/utils.js",
-      "require": "./dist/cjs/utils.js"
-    },
-    "combinators": {
-      "import": "./dist/es/combinators/index.js",
-      "require": "./dist/cjs/combinators/index.js"
-    }
-  },
   "publishConfig": {
     "access": "public"
   },
@@ -29,7 +19,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --outDir dist/es -m ESNext && tsc -m CommonJS --outDir dist/cjs",
+    "build": "tsc -m ESNext --outDir dist/es && tsc -m CommonJS --outDir dist/cjs",
     "lint": "eslint .",
     "spell": "cspell '*.json' README.md '**/*.ts'",
     "format": "prettier --check '**/*.ts' README.md",
