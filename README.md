@@ -35,12 +35,7 @@ For example, the following code snippet sets an `Authorization` header, add
 user's id as a search parameter, and parse the response body into JSON.
 
 ```ts
-import { request } from '@equt/fetch'
-import {
-  asJSON,
-  withHeaders,
-  withURLSearchParams,
-} from '@equt/fetch/combinators'
+import { request, asJSON, withHeaders, withURLSearchParams } from '@equt/fetch'
 
 const getUserProfile = pipe(
   request,
@@ -66,12 +61,12 @@ error, just like what we've done above. To create a _safer_ one, we could
 rewrite it into the following form
 
 ```ts
-import { mkRequest } from '@equt/fetch'
 import {
+  mkRequest,
   asJSON,
   withHeaders,
   withURLSearchParams,
-} from '@equt/fetch/combinators'
+} from '@equt/fetch'
 
 type Err = 'NETWORK_ERROR' | 'MALFORMED_JSON'
 
@@ -97,12 +92,13 @@ This could be done by the provided `runFetchM` and its variants, they all accept
 the same parameters just like the `fetch` function.
 
 ```ts
-import { mkRequest, runFetchMFlippedP } from '@equt/fetch'
 import {
+  mkRequest,
+  runFetchMFlippedP,
   asJSON,
   withHeaders,
   withURLSearchParams,
-} from '@equt/fetch/combinators'
+} from '@equt/fetch'
 
 type Err = 'NETWORK_ERROR' | 'MALFORMED_JSON'
 
@@ -137,12 +133,13 @@ Almost all combinators provided by this library accept lazy values. So we could
 rewrite `getUserProfile` into
 
 ```ts
-import { mkRequest, runFetchMFlippedP } from '@equt/fetch'
 import {
+  mkRequest,
+  runFetchMFlippedP,
   asJSON,
   withHeaders,
   withURLSearchParams,
-} from '@equt/fetch/combinators'
+} from '@equt/fetch'
 
 type Err = 'NETWORK_ERROR' | 'MALFORMED_JSON'
 
