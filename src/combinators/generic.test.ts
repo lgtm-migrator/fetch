@@ -1,47 +1,37 @@
 import { left, right } from 'fp-ts/Either'
-import { pipe } from 'fp-ts/function'
+import { map } from 'fp-ts/ReaderTaskEither'
+import { pipe, constVoid, constNull, constTrue } from 'fp-ts/function'
 
 import mock from 'fetch-mock-jest'
 
 import { request, runFetchM } from '..'
-import { withJSON } from './body'
-import { fail, localE, when } from './generic'
-import { withMethod } from './method'
+import { fail, localE, guard } from './generic'
 
 beforeEach(() => mock.mock('https://example.com', 200))
 afterEach(() => mock.reset())
 
 const mk = runFetchM('https://example.com')
 
-describe('when', () => {
-  it('transparent if true', async () => {
-    await pipe(
-      request,
-      withMethod('POST'),
-      when(true, withJSON({ Earth: 'Always Has Been' })),
-      mk,
-    )()
-
-    expect(mock.lastCall()?.[1]).toStrictEqual({
-      body: '{"Earth":"Always Has Been"}',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-    })
-  })
-
+describe('guard', () => {
   it('transparent if true', async () => {
     expect(
       await pipe(
         request,
-        when(
-          false,
-          fail(() => 'Always has been'),
-        ),
+        map(constTrue),
+        guard(b => b, constVoid),
         mk,
       )(),
-    ).toStrictEqual(expect.objectContaining({ _tag: 'Right' }))
+    ).toStrictEqual(right(true))
+  })
+
+  it('should return null if false', async () => {
+    expect(
+      await pipe(
+        request,
+        guard(() => false, constNull),
+        mk,
+      )(),
+    ).toStrictEqual(left(null))
   })
 })
 

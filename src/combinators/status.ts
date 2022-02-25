@@ -1,8 +1,8 @@
-import { left, right } from 'fp-ts/Either'
-import { chainEitherKW } from 'fp-ts/ReaderTaskEither'
+import type { Predicate } from 'fp-ts/Predicate'
 import { pipe } from 'fp-ts/function'
 
 import type { Combinator, MapError } from '..'
+import { guard } from '..'
 
 /**
  * Guard the {@link Response} status code.
@@ -13,9 +13,7 @@ import type { Combinator, MapError } from '..'
  * @since 1.0.0
  */
 export const ensureStatus = <E, F>(
-  statusIsValid: (code: number) => boolean,
+  predicte: Predicate<number>,
   otherwise: MapError<F, Response>,
 ): Combinator<E, Response, E | F> =>
-  chainEitherKW(resp =>
-    statusIsValid(resp.status) ? right(resp) : pipe(resp, otherwise, left),
-  )
+  guard(resp => pipe(resp.status, predicte), otherwise)

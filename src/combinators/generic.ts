@@ -1,30 +1,33 @@
+import type { Predicate } from 'fp-ts/Predicate'
 import type { Either } from 'fp-ts/Either'
 import {
   ask,
   chain,
   chainW,
+  chainEitherKW,
   fromEither,
   left,
   local,
 } from 'fp-ts/ReaderTaskEither'
+import { left as leftE, right as rightE } from 'fp-ts/Either'
 import type { Lazy } from 'fp-ts/function'
-import { flow, identity, pipe } from 'fp-ts/function'
+import { flow, pipe } from 'fp-ts/function'
 
-import type { Combinator, Config } from '..'
-import { eager } from '../utils'
+import type { Combinator, Config, MapError } from '..'
 
 /**
- * Apply a combinator conditionally.
+ * Guard the value in the pipline.
  *
- * @param condition Whether should the combinator runs or not
- * @param onSatisfied The {@link Combinator}
+ * @since 2.13.0
  *
- * @since 2.2.1
+ * @param predicate A {@link Predicate} determine whether the branch should be called
+ * @param otherwise Called when the predicate is false
  */
-export const when = <E, A, F, B>(
-  condition: boolean | Lazy<boolean>,
-  onSatisfied: Combinator<E, A, F, B>,
-): Combinator<E, A, E | F, A | B> => (eager(condition) ? onSatisfied : identity)
+export const guard = <E, F, A>(
+  predicate: Predicate<A>,
+  otherwise: MapError<F, A>,
+): Combinator<E, A, E | F> =>
+  chainEitherKW(a => (predicate(a) ? rightE(a) : pipe(a, otherwise, leftE)))
 
 /**
  * Throw an error
