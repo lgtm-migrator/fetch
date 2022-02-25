@@ -16,7 +16,7 @@ import { flow, pipe } from 'fp-ts/function'
 import type { Combinator, Config, MapError } from '..'
 
 /**
- * Guard the value in the pipline.
+ * Guard the value in the pipeline.
  *
  * @since 2.13.0
  *
