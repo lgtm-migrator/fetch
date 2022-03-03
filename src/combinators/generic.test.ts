@@ -51,7 +51,7 @@ describe('when', () => {
         when((b): b is false => b, constVoid),
         mk,
       )(),
-    ).toStrictEqual(right(true))
+    ).toStrictEqual(right(false))
   })
 
   it('should return null if true', async () => {

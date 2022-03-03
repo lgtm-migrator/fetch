@@ -13,7 +13,7 @@ import { guard } from '..'
  * @since 1.0.0
  */
 export const ensureStatus = <E, F>(
-  predicate: Predicate<number>,
+  statusIsValid: Predicate<number>,
   otherwise: MapError<F, Response>,
 ): Combinator<E, Response, E | F> =>
-  guard(resp => pipe(resp.status, predicate), otherwise)
+  guard((resp): resp is Response => pipe(resp.status, statusIsValid), otherwise)
