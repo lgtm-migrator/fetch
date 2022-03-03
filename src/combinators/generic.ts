@@ -1,15 +1,15 @@
-import type { Predicate } from 'fp-ts/Predicate'
+import type { Refinement } from 'fp-ts/Refinement'
 import type { Either } from 'fp-ts/Either'
+import { left as leftE, right as rightE } from 'fp-ts/Either'
 import {
   ask,
   chain,
-  chainW,
   chainEitherKW,
+  chainW,
   fromEither,
   left,
   local,
 } from 'fp-ts/ReaderTaskEither'
-import { left as leftE, right as rightE } from 'fp-ts/Either'
 import type { Lazy } from 'fp-ts/function'
 import { flow, pipe } from 'fp-ts/function'
 
@@ -20,14 +20,15 @@ import type { Combinator, Config, MapError } from '..'
  *
  * @since 2.13.0
  *
- * @param predicate A {@link Predicate} determine whether the branch should be called
+ * @param refinement A {@link Refinement} determine whether the branch should be
+ * called
  * @param otherwise Called when the predicate is false
  */
-export const guard = <E, F, A>(
-  predicate: Predicate<A>,
+export const guard = <E, F, A, B extends A>(
+  refinement: Refinement<A, B>,
   otherwise: MapError<F, A>,
-): Combinator<E, A, E | F> =>
-  chainEitherKW(a => (predicate(a) ? rightE(a) : pipe(a, otherwise, leftE)))
+): Combinator<E, A, E | F, B> =>
+  chainEitherKW(a => (refinement(a) ? rightE(a) : pipe(a, otherwise, leftE)))
 
 /**
  * Throw an error
