@@ -1,11 +1,17 @@
 import { left, right } from 'fp-ts/Either'
 import { map } from 'fp-ts/ReaderTaskEither'
-import { pipe, constVoid, constNull, constTrue } from 'fp-ts/function'
+import {
+  constFalse,
+  constNull,
+  constTrue,
+  constVoid,
+  pipe,
+} from 'fp-ts/function'
 
 import mock from 'fetch-mock-jest'
 
 import { request, runFetchM } from '..'
-import { fail, localE, guard } from './generic'
+import { fail, guard, localE, when } from './generic'
 
 beforeEach(() => mock.mock('https://example.com', 200))
 afterEach(() => mock.reset())
@@ -18,7 +24,7 @@ describe('guard', () => {
       await pipe(
         request,
         map(constTrue),
-        guard(b => b, constVoid),
+        guard((b): b is true => b, constVoid),
         mk,
       )(),
     ).toStrictEqual(right(true))
@@ -28,7 +34,32 @@ describe('guard', () => {
     expect(
       await pipe(
         request,
-        guard(() => false, constNull),
+        map(constFalse),
+        guard((b): b is false => b, constNull),
+        mk,
+      )(),
+    ).toStrictEqual(left(null))
+  })
+})
+
+describe('when', () => {
+  it('transparent if false', async () => {
+    expect(
+      await pipe(
+        request,
+        map(constFalse),
+        when((b): b is false => b, constVoid),
+        mk,
+      )(),
+    ).toStrictEqual(right(true))
+  })
+
+  it('should return null if true', async () => {
+    expect(
+      await pipe(
+        request,
+        map(constTrue),
+        when((b): b is true => b, constNull),
         mk,
       )(),
     ).toStrictEqual(left(null))

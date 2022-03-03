@@ -31,6 +31,21 @@ export const guard = <E, F, A, B extends A>(
   chainEitherKW(a => (refinement(a) ? rightE(a) : pipe(a, otherwise, leftE)))
 
 /**
+ * Throw if the value meets.
+ *
+ * @since 2.14.0
+ *
+ * @param refinement A {@link Refinement} determine whether the branch
+ * should be called
+ * @param then Called when the predicate is true
+ */
+export const when = <E, F, A, B extends A>(
+  refinement: Refinement<A, B>,
+  then: MapError<F, B>,
+): Combinator<E, A, E | F, A> =>
+  chainEitherKW(a => (refinement(a) ? pipe(a, then, leftE) : rightE(a)))
+
+/**
  * Throw an error
  *
  * @param error
