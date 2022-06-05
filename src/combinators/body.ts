@@ -14,6 +14,13 @@ type FormBlob = {
 }
 
 /**
+ * Form like object.
+ *
+ * @since 1.1.0
+ */
+export type Formable = Record<string, string | Blob | FormBlob>
+
+/**
  * Create a {@link FormData} from a form like object {@link Formable}.
  *
  * @param form Form like object {@link Formable}
@@ -48,13 +55,6 @@ export const collectFormable = (form: FormData): Formable => {
   })
   return obj
 }
-
-/**
- * Form like object.
- *
- * @since 1.1.0
- */
-export type Formable = Record<string, string | Blob | FormBlob>
 
 /**
  * Set the request body as {@link FormData}.
