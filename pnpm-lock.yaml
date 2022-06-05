@@ -16,6 +16,7 @@ specifiers:
   io-ts: ^2.2.16
   jest: ^28.1.0
   jest-environment-jsdom: ^28.1.0
+  pnpm: ^7.1.8
   prettier: ^2.6.2
   ts-jest: ^28.0.4
   typescript: ^4.7.3
@@ -36,6 +37,7 @@ devDependencies:
   io-ts: 2.2.16_fp-ts@2.12.1
   jest: 28.1.0
   jest-environment-jsdom: 28.1.0
+  pnpm: 7.1.8
   prettier: 2.6.2
   ts-jest: 28.0.4_dobhpzuee57u35mlukeats7vq4
   typescript: 4.7.3
@@ -4309,6 +4311,12 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       find-up: 4.1.0
+    dev: true
+
+  /pnpm/7.1.8:
+    resolution: {integrity: sha512-6E+iGdkAcEtEvmxgLGpHiK51ArFK8mBUFIQ6/x5LeL+YCWbi1r1Fy2UPN1dDWUjy2xauLjgIMp/KQ5s5b85EBA==}
+    engines: {node: '>=14.19'}
+    hasBin: true
     dev: true
 
   /postcss-selector-parser/6.0.10:
