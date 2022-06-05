@@ -2,9 +2,9 @@
   "name": "@equt/fetch",
   "version": "2.14.0",
   "license": "MIT",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/es/index.js",
-  "types": "./dist/es/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
@@ -19,14 +19,15 @@
     "dist"
   ],
   "packageManager": "pnpm@7.1.8",
+  "sideEffects": false,
   "scripts": {
     "prepare": "husky install",
-    "build": "tsc -m ESNext --outDir dist/es && tsc -m CommonJS --outDir dist/cjs",
+    "build": "unbuild",
     "lint": "eslint .",
     "spell": "cspell '*.json' README.md '**/*.ts'",
-    "format": "prettier --check '**/*.ts' README.md",
+    "format": "prettier --check 'src/*.ts' '*.config.ts' README.md",
     "test": "jest --coverage",
-    "check": "tsc --noEmit"
+    "check": "tsc"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.2",
@@ -47,7 +48,8 @@
     "pnpm": "^7.1.8",
     "prettier": "^2.6.2",
     "ts-jest": "^28.0.4",
-    "typescript": "^4.7.3"
+    "typescript": "^4.7.3",
+    "unbuild": "^0.7.4"
   },
   "peerDependencies": {
     "fp-ts": ">=2.11.1",
