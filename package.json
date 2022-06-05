@@ -1,6 +1,6 @@
 {
   "name": "@equt/fetch",
-  "version": "2.14.2",
+  "version": "2.14.3",
   "license": "MIT",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -102,15 +102,6 @@
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
-    ],
-    "rules": {
-      "subject-case": [
-        2,
-        "always",
-        [
-          "sentence-case"
-        ]
-      ]
-    }
+    ]
   }
 }
