@@ -32,7 +32,7 @@
     "build": "unbuild",
     "lint": "eslint .",
     "spell": "cspell '*.json' README.md '**/*.ts'",
-    "format": "prettier --check 'src/*.ts' '*.config.ts' README.md",
+    "format": "prettier --check 'src/*.ts' README.md",
     "test": "jest --coverage",
     "check": "tsc"
   },
@@ -78,6 +78,16 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "jsdom"
+  },
+  "unbuild": {
+    "entries": [
+      "src/index"
+    ],
+    "clean": true,
+    "declaration": true,
+    "rollup": {
+      "emitCJS": true
+    }
   },
   "cspell": {
     "words": [
