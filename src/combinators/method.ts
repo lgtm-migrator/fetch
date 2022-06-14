@@ -18,6 +18,7 @@ export type HTTPMethod =
   | 'DELETE'
   | 'OPTION'
   | 'PATCH'
+  | (string & Record<never, never>)
 
 /**
  * Set the request HTTP method.
