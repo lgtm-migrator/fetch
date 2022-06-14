@@ -29,4 +29,9 @@ describe('Method combinator', () => {
     )()
     expect(mock.lastOptions()).toStrictEqual({ method: 'GET' })
   })
+
+  it('should allow custom method', async () => {
+    await pipe(request, withMethod('CUSTOM'), mk)()
+    expect(mock.lastOptions()).toStrictEqual({ method: 'CUSTOM' })
+  })
 })
