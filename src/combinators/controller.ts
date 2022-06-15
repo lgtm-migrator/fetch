@@ -1,8 +1,10 @@
+import type { Lazy } from 'fp-ts/function'
 import { chain, chainFirst, local, rightIO } from 'fp-ts/ReaderTaskEither'
 import { mapSnd } from 'fp-ts/Tuple'
 import { pipe } from 'fp-ts/function'
 
 import { bail, Combinator, MapError } from '..'
+import { eager } from '../utils'
 
 /**
  * Set an abort signal.
@@ -13,16 +15,20 @@ import { bail, Combinator, MapError } from '..'
  * @since 1.0.0
  */
 export function withSignal<E, A, F>(
-  signal: AbortSignal,
+  signal: Lazy<AbortSignal> | AbortSignal,
   mapError: MapError<F>,
 ): Combinator<E, A, E | F>
-export function withSignal<E, A>(signal: AbortSignal): Combinator<E, A>
+export function withSignal<E, A>(
+  signal: Lazy<AbortSignal> | AbortSignal,
+): Combinator<E, A>
 export function withSignal<E, A, F>(
-  signal: AbortSignal,
+  signal: Lazy<AbortSignal> | AbortSignal,
   mapError: MapError<F> = bail,
 ): Combinator<E, A, E | F> {
   // How could this even be possible? See the impl details of `mkRequest`
-  return local(mapSnd(x => ({ signal, _ABORT_MAP_ERROR: mapError, ...x })))
+  return local(
+    mapSnd(x => ({ signal: eager(signal), _ABORT_MAP_ERROR: mapError, ...x })),
+  )
 }
 
 /**
@@ -34,12 +40,14 @@ export function withSignal<E, A, F>(
  * @since 1.0.0
  */
 export function withTimeout<E, A, F>(
-  milliseconds: number,
+  milliseconds: Lazy<number> | number,
   mapError: MapError<F>,
 ): Combinator<E, A, E | F>
-export function withTimeout<E, A>(milliseconds: number): Combinator<E, A>
+export function withTimeout<E, A>(
+  milliseconds: Lazy<number> | number,
+): Combinator<E, A>
 export function withTimeout<E, A, F>(
-  milliseconds: number,
+  milliseconds: Lazy<number> | number,
   mapError: MapError<F> = bail,
 ): Combinator<E, A, E | F> {
   return m => {
@@ -48,7 +56,7 @@ export function withTimeout<E, A, F>(
     return pipe(
       rightIO(() => {
         controller = new AbortController()
-        return setTimeout(() => controller.abort(), milliseconds)
+        return setTimeout(() => controller.abort(), eager(milliseconds))
       }),
       chain(id =>
         pipe(
