@@ -12,8 +12,10 @@ import {
   runFetchMFlipped,
   runFetchMFlippedP,
   runFetchMFlippedPT,
+  runFetchMFlippedPTL,
   runFetchMP,
   runFetchMPT,
+  runFetchMPTL,
 } from '.'
 
 afterEach(() => mock.reset())
@@ -37,6 +39,9 @@ describe('Plain request', () => {
       await pipe(request, runFetchMPT('https://example.com')),
     ).toStrictEqual(resp)
     expect(
+      await pipe(request, runFetchMPTL('https://example.com'))(),
+    ).toStrictEqual(resp)
+    expect(
       await pipe(request, runFetchMFlipped)('https://example.com')(),
     ).toStrictEqual(right(resp))
     expect(
@@ -44,6 +49,9 @@ describe('Plain request', () => {
     ).toStrictEqual(right(resp))
     expect(
       await pipe(request, runFetchMFlippedPT)('https://example.com'),
+    ).toStrictEqual(resp)
+    expect(
+      await pipe(request, runFetchMFlippedPTL)('https://example.com')(),
     ).toStrictEqual(resp)
   })
 
@@ -68,6 +76,13 @@ describe('Plain request', () => {
         ),
     ).rejects.toMatch('InternalError')
     expect(
+      async () =>
+        await pipe(
+          mkRequest(() => 'InternalError', realFetch),
+          runFetchMPTL('https://*'),
+        )(),
+    ).rejects.toMatch('InternalError')
+    expect(
       await pipe(
         mkRequest(() => 'InternalError', realFetch),
         runFetchMFlipped,
@@ -85,6 +100,13 @@ describe('Plain request', () => {
           mkRequest(() => 'InternalError', realFetch),
           runFetchMFlippedPT,
         )('https://*'),
+    ).rejects.toMatch('InternalError')
+    expect(
+      async () =>
+        await pipe(
+          mkRequest(() => 'InternalError', realFetch),
+          runFetchMFlippedPTL,
+        )('https://*')(),
     ).rejects.toMatch('InternalError')
   })
 })
