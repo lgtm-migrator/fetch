@@ -230,6 +230,25 @@ export const runFetchMPT =
     )
 
 /**
+ * Lazy version of {@link runFetchMPT}.
+ *
+ * @param input URL
+ * @param init Request init {@link RequestInit}
+ *
+ * @since 2.15.0
+ */
+export const runFetchMPTL =
+  <E, A>(input: Lazyable<string>, init?: Lazyable<RequestInit>) =>
+  (m: FetchM<E, A>) =>
+  async () =>
+    pipe(
+      await m([eager(input), eager(init) ?? {}])(),
+      match(e => {
+        throw e
+      }, identity),
+    )
+
+/**
  * The flipped version of {@link runFetchM}.
  *
  * @param m The Monad {@link FetchM}
@@ -263,6 +282,24 @@ export const runFetchMFlippedP =
 export const runFetchMFlippedPT =
   <E, A>(m: FetchM<E, A>) =>
   async (input: Lazyable<string>, init?: Lazyable<RequestInit>) =>
+    pipe(
+      await m([eager(input), eager(init) ?? {}])(),
+      match(e => {
+        throw e
+      }, identity),
+    )
+
+/**
+ * Lazy version of {@link runFetchMFlippedP}.
+ *
+ * @param m The Monad {@link FetchM}
+ *
+ * @since 2.15.0
+ */
+export const runFetchMFlippedPTL =
+  <E, A>(m: FetchM<E, A>) =>
+  (input: Lazyable<string>, init?: Lazyable<RequestInit>) =>
+  async () =>
     pipe(
       await m([eager(input), eager(init) ?? {}])(),
       match(e => {
