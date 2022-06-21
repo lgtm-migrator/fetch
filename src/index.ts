@@ -5,9 +5,6 @@ import { chain, map, right, tryCatch } from 'fp-ts/TaskEither'
 import { snd } from 'fp-ts/Tuple'
 import { identity, pipe, tupled } from 'fp-ts/function'
 
-import type { Lazyable } from './utils'
-import { eager } from './utils'
-
 /**
  * {@link FetchM} Monad Environment.
  *
@@ -194,9 +191,9 @@ export const request = mkRequest(bail)
  * @since 1.0.0
  */
 export const runFetchM =
-  <E, A>(input: Lazyable<string>, init?: Lazyable<RequestInit>) =>
+  <E, A>(input: string, init?: RequestInit) =>
   (m: FetchM<E, A>): TaskEither<E, A> =>
-    m([eager(input), eager(init) ?? {}])
+    m([input, init ?? {}])
 
 /**
  * Call {@link runFetchM} returned {@link TaskEither} to produce a {@link Promise}.
@@ -207,9 +204,9 @@ export const runFetchM =
  * @since 2.11.0
  */
 export const runFetchMP =
-  <E, A>(input: Lazyable<string>, init?: Lazyable<RequestInit>) =>
+  <E, A>(input: string, init?: RequestInit) =>
   (m: FetchM<E, A>) =>
-    m([eager(input), eager(init) ?? {}])()
+    m([input, init ?? {}])()
 
 /**
  * Throw the left value from {@link runFetchMP}.
@@ -220,10 +217,10 @@ export const runFetchMP =
  * @since 2.11.0
  */
 export const runFetchMPT =
-  <E, A>(input: Lazyable<string>, init?: Lazyable<RequestInit>) =>
+  <E, A>(input: string, init?: RequestInit) =>
   async (m: FetchM<E, A>) =>
     pipe(
-      await m([eager(input), eager(init) ?? {}])(),
+      await m([input, init ?? {}])(),
       match(e => {
         throw e
       }, identity),
@@ -238,11 +235,11 @@ export const runFetchMPT =
  * @since 2.15.0
  */
 export const runFetchMPTL =
-  <E, A>(input: Lazyable<string>, init?: Lazyable<RequestInit>) =>
+  <E, A>(input: string, init?: RequestInit) =>
   (m: FetchM<E, A>) =>
   async () =>
     pipe(
-      await m([eager(input), eager(init) ?? {}])(),
+      await m([input, init ?? {}])(),
       match(e => {
         throw e
       }, identity),
@@ -257,8 +254,8 @@ export const runFetchMPTL =
  */
 export const runFetchMFlipped =
   <E, A>(m: FetchM<E, A>) =>
-  (input: Lazyable<string>, init?: Lazyable<RequestInit>) =>
-    m([eager(input), eager(init) ?? {}])
+  (input: string, init?: RequestInit) =>
+    m([input, init ?? {}])
 
 /**
  * Call {@link runFetchMFlipped} returned {@link TaskEither} to produce a {@link Promise}.
@@ -269,8 +266,8 @@ export const runFetchMFlipped =
  */
 export const runFetchMFlippedP =
   <E, A>(m: FetchM<E, A>) =>
-  (input: Lazyable<string>, init?: Lazyable<RequestInit>) =>
-    m([eager(input), eager(init) ?? {}])()
+  (input: string, init?: RequestInit) =>
+    m([input, init ?? {}])()
 
 /**
  * Throw the left value from {@link runFetchMFlippedP}.
@@ -281,9 +278,9 @@ export const runFetchMFlippedP =
  */
 export const runFetchMFlippedPT =
   <E, A>(m: FetchM<E, A>) =>
-  async (input: Lazyable<string>, init?: Lazyable<RequestInit>) =>
+  async (input: string, init?: RequestInit) =>
     pipe(
-      await m([eager(input), eager(init) ?? {}])(),
+      await m([input, init ?? {}])(),
       match(e => {
         throw e
       }, identity),
@@ -298,14 +295,13 @@ export const runFetchMFlippedPT =
  */
 export const runFetchMFlippedPTL =
   <E, A>(m: FetchM<E, A>) =>
-  (input: Lazyable<string>, init?: Lazyable<RequestInit>) =>
+  (input: string, init?: RequestInit) =>
   async () =>
     pipe(
-      await m([eager(input), eager(init) ?? {}])(),
+      await m([input, init ?? {}])(),
       match(e => {
         throw e
       }, identity),
     )
 
-export * from './utils'
 export * from './combinators'
