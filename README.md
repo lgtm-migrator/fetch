@@ -122,40 +122,6 @@ error of type `Err`, or a valid JSON object.
 For [SWR](https://swr.vercel.app) users, the `runFetchMFlippedPT` gives a valid
 `fetcher`, and the `error` is guaranteed to be of the type `Err`.
 
-### Laziness
-
-Sometimes, values might not be ready when constructing the request, e.g., `user`
-might not available when building up the `getUserProfile`. Or, if you're using
-the `useState` hook from React (Reactivity API for Vue 3 users), you will always
-want to use the latest value instead of the one when defining the pipeline.
-
-Almost all combinators provided by this library accept lazy values. So we could
-rewrite `getUserProfile` into
-
-```ts
-import {
-  mkRequest,
-  runFetchMFlippedP,
-  asJSON,
-  withHeaders,
-  withURLSearchParams,
-} from '@equt/fetch'
-
-type Err = 'NETWORK_ERROR' | 'MALFORMED_JSON'
-
-const getUserProfile = pipe(
-  mkRequest((): Err => 'NETWORK_ERROR'),
-  withHeaders(() => ({
-    Authorization: `BEARER ${user.access_token}`,
-  })),
-  withURLSearchParams(() => ({
-    id: user.id,
-  })),
-  asJSON((): Err => 'MALFORMED_JSON'),
-  runFetchMFlippedP,
-)
-```
-
 ### Code Reusing
 
 We could write more APIs just like `getUserProfile`, and will soon find out some
