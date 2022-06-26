@@ -11,7 +11,9 @@ import type { Combinator } from '..'
  *
  * @since 1.0.0
  */
-export const toRecord = (headers: HeadersInit): Record<string, string> => {
+export const toRecord = /* #__PURE__ */ (
+  headers: HeadersInit,
+): Record<string, string> => {
   if (Array.isArray(headers)) {
     return Object.fromEntries(headers)
   } else if (headers instanceof Headers) {
@@ -32,7 +34,10 @@ export const toRecord = (headers: HeadersInit): Record<string, string> => {
  *
  * @since 1.0.0
  */
-export const merge = (into: HeadersInit, from: HeadersInit): HeadersInit => ({
+export const merge = /* #__PURE__ */ (
+  into: HeadersInit,
+  from: HeadersInit,
+): HeadersInit => ({
   ...toRecord(into),
   ...toRecord(from),
 })
@@ -44,5 +49,7 @@ export const merge = (into: HeadersInit, from: HeadersInit): HeadersInit => ({
  *
  * @since 1.0.0
  */
-export const withHeaders = <E, A>(headers: HeadersInit): Combinator<E, A> =>
+export const withHeaders = /* #__PURE__ */ <E, A>(
+  headers: HeadersInit,
+): Combinator<E, A> =>
   local(mapSnd(x => ({ headers: merge(headers, x.headers ?? {}), ...x })))

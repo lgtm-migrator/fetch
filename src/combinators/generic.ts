@@ -24,7 +24,7 @@ import type { Combinator, Config, MapError } from '..'
  * called
  * @param otherwise Called when the predicate is false
  */
-export const guard = <E, F, A, B extends A>(
+export const guard = /* #__PURE__ */ <E, F, A, B extends A>(
   refinement: Refinement<A, B>,
   otherwise: MapError<F, A>,
 ): Combinator<E, A, E | F, B> =>
@@ -39,7 +39,7 @@ export const guard = <E, F, A, B extends A>(
  * should be called
  * @param then Called when the predicate is true
  */
-export const when = <E, F, A, B extends A>(
+export const when = /* #__PURE__ */ <E, F, A, B extends A>(
   refinement: Refinement<A, B>,
   then: MapError<F, B>,
 ): Combinator<E, A, E | F, A> =>
@@ -60,7 +60,8 @@ export const fail = <E, A, F>(error: Lazy<F>): Combinator<E, A, E | F, A> =>
  *
  * @since 2.2.3
  */
-export const localE =
+// prettier-ignore
+export const localE = /* #__PURE__ */
   <E, A, F>(f: (a: Config) => Either<F, Config>): Combinator<E, A, E | F> =>
   m =>
     pipe(

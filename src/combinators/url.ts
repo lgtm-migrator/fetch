@@ -42,7 +42,7 @@ export function withBaseURL<E, F, A>(
  *
  * @since 2.0.0
  */
-export const withURLSearchParams = <E, A>(
+export const withURLSearchParams = /* #__PURE__ */ <E, A>(
   params: Record<string, string>,
 ): Combinator<E, A> => {
   type ExtendedRequestInit = RequestInit & {

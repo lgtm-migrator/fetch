@@ -12,7 +12,7 @@ import { guard } from '..'
  *
  * @since 1.0.0
  */
-export const ensureStatus = <E, F>(
+export const ensureStatus = /* #__PURE__ */ <E, F>(
   statusIsValid: Predicate<number>,
   otherwise: MapError<F, Response>,
 ): Combinator<E, Response, E | F> =>

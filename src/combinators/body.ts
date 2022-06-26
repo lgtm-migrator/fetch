@@ -26,7 +26,7 @@ export type Formable = Record<string, string | Blob | FormBlob>
  *
  * @since 1.1.0
  */
-export const mkFormData = (form: Formable): FormData =>
+export const mkFormData = /* #__PURE__ */ (form: Formable): FormData =>
   Object.entries(form).reduce((m, [k, v]) => {
     if (typeof v === 'string') {
       m.set(k, v)
@@ -46,7 +46,7 @@ export const mkFormData = (form: Formable): FormData =>
  *
  * @since 2.1.0
  */
-export const collectFormable = (form: FormData): Formable => {
+export const collectFormable = /* #__PURE__ */ (form: FormData): Formable => {
   const obj: Formable = {}
   form.forEach((v, k) => {
     obj[k] = v
@@ -61,7 +61,9 @@ export const collectFormable = (form: FormData): Formable => {
  *
  * @since 2.1.0
  */
-export const withForm = <E, A>(form: Formable): Combinator<E, A> =>
+export const withForm = /* #__PURE__ */ <E, A>(
+  form: Formable,
+): Combinator<E, A> =>
   local(
     mapSnd(({ body, ...rest }) => {
       const _form = form
@@ -95,7 +97,7 @@ export const withForm = <E, A>(form: Formable): Combinator<E, A> =>
  *
  * @since 1.0.0
  */
-export const withJSONBody = <E, A>(
+export const withJSONBody = /* #__PURE__ */ <E, A>(
   json: Json,
   replacer?: (
     this: unknown,
@@ -118,7 +120,7 @@ export const withJSONBody = <E, A>(
  *
  * @since 1.0.0
  */
-export const withJSON = <E, A>(
+export const withJSON = /* #__PURE__ */ <E, A>(
   json: Json,
   replacer?: (
     this: unknown,
@@ -140,7 +142,7 @@ export const withJSON = <E, A>(
  *
  * @since 1.0.0
  */
-export const withBlob = <E extends Error, A>(
+export const withBlob = /* #__PURE__ */ <E extends Error, A>(
   blob: Blob,
   contentType: string,
 ): Combinator<E, A> =>

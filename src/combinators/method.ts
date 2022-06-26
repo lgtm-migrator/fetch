@@ -25,5 +25,6 @@ export type HTTPMethod =
  *
  * @since 1.0.0
  */
-export const withMethod = <E, A>(method: HTTPMethod): Combinator<E, A> =>
-  local(mapSnd(x => ({ method: method, ...x })))
+export const withMethod = /* #__PURE__ */ <E, A>(
+  method: HTTPMethod,
+): Combinator<E, A> => local(mapSnd(x => ({ method: method, ...x })))
