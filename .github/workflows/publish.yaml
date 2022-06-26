@@ -21,7 +21,7 @@ jobs:
       - run: pnpx changelogithub
         continue-on-error: true
         env:
-          CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - run: pnpm publish --no-git-checks
