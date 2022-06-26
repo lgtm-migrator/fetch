@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
-      - run: pnpx conventional-github-releaser -p angular
+      - run: pnpx changelogithub
         continue-on-error: true
         env:
           CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{secrets.GITHUB_TOKEN}}
