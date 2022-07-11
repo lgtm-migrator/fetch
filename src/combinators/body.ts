@@ -104,13 +104,12 @@ export function withJSONBody<E, A>(
 ): Combinator<E, A>
 export function withJSONBody<E, A>(
   json: Json,
-  replacer?: // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ((this: any, key: string, value: any) => any) | Array<number | string>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  replacer?: any,
   space?: string | number,
 ): Combinator<E, A> {
   return local(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    mapSnd(x => ({ body: JSON.stringify(json, replacer as any, space), ...x })),
+    mapSnd(x => ({ body: JSON.stringify(json, replacer, space), ...x })),
   )
 }
 
@@ -139,14 +138,13 @@ export function withJSON<E, A>(
 ): Combinator<E, A>
 export function withJSON<E, A>(
   json: Json,
-  replacer?: // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ((this: any, key: string, value: any) => any) | Array<number | string>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  replacer?: any,
   space?: string | number,
 ): Combinator<E, A> {
   return flow(
     withHeaders({ 'Content-Type': 'application/json' }),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    withJSONBody(json, replacer as any, space),
+    withJSONBody(json, replacer, space),
   )
 }
 
