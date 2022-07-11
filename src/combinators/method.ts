@@ -27,4 +27,4 @@ export type HTTPMethod =
  */
 export const withMethod = /* #__PURE__ */ <E, A>(
   method: HTTPMethod,
-): Combinator<E, A> => local(mapSnd(x => ({ method: method, ...x })))
+): Combinator<E, A> => local(mapSnd(x => ({ method, ...x })))

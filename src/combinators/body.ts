@@ -48,9 +48,7 @@ export const mkFormData = /* #__PURE__ */ (form: Formable): FormData =>
  */
 export const collectFormable = /* #__PURE__ */ (form: FormData): Formable => {
   const obj: Formable = {}
-  form.forEach((v, k) => {
-    obj[k] = v
-  })
+  form.forEach((v, k) => (obj[k] = v))
   return obj
 }
 
@@ -65,24 +63,20 @@ export const withForm = /* #__PURE__ */ <E, A>(
   form: Formable,
 ): Combinator<E, A> =>
   local(
-    mapSnd(({ body, ...rest }) => {
-      const _form = form
-      if (body instanceof FormData) {
-        const formable = collectFormable(body)
-        return {
-          body: mkFormData({
-            ..._form,
-            ...formable,
-          }),
-          ...rest,
-        }
-      } else {
-        return {
-          body: mkFormData(_form),
-          ...rest,
-        }
-      }
-    }),
+    mapSnd(({ body, ...rest }) =>
+      body instanceof FormData
+        ? {
+            body: mkFormData({
+              ...form,
+              ...collectFormable(body),
+            }),
+            ...rest,
+          }
+        : {
+            body: mkFormData(form),
+            ...rest,
+          },
+    ),
   )
 
 /**
