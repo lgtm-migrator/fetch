@@ -97,16 +97,28 @@ export const withForm = /* #__PURE__ */ <E, A>(
  *
  * @since 1.0.0
  */
-export const withJSONBody = /* #__PURE__ */ <E, A>(
+export function withJSONBody<E, A>(
   json: Json,
-  replacer?: (
-    this: unknown,
-    key: string,
-    value: unknown,
-  ) => unknown | (number | string)[] | null,
-  space?: Parameters<typeof JSON.stringify>['2'],
-): Combinator<E, A> =>
-  local(mapSnd(x => ({ body: JSON.stringify(json, replacer, space), ...x })))
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  replacer?: (this: any, key: string, value: any) => any,
+  space?: string | number,
+): Combinator<E, A>
+export function withJSONBody<E, A>(
+  json: Json,
+  replacer?: Array<number | string>,
+  space?: string | number,
+): Combinator<E, A>
+export function withJSONBody<E, A>(
+  json: Json,
+  replacer?: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ((this: any, key: string, value: any) => any) | Array<number | string>,
+  space?: string | number,
+): Combinator<E, A> {
+  return local(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mapSnd(x => ({ body: JSON.stringify(json, replacer as any, space), ...x })),
+  )
+}
 
 /**
  * Set the request body as JSON.
@@ -120,19 +132,29 @@ export const withJSONBody = /* #__PURE__ */ <E, A>(
  *
  * @since 1.0.0
  */
-export const withJSON = /* #__PURE__ */ <E, A>(
+export function withJSON<E, A>(
   json: Json,
-  replacer?: (
-    this: unknown,
-    key: string,
-    value: unknown,
-  ) => unknown | (number | string)[] | null,
-  space?: Parameters<typeof JSON.stringify>['2'],
-): Combinator<E, A> =>
-  flow(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  replacer?: (this: any, key: string, value: any) => any,
+  space?: string | number,
+): Combinator<E, A>
+export function withJSON<E, A>(
+  json: Json,
+  replacer?: Array<number | string>,
+  space?: string | number,
+): Combinator<E, A>
+export function withJSON<E, A>(
+  json: Json,
+  replacer?: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ((this: any, key: string, value: any) => any) | Array<number | string>,
+  space?: string | number,
+): Combinator<E, A> {
+  return flow(
     withHeaders({ 'Content-Type': 'application/json' }),
-    withJSONBody(json, replacer, space),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    withJSONBody(json, replacer as any, space),
   )
+}
 
 /**
  * Set the request body as Blob.

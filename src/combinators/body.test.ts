@@ -48,6 +48,42 @@ describe('JSON body combinator', () => {
       method: 'POST',
     })
   })
+
+  it('should respect JSON.stringify replacer (function overload)', async () => {
+    await pipe(
+      request,
+      withMethod('POST'),
+      withJSON({ Earth: 'Always' }, (_, value) =>
+        value === 'Always' ? 'Always Has Been' : value,
+      ),
+      mk,
+    )()
+
+    expect(mock.lastCall()?.[1]).toStrictEqual({
+      body: '{"Earth":"Always Has Been"}',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    })
+  })
+
+  it('should respect JSON.stringify replacer (array overload)', async () => {
+    await pipe(
+      request,
+      withMethod('POST'),
+      withJSON({ Earth: 'Always', Solar: 'Never' }, ['Solar']),
+      mk,
+    )()
+
+    expect(mock.lastCall()?.[1]).toStrictEqual({
+      body: '{"Solar":"Never"}',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    })
+  })
 })
 
 describe('Form body combinator', () => {
