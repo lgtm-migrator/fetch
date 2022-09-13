@@ -116,28 +116,22 @@ const buildURL = /* #__PURE__ */ (config: Readonly<Config>): Config => {
       _URL_USERNAME: string
     }>
 
-  let input = config[0]
+  const url = new URL(config[0])
   const init: ExtendedRequestInit = config[1]
 
   if (init._URL_SEARCH_PARAMS) {
-    const url = new URL(input)
     url.search = new URLSearchParams(init._URL_SEARCH_PARAMS).toString()
-    input = url.href
   }
 
   if (init._URL_PASSWORD) {
-    const url = new URL(input)
     url.password = init._URL_PASSWORD
-    input = url.href
   }
 
   if (init._URL_USERNAME) {
-    const url = new URL(input)
     url.username = init._URL_USERNAME
-    input = url.href
   }
 
-  return [input, init]
+  return [url.href, init]
 }
 
 /**
