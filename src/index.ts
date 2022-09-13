@@ -114,6 +114,7 @@ const buildURL = /* #__PURE__ */ (config: Readonly<Config>): Config => {
       _URL_SEARCH_PARAMS: Record<string, string>
       _URL_PASSWORD: string
       _URL_USERNAME: string
+      _URL_PORT: string | number
     }>
 
   const url = new URL(config[0])
@@ -129,6 +130,10 @@ const buildURL = /* #__PURE__ */ (config: Readonly<Config>): Config => {
 
   if (init._URL_USERNAME) {
     url.username = init._URL_USERNAME
+  }
+
+  if (init._URL_PORT) {
+    url.port = init._URL_PORT.toString()
   }
 
   return [url.href, init]

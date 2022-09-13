@@ -116,3 +116,30 @@ export const withUsername = /* #__PURE__ */ <E, A>(
     }),
   )
 }
+
+/**
+ * Set port.
+ *
+ * If this combinator occurs more than one time in the pipeline, the latter set parameters will
+ * override the previous one.
+ *
+ * @param port The port
+ *
+ * @since 3.3.0
+ */
+export const withPort = /* #__PURE__ */ <E, A>(
+  port: number | string,
+): Combinator<E, A> => {
+  type ExtendedRequestInit = RequestInit & {
+    _URL_PORT?: number | string
+  }
+
+  return local(
+    mapSnd(x => {
+      return {
+        _URL_PORT: port,
+        ...(x as ExtendedRequestInit),
+      }
+    }),
+  )
+}
