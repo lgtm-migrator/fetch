@@ -6,6 +6,7 @@ import { request, runFetchM } from '..'
 import {
   withBaseURL,
   withPassword,
+  withPort,
   withURLSearchParams,
   withUsername,
 } from './url'
@@ -159,5 +160,40 @@ describe('URL Username Combinator', () => {
     )()
 
     expect(mock.lastCall()?.[0]).toStrictEqual('https://user@example.com/')
+  })
+})
+
+describe('URL Port Combinator', () => {
+  it('should set port', async () => {
+    mock.mock('https://example.com:442', 200)
+
+    await pipe(request, withPort(442), runFetchM('https://example.com'))()
+
+    expect(mock.lastCall()?.[0]).toStrictEqual('https://example.com:442/')
+  })
+
+  it('should override', async () => {
+    mock.mock('https://example.com:442', 200)
+
+    await pipe(
+      request,
+      withPort(80),
+      withPort(442),
+      runFetchM('https://example.com'),
+    )()
+
+    expect(mock.lastCall()?.[0]).toStrictEqual('https://example.com:442/')
+  })
+
+  it('should accept both string and number', async () => {
+    mock.mock('https://example.com:442', 200)
+
+    await pipe(request, withPort('442'), runFetchM('https://example.com'))()
+
+    expect(mock.lastCall()?.[0]).toStrictEqual('https://example.com:442/')
+
+    await pipe(request, withPort(442), runFetchM('https://example.com'))()
+
+    expect(mock.lastCall()?.[0]).toStrictEqual('https://example.com:442/')
   })
 })
