@@ -5,11 +5,13 @@ import {
   ask,
   chain,
   chainEitherKW,
+  chainFirstIOK,
   chainW,
   fromEither,
   left,
   local,
 } from 'fp-ts/ReaderTaskEither'
+import { of } from 'fp-ts/IO'
 import type { Lazy } from 'fp-ts/function'
 import { flow, pipe } from 'fp-ts/function'
 
@@ -54,6 +56,15 @@ export const when = /* #__PURE__ */ <E, F, A, B extends A>(
  */
 export const fail = <E, A, F>(error: Lazy<F>): Combinator<E, A, E | F, A> =>
   flow(error, left)
+
+/**
+ * Inspect the value
+ *
+ * @since 3.3.0
+ */
+export const inspect = /* #__PURE__ */ <E, A>(
+  inspector: (a: A) => void,
+): Combinator<E, A> => chainFirstIOK(flow(inspector, of))
 
 /**
  * Abuse version of {@link local}, which might raise an error.
