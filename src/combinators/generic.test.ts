@@ -1,5 +1,6 @@
 import { left, right } from 'fp-ts/Either'
-import { map } from 'fp-ts/ReaderTaskEither'
+import { map, chainIOK } from 'fp-ts/ReaderTaskEither'
+import { of } from 'fp-ts/IO'
 import {
   constFalse,
   constNull,
@@ -11,7 +12,7 @@ import {
 import mock from 'fetch-mock-jest'
 
 import { request, runFetchM } from '..'
-import { fail, guard, localE, when } from './generic'
+import { fail, guard, localE, inspect, when } from './generic'
 
 beforeEach(() => mock.mock('https://example.com', 200))
 afterEach(() => mock.reset())
@@ -75,6 +76,21 @@ describe('fail', () => {
         mk,
       )(),
     ).toStrictEqual(expect.objectContaining({ _tag: 'Left' }))
+  })
+})
+
+describe('inspect', () => {
+  it('inspect inside', async () => {
+    let result: true | false = false
+
+    await pipe(
+      request,
+      chainIOK(() => of(true)),
+      inspect(b => (result = b)),
+      mk,
+    )()
+
+    expect(result).toBeTruthy()
   })
 })
 
