@@ -108,22 +108,36 @@ const buildBaseURL = /* #__PURE__ */ <E>(
 
 // NOTE This has to be called after the buildBaseURL, since it assume the `input`
 // in the config is always a valid URL.
-const buildURLParams = /* #__PURE__ */ (config: Config): Config => {
-  type ExtendedRequestInit = RequestInit & {
-    _URL_SEARCH_PARAMS: Record<string, string>
-  }
+const buildURL = /* #__PURE__ */ (config: Readonly<Config>): Config => {
+  type ExtendedRequestInit = RequestInit &
+    Partial<{
+      _URL_SEARCH_PARAMS: Record<string, string>
+      _URL_PASSWORD: string
+      _URL_USERNAME: string
+    }>
 
-  const [input, init] = config
+  let input = config[0]
+  const init: ExtendedRequestInit = config[1]
 
-  if ((init as ExtendedRequestInit)._URL_SEARCH_PARAMS) {
-    // We simply assume the input is a valid URL
+  if (init._URL_SEARCH_PARAMS) {
     const url = new URL(input)
-    url.search = new URLSearchParams(
-      (init as ExtendedRequestInit)._URL_SEARCH_PARAMS,
-    ).toString()
-    return [url.href, init]
+    url.search = new URLSearchParams(init._URL_SEARCH_PARAMS).toString()
+    input = url.href
   }
-  return config
+
+  if (init._URL_PASSWORD) {
+    const url = new URL(input)
+    url.password = init._URL_PASSWORD
+    input = url.href
+  }
+
+  if (init._URL_USERNAME) {
+    const url = new URL(input)
+    url.username = init._URL_USERNAME
+    input = url.href
+  }
+
+  return [input, init]
 }
 
 /**
@@ -141,7 +155,7 @@ export const mkRequest = /* #__PURE__ */
     r =>
       pipe(
         buildBaseURL<E>(r),
-        map(r => buildURLParams(r)),
+        map(buildURL),
         chain(r =>
           tryCatch(
             () => tupled(fetchImpl ?? fetch)(r),

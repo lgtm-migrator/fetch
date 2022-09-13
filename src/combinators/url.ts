@@ -62,3 +62,57 @@ export const withURLSearchParams = /* #__PURE__ */ <E, A>(
     }),
   )
 }
+
+/**
+ * Set password.
+ *
+ * If this combinator occurs more than one time in the pipeline, the latter set parameters will
+ * override the previous one.
+ *
+ * @param password The password
+ *
+ * @since 3.3.0
+ */
+export const withPassword = /* #__PURE__ */ <E, A>(
+  password: string,
+): Combinator<E, A> => {
+  type ExtendedRequestInit = RequestInit & {
+    _URL_PASSWORD?: string
+  }
+
+  return local(
+    mapSnd(x => {
+      return {
+        _URL_PASSWORD: password,
+        ...(x as ExtendedRequestInit),
+      }
+    }),
+  )
+}
+
+/**
+ * Set username.
+ *
+ * If this combinator occurs more than one time in the pipeline, the latter set parameters will
+ * override the previous one.
+ *
+ * @param username The username
+ *
+ * @since 3.3.0
+ */
+export const withUsername = /* #__PURE__ */ <E, A>(
+  username: string,
+): Combinator<E, A> => {
+  type ExtendedRequestInit = RequestInit & {
+    _URL_USERNAME?: string
+  }
+
+  return local(
+    mapSnd(x => {
+      return {
+        _URL_USERNAME: username,
+        ...(x as ExtendedRequestInit),
+      }
+    }),
+  )
+}
