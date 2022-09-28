@@ -23,11 +23,12 @@ import type { Combinator, Config, MapError } from '..'
 /**
  * Guard the value in the pipeline.
  *
- * @since 2.13.0
- *
  * @param refinement A {@link Refinement} determine whether the branch should be
  * called
  * @param otherwise Called when the predicate is false
+ *
+ * @category combinators
+ * @since 2.13.0
  */
 export const guard = /* #__PURE__ */ <E, F, A, B extends A>(
   refinement: Refinement<A, B>,
@@ -38,11 +39,13 @@ export const guard = /* #__PURE__ */ <E, F, A, B extends A>(
 /**
  * Throw if the value meets.
  *
- * @since 2.14.0
- *
  * @param refinement A {@link Refinement} determine whether the branch
  * should be called
  * @param then Called when the predicate is true
+ *
+ * @category combinators
+ * @since 2.14.0
+ *
  */
 export const when = /* #__PURE__ */ <E, F, A, B extends A>(
   refinement: Refinement<A, B>,
@@ -55,6 +58,7 @@ export const when = /* #__PURE__ */ <E, F, A, B extends A>(
  *
  * @param error
  *
+ * @category combinators
  * @since 2.2.1
  */
 export const fail = <E, A, F>(error: Lazy<F>): Combinator<E, A, E | F, A> =>
@@ -63,6 +67,7 @@ export const fail = <E, A, F>(error: Lazy<F>): Combinator<E, A, E | F, A> =>
 /**
  * Inspect the value
  *
+ * @category combinators
  * @since 3.3.0
  */
 export const inspect = /* #__PURE__ */ <E, A>(
@@ -72,6 +77,7 @@ export const inspect = /* #__PURE__ */ <E, A>(
 /**
  * Abuse version of {@link local}, which might raise an error.
  *
+ * @category combinators
  * @since 2.2.3
  */
 // prettier-ignore

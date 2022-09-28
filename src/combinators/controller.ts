@@ -13,6 +13,7 @@ import { bail, Combinator, MapError } from '..'
  * @param signal Abort signal {@link AbortSignal}
  * @param mapError An instance of {@link MapError}
  *
+ * @category combinators
  * @since 1.0.0
  */
 export function withSignal<E, A, F>(
@@ -36,6 +37,7 @@ export function withSignal<E, A, F>(
  * @param milliseconds Duration in milliseconds
  * @param mapError An instance of {@link MapError}
  *
+ * @category combinators
  * @since 1.0.0
  */
 export function withTimeout<E, A, F>(

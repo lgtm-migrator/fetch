@@ -17,6 +17,7 @@ type FormBlob = {
 /**
  * Form like object.
  *
+ * @category types
  * @since 1.1.0
  */
 export type Formable = Record<string, string | Blob | FormBlob>
@@ -27,6 +28,7 @@ export type Formable = Record<string, string | Blob | FormBlob>
  * @param form Form like object {@link Formable}
  * @returns Form Data {@link FormData}
  *
+ * @category utils
  * @since 1.1.0
  */
 export const mkFormData = /* #__PURE__ */ (form: Formable): FormData =>
@@ -47,6 +49,7 @@ export const mkFormData = /* #__PURE__ */ (form: Formable): FormData =>
  * @param form A {@link FormData}
  * @returns An object satisfies {@link Formable}
  *
+ * @category utils
  * @since 2.1.0
  */
 export const collectFormable = /* #__PURE__ */ (form: FormData): Formable => {
@@ -60,6 +63,7 @@ export const collectFormable = /* #__PURE__ */ (form: FormData): Formable => {
  *
  * @param form Form like object {@link Formable}
  *
+ * @category combinators
  * @since 2.1.0
  */
 export const withForm = /* #__PURE__ */ <E, A>(
@@ -85,13 +89,14 @@ export const withForm = /* #__PURE__ */ <E, A>(
 /**
  * Set the request body as JSON.
  *
+ * Note, this combinator will not set `Content-Type` header automatically.
+ * You should use the {@link withJSON} combinator if that behavior is desired.
+ *
  * @param json JSON like object {@link Json}
  * @param replacer The replacer parameter in {@link JSON.stringify}
  * @param space The space parameter in {@link JSON.stringify}
  *
- * Note, this combinator will not set `Content-Type` header automatically.
- * You should use the {@link withJSON} combinator if that behavior is desired.
- *
+ * @category combinators
  * @since 1.0.0
  */
 export function withJSONBody<E, A>(
@@ -119,13 +124,14 @@ export function withJSONBody<E, A>(
 /**
  * Set the request body as JSON.
  *
+ * Note, this combinator will set `Content-Type` header automatically.
+ * You could use the {@link withJSONBody} combinator if this behavior is not desired.
+ *
  * @param json JSON like object {@link Json}
  * @param replacer The replacer parameter in {@link JSON.stringify}
  * @param space The space parameter in {@link JSON.stringify}
  *
- * Note, this combinator will set `Content-Type` header automatically.
- * You could use the {@link withJSONBody} combinator if this behavior is not desired.
- *
+ * @category combinators
  * @since 1.0.0
  */
 export function withJSON<E, A>(
@@ -157,6 +163,7 @@ export function withJSON<E, A>(
  * @param blob Data in {@link Blob}
  * @param contentType MIME
  *
+ * @category combinators
  * @since 1.0.0
  */
 export const withBlob = /* #__PURE__ */ <E extends Error, A>(

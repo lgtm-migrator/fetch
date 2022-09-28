@@ -12,6 +12,7 @@ import type { Combinator } from '..'
  * @param headers Headers {@link HeadersInit}
  * @returns Record `Record<string, string>`
  *
+ * @category utils
  * @since 1.0.0
  */
 export const toRecord = /* #__PURE__ */ (
@@ -35,6 +36,7 @@ export const toRecord = /* #__PURE__ */ (
  * @param from The source {@link HeadersInit}, entries must persist.
  * @returns Headers {@link HeadersInit}
  *
+ * @category utils
  * @since 1.0.0
  */
 export const merge = /* #__PURE__ */ (
@@ -50,6 +52,7 @@ export const merge = /* #__PURE__ */ (
  *
  * @param headers Headers like {@link HeadersInit}
  *
+ * @category combinators
  * @since 1.0.0
  */
 export const withHeaders = /* #__PURE__ */ <E, A>(

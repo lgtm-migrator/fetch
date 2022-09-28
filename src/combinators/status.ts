@@ -13,6 +13,7 @@ import { guard } from '..'
  * @param statusIsValid An predication whether the status code is valid.
  * @param otherwise An instance of {@link MapError}
  *
+ * @category combinators
  * @since 1.0.0
  */
 export const ensureStatus = /* #__PURE__ */ <E, F>(

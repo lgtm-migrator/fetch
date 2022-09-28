@@ -17,6 +17,7 @@ import { withHeaders } from './header'
  *
  * @param mapError An instance of {@link MapError}
  *
+ * @category combinators
  * @since 1.0.0
  */
 export function asJSON<E, F>(
@@ -38,6 +39,7 @@ export function asJSON<E, F>(
  * @param accept Set the `Accept` MIME header
  * @param mapError An instance of {@link MapError}
  *
+ * @category combinators
  * @since 1.0.0
  */
 export function asBlob<E, F>(
@@ -60,6 +62,7 @@ export function asBlob<E, F>(
  *
  * @param mapError An instance of {@link MapError}
  *
+ * @category combinators
  * @since 1.0.0
  */
 export function asText<E, F>(
@@ -81,6 +84,7 @@ export function asText<E, F>(
  * @param codeC Extends {@link Mixed}
  * @param mapError An instance of {@link MapError}
  *
+ * @category combinators
  * @since 2.5.0
  */
 export function decodeAs<E, F, C extends Mixed>(

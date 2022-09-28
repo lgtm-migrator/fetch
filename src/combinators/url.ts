@@ -15,6 +15,7 @@ type MaybeURLLike = URL | string | undefined
  * @param url The base URL
  * @param mapError An instance of {@link MapError}, if omitted, {@link bail} will be used instead.
  *
+ * @category combinators
  * @since 1.0.0
  */
 export function withBaseURL<E, F, A>(
@@ -43,6 +44,7 @@ export function withBaseURL<E, F, A>(
  *
  * @param params URL parameters in `Record<string, string>`
  *
+ * @category combinators
  * @since 2.0.0
  */
 export const withURLSearchParams = /* #__PURE__ */ <E, A>(
@@ -74,6 +76,7 @@ export const withURLSearchParams = /* #__PURE__ */ <E, A>(
  *
  * @param password The password
  *
+ * @category combinators
  * @since 3.3.0
  */
 export const withPassword = /* #__PURE__ */ <E, A>(
@@ -101,6 +104,7 @@ export const withPassword = /* #__PURE__ */ <E, A>(
  *
  * @param username The username
  *
+ * @category combinators
  * @since 3.3.0
  */
 export const withUsername = /* #__PURE__ */ <E, A>(
@@ -128,6 +132,7 @@ export const withUsername = /* #__PURE__ */ <E, A>(
  *
  * @param port The port
  *
+ * @category combinators
  * @since 3.3.0
  */
 export const withPort = /* #__PURE__ */ <E, A>(

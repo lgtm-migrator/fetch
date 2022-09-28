@@ -9,6 +9,7 @@ import type { Combinator } from '..'
 /**
  * All possible HTTP methods
  *
+ * @category types
  * @since 1.0.0
  */
 export type HTTPMethod =
@@ -26,6 +27,7 @@ export type HTTPMethod =
  *
  * @param method HTTP method {@link HTTPMethod}
  *
+ * @category combinators
  * @since 1.0.0
  */
 export const withMethod = /* #__PURE__ */ <E, A>(
