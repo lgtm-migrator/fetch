@@ -16,8 +16,16 @@
   "publishConfig": {
     "access": "public"
   },
-  "keywords": ["fp-ts", "fetch", "HTTP"],
-  "files": ["README.md", "LICENSE.md", "dist"],
+  "keywords": [
+    "fp-ts",
+    "fetch",
+    "HTTP"
+  ],
+  "files": [
+    "README.md",
+    "LICENSE.md",
+    "dist"
+  ],
   "packageManager": "pnpm@7.1.8",
   "sideEffects": false,
   "scripts": {
@@ -27,7 +35,8 @@
     "spell": "cspell '*.json' README.md '**/*.ts'",
     "format": "prettier --check 'src/*.ts' README.md",
     "test": "jest --coverage",
-    "check": "tsc"
+    "check": "tsc",
+    "doc": "docs-ts"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.2",
@@ -65,13 +74,18 @@
   "eslintConfig": {
     "extends": "@equt"
   },
-  "eslintIgnore": ["node_modules", "coverage"],
+  "eslintIgnore": [
+    "node_modules",
+    "coverage"
+  ],
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "jsdom"
   },
   "unbuild": {
-    "entries": ["src/index"],
+    "entries": [
+      "src/index"
+    ],
     "clean": true,
     "declaration": true,
     "rollup": {
@@ -101,6 +115,8 @@
     ]
   },
   "commitlint": {
-    "extends": ["@commitlint/config-conventional"]
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }
