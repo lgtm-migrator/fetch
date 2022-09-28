@@ -41,7 +41,10 @@ Added in v1.0.0
 
 ## withForm
 
-Set the request body as {@link FormData}.
+Set the request body as `FormData`.
+
+Calling this combinator multiple times will merge all of them instead of overriding.
+If the body is not a `FormData`, the existing body will be discarded.
 
 **Signature**
 
@@ -55,8 +58,8 @@ Added in v2.1.0
 
 Set the request body as JSON.
 
-Note, this combinator will set `Content-Type` header automatically.
-You could use the {@link withJSONBody} combinator if this behavior is not desired.
+This combinator will override the current existing body and `Content-Type` header.
+If setting the `Content-Type` is not desired, use the [`withJSONBody`](#withjsonbody) combinator instead.
 
 **Signature**
 
@@ -80,8 +83,8 @@ Added in v1.0.0
 
 Set the request body as JSON.
 
-Note, this combinator will not set `Content-Type` header automatically.
-You should use the {@link withJSON} combinator if that behavior is desired.
+This combinator will override the current existing body.
+You may want to use [`withJSON`](#withjson) if the auto `Content-Type` setting is desired.
 
 **Signature**
 
@@ -119,7 +122,7 @@ Added in v1.1.0
 
 ## collectFormable
 
-Collect a {@link FormData} into a {@link Formable}.
+Transform `FormData` into an intermediate [`Formable`](#formable-type-alias) object.
 
 **Signature**
 
@@ -131,7 +134,7 @@ Added in v2.1.0
 
 ## mkFormData
 
-Create a {@link FormData} from a form like object {@link Formable}.
+Translate the intermediate [`Formable`](#formable-type-alias) into a `FormData`.
 
 **Signature**
 

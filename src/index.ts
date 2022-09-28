@@ -9,10 +9,11 @@ import { snd } from 'fp-ts/Tuple'
 import { identity, pipe, tupled } from 'fp-ts/function'
 
 /**
- * {@link FetchM} Monad Environment.
+ * [`FetchM`](#fetchm-type-alias) Monad Environment.
  *
- * This is the same as the parameters of the {@link fetch} function.
+ * This is the same as the parameters of the `fetch` function.
  *
+ * @category types
  * @since 1.0.0
  */
 export type Config = [string, RequestInit]
@@ -20,23 +21,26 @@ export type Config = [string, RequestInit]
 /**
  * Main Monad of this package. The stack contains
  *
- * - A Reader of {@link Config}
- * - A {@link TaskEither} represents an asynchronous computation which can yield result `A` or raise an Error of type `E` eventually.
+ * - A Reader of [`Config`](#config-type-alias)
+ * - A `TaskEither` represents an asynchronous computation which can yield result `A` or raise an Error of type `E` eventually.
  *
+ * @category types
  * @since 1.0.0
  */
 export type FetchM<E, A> = ReaderTaskEither<Config, E, A>
 
 /**
- * Inspect the error type for a {@link FetchM}.
+ * Inspect the error type for a [`FetchM`](#fetchm-type-alias).
  *
+ * @category types
  * @since 2.10.0
  */
 export type InspectError<M> = M extends FetchM<infer E, unknown> ? E : never
 
 /**
- * Inspect the return type for a {@link FetchM}.
+ * Inspect the return type for a [`FetchM`](#fetchm-type-alias).
  *
+ * @category types
  * @since 2.10.0
  */
 export type InspectReturn<M> = M extends FetchM<unknown, infer A> ? A : never
@@ -44,15 +48,19 @@ export type InspectReturn<M> = M extends FetchM<unknown, infer A> ? A : never
 /**
  * A mapping from type `S` to an arbitrary error type `E`.
  *
+ * @category types
  * @since 1.0.0
  */
 export type MapError<E, S = unknown> = (s: S) => E
 
 /**
- * A built-in instance for {@link MapError}.
+ * A built-in instance for [`MapError`](#maperror-type-alias).
+ *
+ * This will directly throw any error.
  *
  * @param e Arbitrary data to be thrown as an {@link Error}
  *
+ * @category error handlers
  * @since 1.0.0
  */
 export const bail: MapError<never> = /* #__PURE__ */ e => {
@@ -64,15 +72,16 @@ export const bail: MapError<never> = /* #__PURE__ */ e => {
 }
 
 /**
- * Transform from one {@link FetchM} to another {@link FetchM}.
+ * Transform from one [`FetchM`](#fetchm-type-alias) to another [`FetchM`](#fetchm-type-alias).
  *
- * A combinator is an alias for a function mapping from one {@link FetchM} to
- * another {@link FetchM}.
+ * A combinator is an alias for a function mapping from one [`FetchM`](#fetchm-type-alias) to
+ * another [`FetchM`](#fetchm-type-alias).
  *
  * Before 2.2.0, previous errors union will always get preserved. But starting
  * from 2.2.0, the type signature is relaxed to allow you to create combinators that
  * recover the errors, or conditionally applied.
  *
+ * @category types
  * @since 1.0.0
  */
 export type Combinator<E1, A, E2 = E1, B = A> = (
@@ -143,12 +152,13 @@ const buildURL = /* #__PURE__ */ (config: Readonly<Config>): Config => {
 }
 
 /**
- * Create an instance of {@link FetchM} by providing how to map possible errors and optional {@link fetch} implementation.
+ * Create an instance of [`FetchM`](#fetchm-type-alias) by providing how to map possible errors and optional `fetch` implementation.
  *
  * @param mapError An instance of {@link MapError}
  * @param fetchImpl An implementation of {@link fetch}
  * @returns An instance of {@link FetchM}
  *
+ * @category constructors
  * @since 1.0.0
  */
 // prettier-ignore
@@ -193,20 +203,22 @@ export const mkRequest = /* #__PURE__ */
       )
 
 /**
- * A special instance of {@link FetchM} which always {@link bail}s errors and utilizes global {@link fetch}.
+ * A special instance of [`FetchM`](#fetchm-type-alias) which always [`bail`](#bail)s errors and utilizes global `fetch`.
  *
+ * @category constructors
  * @since 1.0.0
  */
 export const request = /* #__PURE__ */ mkRequest(bail)
 
 /**
- * Run the main Monad {@link FetchM}.
+ * Run the main Monad [`FetchM`](#fetchm-type-alias).
  *
- * This is the same as calling {@link fetch} function, or the Monad {@link FetchM} itself.
+ * This is the same as calling `fetch` function, or the Monad [`FetchM`](#fetchm-type-alias) itself.
  *
  * @param input URL
  * @param init Request init {@link RequestInit}
  *
+ * @category destructors
  * @since 1.0.0
  */
 // prettier-ignore
@@ -216,11 +228,12 @@ export const runFetchM = /* #__PURE__ */
       m([input, init ?? {}])
 
 /**
- * Call {@link runFetchM} returned {@link TaskEither} to produce a {@link Promise}.
+ * Call [`runFetchM`](#runfetchm) returned `TaskEither` to produce a `Promise`.
  *
  * @param input URL
  * @param init Request init {@link RequestInit}
  *
+ * @category destructors
  * @since 2.11.0
  */
 // prettier-ignore
@@ -230,11 +243,12 @@ export const runFetchMP = /* #__PURE__ */
     m([input, init ?? {}])()
 
 /**
- * Throw the left value from {@link runFetchMP}.
+ * Throw the left value from [`runFetchMP`](#runfetchmp).
  *
  * @param input URL
  * @param init Request init {@link RequestInit}
  *
+ * @category destructors
  * @since 2.11.0
  */
 // prettier-ignore
@@ -249,11 +263,12 @@ export const runFetchMPT = /* #__PURE__ */
     )
 
 /**
- * Lazy version of {@link runFetchMPT}.
+ * Lazy version of [`runFetchMPT`](#runfetchmpt).
  *
  * @param input URL
  * @param init Request init {@link RequestInit}
  *
+ * @category destructors
  * @since 2.15.0
  */
 // prettier-ignore
@@ -269,10 +284,11 @@ export const runFetchMPTL = /* #__PURE__ */
     )
 
 /**
- * The flipped version of {@link runFetchM}.
+ * The flipped version of [`runFetchM`](runfetchm).
  *
  * @param m The Monad {@link FetchM}
  *
+ * @category destructors
  * @since 2.7.0
  */
 // prettier-ignore
@@ -282,10 +298,11 @@ export const runFetchMFlipped = /* #__PURE__ */
     m([input, init ?? {}])
 
 /**
- * Call {@link runFetchMFlipped} returned {@link TaskEither} to produce a {@link Promise}.
+ * Call [`runFetchMFlipped`](#runfetchmflipped) returned `TaskEither` to produce a `Promise`.
  *
  * @param m The Monad {@link FetchM}
  *
+ * @category destructors
  * @since 2.9.0
  */
 // prettier-ignore
@@ -295,10 +312,11 @@ export const runFetchMFlippedP = /* #__PURE__ */
     m([input, init ?? {}])()
 
 /**
- * Throw the left value from {@link runFetchMFlippedP}.
+ * Throw the left value from [`runFetchMFlippedP`](#runfetchmflippedpt).
  *
  * @param m The Monad {@link FetchM}
  *
+ * @category destructors
  * @since 2.9.0
  */
 // prettier-ignore
@@ -313,10 +331,11 @@ export const runFetchMFlippedPT = /* #__PURE__ */
     )
 
 /**
- * Lazy version of {@link runFetchMFlippedP}.
+ * Lazy version of [`runFetchMFlippedP`](#runfetchmflippedp).
  *
  * @param m The Monad {@link FetchM}
  *
+ * @category destructors
  * @since 2.15.0
  */
 // prettier-ignore

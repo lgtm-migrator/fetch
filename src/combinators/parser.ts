@@ -13,7 +13,7 @@ import { bail, Combinator, MapError } from '..'
 import { withHeaders } from './header'
 
 /**
- * Parse the {@link Response} body as {@link Json}
+ * Parse the `Response` body as JSON
  *
  * @param mapError An instance of {@link MapError}
  *
@@ -34,7 +34,7 @@ export function asJSON<E, F>(
 }
 
 /**
- * Parse the {@link Response} body as {@link Blob}
+ * Parse the `Response` body as `Blob`
  *
  * @param accept Set the `Accept` MIME header
  * @param mapError An instance of {@link MapError}
@@ -58,7 +58,7 @@ export function asBlob<E, F>(
 }
 
 /**
- * Parse the {@link Response} body as {@link string}
+ * Parse the `Response` body as `string`
  *
  * @param mapError An instance of {@link MapError}
  *
@@ -79,7 +79,9 @@ export function asText<E, F>(
 }
 
 /**
- * Decode a {@link Json} type using [`io-ts`](https://github.com/gcanti/io-ts)
+ * Decode a `Json` type using [`io-ts`](https://github.com/gcanti/io-ts)
+ *
+ * Using this combinator will require [`io-ts`](https://github.com/gcanti/io-ts) to be installed.
  *
  * @param codeC Extends {@link Mixed}
  * @param mapError An instance of {@link MapError}

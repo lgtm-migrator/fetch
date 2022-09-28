@@ -24,6 +24,10 @@ Added in v1.0.0
 
 Set an abort signal.
 
+Even though you could create multiple abort signals (including both `withSignal` and `withTimeout`),
+the request will be aborted if any of them is aborted. And only the last combinator will receive the
+error for handling.
+
 **Signature**
 
 ```ts
@@ -36,6 +40,10 @@ Added in v1.0.0
 ## withTimeout
 
 Set the request timeout.
+
+Even though you could create multiple abort signals (including both `withSignal` and `withTimeout`),
+the request will be aborted if any of them is aborted. And only the last combinator will receive the
+error for handling.
 
 **Signature**
 

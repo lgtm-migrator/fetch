@@ -25,7 +25,12 @@ Added in v2.1.1
 
 ## fail
 
-Throw an error
+Fail the execution.
+
+This combinator will immediately terminate the execution, any combinators after this will not be called.
+It's different from an immediately aborted `withSignal` combinator, as `withSignal` will always try to fire
+the request. This combinator won't send a request to the server at all, which makes it suit for
+cases where the request params are invalid.
 
 **Signature**
 
@@ -64,7 +69,7 @@ Added in v3.3.0
 
 ## localE
 
-Abuse version of {@link local}, which might raise an error.
+Perform a failable operation.
 
 **Signature**
 

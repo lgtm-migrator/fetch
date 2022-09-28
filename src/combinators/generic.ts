@@ -54,7 +54,12 @@ export const when = /* #__PURE__ */ <E, F, A, B extends A>(
   chainEitherKW(a => (refinement(a) ? pipe(a, then, leftE) : rightE(a)))
 
 /**
- * Throw an error
+ * Fail the execution.
+ *
+ * This combinator will immediately terminate the execution, any combinators after this will not be called.
+ * It's different from an immediately aborted `withSignal` combinator, as `withSignal` will always try to fire
+ * the request. This combinator won't send a request to the server at all, which makes it suit for
+ * cases where the request params are invalid.
  *
  * @param error
  *
@@ -75,7 +80,7 @@ export const inspect = /* #__PURE__ */ <E, A>(
 ): Combinator<E, A> => chainFirstIOK(flow(inspector, of))
 
 /**
- * Abuse version of {@link local}, which might raise an error.
+ * Perform a failable operation.
  *
  * @category combinators
  * @since 2.2.3

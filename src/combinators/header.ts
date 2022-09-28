@@ -7,7 +7,7 @@ import { mapSnd } from 'fp-ts/Tuple'
 import type { Combinator } from '..'
 
 /**
- * Collect {@link HeadersInit} as {@link Record}, where keys and values are both {@link string}
+ * Collect `HeadersInit` as `Record`, where keys and values are both `string`
  *
  * @param headers Headers {@link HeadersInit}
  * @returns Record `Record<string, string>`
@@ -30,7 +30,7 @@ export const toRecord = /* #__PURE__ */ (
 }
 
 /**
- * Merge two {@link HeadersInit} into one {@link HeadersInit}.
+ * Merge two `HeadersInit` into one `HeadersInit`.
  *
  * @param into The target {@link HeadersInit}, entries might be overwritten.
  * @param from The source {@link HeadersInit}, entries must persist.
@@ -49,6 +49,8 @@ export const merge = /* #__PURE__ */ (
 
 /**
  * Set request headers
+ *
+ * Calling this combinator multiple times will merge all of them instead of overriding.
  *
  * @param headers Headers like {@link HeadersInit}
  *

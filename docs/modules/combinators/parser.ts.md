@@ -24,7 +24,7 @@ Added in v1.0.0
 
 ## asBlob
 
-Parse the {@link Response} body as {@link Blob}
+Parse the `Response` body as `Blob`
 
 **Signature**
 
@@ -37,7 +37,7 @@ Added in v1.0.0
 
 ## asJSON
 
-Parse the {@link Response} body as {@link Json}
+Parse the `Response` body as JSON
 
 **Signature**
 
@@ -50,7 +50,7 @@ Added in v1.0.0
 
 ## asText
 
-Parse the {@link Response} body as {@link string}
+Parse the `Response` body as `string`
 
 **Signature**
 
@@ -63,7 +63,9 @@ Added in v1.0.0
 
 ## decodeAs
 
-Decode a {@link Json} type using [`io-ts`](https://github.com/gcanti/io-ts)
+Decode a `Json` type using [`io-ts`](https://github.com/gcanti/io-ts)
+
+Using this combinator will require [`io-ts`](https://github.com/gcanti/io-ts) to be installed.
 
 **Signature**
 

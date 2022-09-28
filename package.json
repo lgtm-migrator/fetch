@@ -104,14 +104,25 @@
       "contactlab",
       "contactlabappy",
       "equt",
+      "failable",
+      "fetchm",
       "lazyable",
+      "maperror",
       "miliseconds",
       "orio",
       "pnpm",
       "postpublish",
+      "runfetchm",
+      "runfetchmflipped",
+      "runfetchmflippedp",
+      "runfetchmflippedpt",
+      "runfetchmp",
+      "runfetchmpt",
       "tsbuildinfo",
       "tupled",
-      "typecheck"
+      "typecheck",
+      "withjson",
+      "withjsonbody"
     ]
   },
   "commitlint": {

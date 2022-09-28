@@ -10,6 +10,10 @@ import { bail, Combinator, MapError } from '..'
 /**
  * Set an abort signal.
  *
+ * Even though you could create multiple abort signals (including both `withSignal` and `withTimeout`),
+ * the request will be aborted if any of them is aborted. And only the last combinator will receive the
+ * error for handling.
+ *
  * @param signal Abort signal {@link AbortSignal}
  * @param mapError An instance of {@link MapError}
  *
@@ -33,6 +37,10 @@ export function withSignal<E, A, F>(
 
 /**
  * Set the request timeout.
+ *
+ * Even though you could create multiple abort signals (including both `withSignal` and `withTimeout`),
+ * the request will be aborted if any of them is aborted. And only the last combinator will receive the
+ * error for handling.
  *
  * @param milliseconds Duration in milliseconds
  * @param mapError An instance of {@link MapError}

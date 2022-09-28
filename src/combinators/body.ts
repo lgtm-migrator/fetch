@@ -23,7 +23,7 @@ type FormBlob = {
 export type Formable = Record<string, string | Blob | FormBlob>
 
 /**
- * Create a {@link FormData} from a form like object {@link Formable}.
+ * Translate the intermediate [`Formable`](#formable-type-alias) into a `FormData`.
  *
  * @param form Form like object {@link Formable}
  * @returns Form Data {@link FormData}
@@ -44,7 +44,7 @@ export const mkFormData = /* #__PURE__ */ (form: Formable): FormData =>
   }, new FormData())
 
 /**
- * Collect a {@link FormData} into a {@link Formable}.
+ * Transform `FormData` into an intermediate [`Formable`](#formable-type-alias) object.
  *
  * @param form A {@link FormData}
  * @returns An object satisfies {@link Formable}
@@ -59,7 +59,10 @@ export const collectFormable = /* #__PURE__ */ (form: FormData): Formable => {
 }
 
 /**
- * Set the request body as {@link FormData}.
+ * Set the request body as `FormData`.
+ *
+ * Calling this combinator multiple times will merge all of them instead of overriding.
+ * If the body is not a `FormData`, the existing body will be discarded.
  *
  * @param form Form like object {@link Formable}
  *
@@ -69,6 +72,7 @@ export const collectFormable = /* #__PURE__ */ (form: FormData): Formable => {
 export const withForm = /* #__PURE__ */ <E, A>(
   form: Formable,
 ): Combinator<E, A> =>
+  // TODO Allowing setting the value to `null` to explicitly remove the existing value
   local(
     mapSnd(({ body, ...rest }) =>
       body instanceof FormData
@@ -89,8 +93,8 @@ export const withForm = /* #__PURE__ */ <E, A>(
 /**
  * Set the request body as JSON.
  *
- * Note, this combinator will not set `Content-Type` header automatically.
- * You should use the {@link withJSON} combinator if that behavior is desired.
+ * This combinator will override the current existing body.
+ * You may want to use [`withJSON`](#withjson) if the auto `Content-Type` setting is desired.
  *
  * @param json JSON like object {@link Json}
  * @param replacer The replacer parameter in {@link JSON.stringify}
@@ -116,6 +120,7 @@ export function withJSONBody<E, A>(
   replacer?: any,
   space?: string | number,
 ): Combinator<E, A> {
+  // TODO Handle JSON serialization error, i.e., circular reference
   return local(
     mapSnd(x => ({ body: JSON.stringify(json, replacer, space), ...x })),
   )
@@ -124,8 +129,8 @@ export function withJSONBody<E, A>(
 /**
  * Set the request body as JSON.
  *
- * Note, this combinator will set `Content-Type` header automatically.
- * You could use the {@link withJSONBody} combinator if this behavior is not desired.
+ * This combinator will override the current existing body and `Content-Type` header.
+ * If setting the `Content-Type` is not desired, use the [`withJSONBody`](#withjsonbody) combinator instead.
  *
  * @param json JSON like object {@link Json}
  * @param replacer The replacer parameter in {@link JSON.stringify}

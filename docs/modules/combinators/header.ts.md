@@ -26,6 +26,8 @@ Added in v1.0.0
 
 Set request headers
 
+Calling this combinator multiple times will merge all of them instead of overriding.
+
 **Signature**
 
 ```ts
@@ -38,7 +40,7 @@ Added in v1.0.0
 
 ## merge
 
-Merge two {@link HeadersInit} into one {@link HeadersInit}.
+Merge two `HeadersInit` into one `HeadersInit`.
 
 **Signature**
 
@@ -50,7 +52,7 @@ Added in v1.0.0
 
 ## toRecord
 
-Collect {@link HeadersInit} as {@link Record}, where keys and values are both {@link string}
+Collect `HeadersInit` as `Record`, where keys and values are both `string`
 
 **Signature**
 

@@ -21,7 +21,7 @@ Added in v1.0.0
 
 ## ensureStatus
 
-Guard the {@link Response} status code.
+Guard the `Response` status code.
 
 **Signature**
 
