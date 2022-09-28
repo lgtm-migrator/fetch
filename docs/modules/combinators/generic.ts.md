@@ -12,7 +12,7 @@ Added in v2.1.1
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [utils](#utils)
+- [combinators](#combinators)
   - [fail](#fail)
   - [guard](#guard)
   - [inspect](#inspect)
@@ -21,7 +21,7 @@ Added in v2.1.1
 
 ---
 
-# utils
+# combinators
 
 ## fail
 

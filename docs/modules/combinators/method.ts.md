@@ -12,13 +12,28 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [utils](#utils)
-  - [HTTPMethod (type alias)](#httpmethod-type-alias)
+- [combinators](#combinators)
   - [withMethod](#withmethod)
+- [types](#types)
+  - [HTTPMethod (type alias)](#httpmethod-type-alias)
 
 ---
 
-# utils
+# combinators
+
+## withMethod
+
+Set the request HTTP method.
+
+**Signature**
+
+```ts
+export declare const withMethod: <E, A>(method: HTTPMethod) => Combinator<E, A, E, A>
+```
+
+Added in v1.0.0
+
+# types
 
 ## HTTPMethod (type alias)
 
@@ -36,18 +51,6 @@ export type HTTPMethod =
   | 'OPTION'
   | 'PATCH'
   | (string & Record<never, never>)
-```
-
-Added in v1.0.0
-
-## withMethod
-
-Set the request HTTP method.
-
-**Signature**
-
-```ts
-export declare const withMethod: <E, A>(method: HTTPMethod) => Combinator<E, A, E, A>
 ```
 
 Added in v1.0.0

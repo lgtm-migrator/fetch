@@ -12,13 +12,13 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [utils](#utils)
+- [combinators](#combinators)
   - [withSignal](#withsignal)
   - [withTimeout](#withtimeout)
 
 ---
 
-# utils
+# combinators
 
 ## withSignal
 

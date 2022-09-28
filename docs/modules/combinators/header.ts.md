@@ -12,12 +12,27 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [combinators](#combinators)
+  - [withHeaders](#withheaders)
 - [utils](#utils)
   - [merge](#merge)
   - [toRecord](#torecord)
-  - [withHeaders](#withheaders)
 
 ---
+
+# combinators
+
+## withHeaders
+
+Set request headers
+
+**Signature**
+
+```ts
+export declare const withHeaders: <E, A>(headers: HeadersInit) => Combinator<E, A, E, A>
+```
+
+Added in v1.0.0
 
 # utils
 
@@ -41,18 +56,6 @@ Collect {@link HeadersInit} as {@link Record}, where keys and values are both {@
 
 ```ts
 export declare const toRecord: (headers: HeadersInit) => Record<string, string>
-```
-
-Added in v1.0.0
-
-## withHeaders
-
-Set request headers
-
-**Signature**
-
-```ts
-export declare const withHeaders: <E, A>(headers: HeadersInit) => Combinator<E, A, E, A>
 ```
 
 Added in v1.0.0

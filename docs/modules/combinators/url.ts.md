@@ -12,7 +12,7 @@ Added in v1.0.0
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [utils](#utils)
+- [combinators](#combinators)
   - [withBaseURL](#withbaseurl)
   - [withPassword](#withpassword)
   - [withPort](#withport)
@@ -21,7 +21,7 @@ Added in v1.0.0
 
 ---
 
-# utils
+# combinators
 
 ## withBaseURL
 
